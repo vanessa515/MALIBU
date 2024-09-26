@@ -47,7 +47,17 @@ class CustomDrawer extends StatelessWidget {
               
             ),
             
-               Divider( color: Colors.black),
+             Divider( color: Colors.black),
+              ListTile(
+              leading: Icon(Icons.add),
+              title: Text("Registrar toppings"),
+              subtitle: Text(''),
+              onTap: (){
+                Get.toNamed('/registrartopp');
+                
+              },
+              
+            ),
             
             
           ],
