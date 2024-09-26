@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:malibu/screen/registrar_cat.dart';
 import 'package:malibu/screen/home.dart';
 import 'package:get/get.dart';
+import 'package:malibu/screen/registrar_prod.dart';
 
 
 //Conexion a base de datos----------------------------
@@ -13,7 +14,7 @@ Future<void> main() async {
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhjdGRvZnRyZnRnYWl3dmZyZHFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjY3ODY5OTcsImV4cCI6MjA0MjM2Mjk5N30.kyKvMcuXnLOMGWz2Mbyscok0l8DrB0-x0ug9jDIqDYU',
   );
   runApp(MyApp());
-} 
+}
 //------------------------------------------------------------      
 
 class MyApp extends StatelessWidget {
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
       getPages: 
       [GetPage(name: '/', page: ()=> Home() ),
        GetPage(name: '/registrocat', page: ()=> RegistroCategoria() ),
+       GetPage(name: '/registroprod', page: ()=> RegistroProducto() ),
       ],
       
       initialRoute: '/',

@@ -27,10 +27,21 @@ class CustomDrawer extends StatelessWidget {
              Divider( color: Colors.black),
               ListTile(
               leading: Icon(Icons.app_registration),
-              title: Text("Registrar productos"),
+              title: Text("Registrar categoria"),
               subtitle: Text(''),
               onTap: (){
                 Get.toNamed('/registrocat');
+                
+              },
+              
+            ),
+            Divider( color: Colors.black),
+              ListTile(
+              leading: Icon(Icons.add),
+              title: Text("Registrar productos"),
+              subtitle: Text(''),
+              onTap: (){
+                Get.toNamed('/registroprod');
                 
               },
               

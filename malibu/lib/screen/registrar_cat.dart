@@ -25,7 +25,7 @@ class _RegistroCategoriaState extends State<RegistroCategoria> {
         final response = await Supabase.instance.client
             .from("categoria")
             .insert({
-              'nombre': _nombreController.text,
+              'nombre_cat': _nombreController.text,
               'estatus': 1, 
             })
             .select(); 
