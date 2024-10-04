@@ -3,8 +3,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../constants/custom_appbar.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
-import 'dart:typed_data'; // Para manejar bytes en web
-import 'package:flutter/foundation.dart' show kIsWeb; // Para verificar si estamos en web
+import 'dart:typed_data'; 
+import 'package:flutter/foundation.dart' show kIsWeb; 
 
 class RegistroTopping extends StatefulWidget {
   const RegistroTopping({super.key});
@@ -80,7 +80,7 @@ class _RegistroToppingState extends State<RegistroTopping> {
 
         if (response.isNotEmpty) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Producto registrado exitosamente')),
+            SnackBar(content: Text('Topping registrado exitosamente')),
           );
           _nombreController.clear();
           _precioController.clear();
