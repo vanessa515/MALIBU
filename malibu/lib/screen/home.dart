@@ -11,7 +11,7 @@ class Home extends StatefulWidget {
 }
 
 class _ListaProductosState extends State<Home> {
-  List<dynamic> _productos = [];
+  List<dynamic> _productos = [];   
   List<int> _cantidad = [];
 
   @override
