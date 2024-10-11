@@ -15,7 +15,7 @@ class Inventario extends StatelessWidget {
       ),
       drawer: CustomDrawer(),
       body: Center(
-        child: Text('Inventario'),
+        child: Text('Inventario - Prueba'),
       ),
     );
   }
