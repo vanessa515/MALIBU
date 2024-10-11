@@ -15,7 +15,7 @@ class _RegistroCategoriaState extends State<RegistroCategoria> {
   final TextEditingController _nombreController = TextEditingController();
   bool _isSubmitting = false;
 
-  Future<void> _registrarCategoria() async {
+  Future<void> _registrarCategoria() async {     
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isSubmitting = true;
