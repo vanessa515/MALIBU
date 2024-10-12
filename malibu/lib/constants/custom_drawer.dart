@@ -58,7 +58,17 @@ class CustomDrawer extends StatelessWidget {
               },
               
             ),
-            
+            Divider( color: Colors.black),
+              ListTile(
+              leading: Icon(Icons.add),
+              title: Text("Funciones Productos"),
+              subtitle: Text(''),
+              onTap: (){
+                Get.toNamed('/productomod');
+                
+              },
+              
+            ),
             
           ],
 
