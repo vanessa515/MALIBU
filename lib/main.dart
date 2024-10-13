@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:malibu/screen/inventario.dart';
 import 'package:malibu/screen/registrar_cat.dart';
 import 'package:malibu/screen/registrar_topp.dart';
 import 'package:malibu/screen/home.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/registrocat', page: () => RegistroCategoria()),
         GetPage(name: '/registroprod', page: () => RegistroProducto()),
         GetPage(name: '/registrartopp', page: () => RegistroTopping()),
+        GetPage(name: '/inventario', page: () => Inventario()),
       ],
       initialRoute: '/',
       theme: ThemeData(
