@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:malibu/constants/custom_appbar.dart';
 import 'package:malibu/constants/custom_drawer.dart';
 
@@ -15,6 +14,8 @@ class _InventarioState extends State<Inventario> {
 
   /* el color aqui en ARGB(alpha, red, green, blue)  */
   Color color_1 = Color.fromARGB(255, 255, 192, 152);
+  Color color_2 = Color.fromARGB(255, 69, 65, 129);
+  Color color_3 = Color.fromARGB(255, 0, 0, 0);
 
   // Imágenes y rutas
 /*final String bg_img = '../assets/img/bg.jpg';
@@ -34,6 +35,19 @@ class _InventarioState extends State<Inventario> {
 
       body: Column(
         children: [
+          // Título de la tabla
+          Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text(
+              'Inventario',
+              style: TextStyle(
+                fontSize: 40, // Tamaño de fuente
+                fontWeight: FontWeight.bold,
+                color: color_2,
+              ),
+            ),
+          ),
+
           // Tabla de datos
           Expanded(
             child: SingleChildScrollView(
@@ -47,7 +61,10 @@ class _InventarioState extends State<Inventario> {
                       DataColumn(
                         label: Text(
                           'Articulos',
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(
+                            color: color_3,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
 
@@ -55,7 +72,10 @@ class _InventarioState extends State<Inventario> {
                       DataColumn(
                         label: Text(
                           'Existencia',
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(
+                            color: color_3,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
 
@@ -63,7 +83,10 @@ class _InventarioState extends State<Inventario> {
                       DataColumn(
                         label: Text(
                           'Minimo',
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(
+                            color: color_3,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
 
@@ -71,7 +94,10 @@ class _InventarioState extends State<Inventario> {
                       DataColumn(
                         label: Text(
                           'Proveedor',
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(
+                            color: color_3,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
 
@@ -79,12 +105,15 @@ class _InventarioState extends State<Inventario> {
                       DataColumn(
                         label: Text(
                           'Ordenar',
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(
+                            color: color_3,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ],
 
-                    // Filas vacías
+                    // Filas de la tabla - Esta tabla no es dinamica aun, falta la programacion de la misma
                     rows: List<DataRow>.generate(
                       5, // Cambia el número para más o menos filas
                       (index) => DataRow(
