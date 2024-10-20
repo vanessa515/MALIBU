@@ -103,7 +103,7 @@ class _ListaProductosState extends State<Home> {
     }
     return toppingTotal;
   }
-
+////////////////////////////////
 Future<void> _registerProductWithToppings(
   int fkProducto, 
   List<int> toppingIds, 
@@ -116,37 +116,58 @@ Future<void> _registerProductWithToppings(
     }
 
     List<int> productoToppingIds = [];
-    
-    // Registro de ambos toppings
-    for (var i = 0; i < cantidad; i++) {
-      for (var toppingId in toppingIds) {
-        for (var toppingId2 in toppingIds2) {
-          final response = await Supabase.instance.client.from('producto_topping').insert({
-            'fk_producto': fkProducto,
-            'fk_topping': toppingId,
-            'fk_topping2': toppingId2, // Agregar el fk_topping2 aquí
-          }).select('pk_producto_topping').single();
+    double totalVenta = 0.0;
+    int? pkVenta;
 
-          if (response != null && response['pk_producto_topping'] != null) {
-            productoToppingIds.add(response['pk_producto_topping']);
-          }
+    // Calcular el precio del producto
+    var producto = _productos.firstWhere((p) => p['pk_producto'] == fkProducto);
+    double precioProducto = producto['precio'];
 
-          // Aquí registramos cada venta individualmente
-          await _registerSale(1, response['pk_producto_topping']); // Registramos 1 unidad por cada producto
+    // Calcular el precio de los toppings
+    double precioToppings = _calculateToppingPrice(toppingIds) + _calculateToppingPrice(toppingIds2);
+
+    // Registro de toppings y venta
+    for (var toppingId in toppingIds) {
+      for (var toppingId2 in toppingIds2) {
+        // Registrar producto con toppings en la tabla 'producto_topping'
+        final insertedData = await Supabase.instance.client.from('producto_topping').insert({
+          'fk_producto': fkProducto,
+          'fk_topping': toppingId,
+          'fk_topping2': toppingId2, // Agregar el fk_topping2 aquí
+        }).select('pk_producto_topping').single();
+
+        if (insertedData != null && insertedData['pk_producto_topping'] != null) {
+          productoToppingIds.add(insertedData['pk_producto_topping']);
+        }
+
+        // Registrar la venta si aún no ha sido registrada
+        if (pkVenta == null && insertedData != null) {
+          // Registrar la venta con la cantidad total
+          pkVenta = await _registerSale(cantidad, insertedData['pk_producto_topping']);
         }
       }
     }
-  setState(() {
-      _cantidad[_productos.indexWhere((producto) => producto['pk_producto'] == fkProducto)] = 0;
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Producto y toppings registrados exitosamente')),
-    );
 
+    // Calcular el total de la venta (producto + toppings)
+    totalVenta = (precioProducto + precioToppings) * cantidad;
+
+    if (pkVenta != null) {
+      // Registrar el detalle de la venta con el total calculado
+      await _registerSaleDetail(pkVenta, totalVenta);
+    } else {
+      throw Exception('No se pudo registrar la venta');
+    }
+
+    // Resetear estado en la UI
     setState(() {
+      _cantidad[_productos.indexWhere((producto) => producto['pk_producto'] == fkProducto)] = 0;
       _selectedToppings.clear();
       _selectedToppings2.clear(); // Limpiar selección de toppings2
     });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Producto y toppings registrados exitosamente')),
+    );
   } catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Error al registrar: $e')),
@@ -154,19 +175,53 @@ Future<void> _registerProductWithToppings(
   }
 }
 
-Future<void> _registerSale(int cantidad, int productoToppingId) async {
+// Función para registrar la venta y retornar 'pk_venta'
+Future<int?> _registerSale(int cantidad, int fkProductoTopping) async {
   try {
-    await Supabase.instance.client.from('venta').insert({
-      'cantidad': cantidad,
-      'fk_producto_topping': productoToppingId,
-    });
+    // Insertamos una sola venta con la cantidad total
+    final insertedData = await Supabase.instance.client
+        .from('venta')
+        .insert({
+          'cantidad': cantidad, // Cantidad total
+          'fk_producto_topping': fkProductoTopping,
+        })
+        .select('pk_venta')
+        .single();
+
+    final pkVenta = insertedData?['pk_venta'];
+
+    if (pkVenta == null) {
+      throw Exception('Error al obtener el ID de la venta');
+    }
+
+    return pkVenta; // Retornamos el 'pk_venta'
   } catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Error al registrar la venta: $e')),
     );
+    return null; // Retornamos null en caso de error
   }
 }
 
+///////////////////////////
+// Función para registrar el detalle de la venta
+Future<void> _registerSaleDetail(int pkVenta, double totalVenta) async {
+  try {
+    await Supabase.instance.client.from('detalle_venta').insert({
+      'fecha': DateTime.now().toIso8601String(),
+      'total_venta': totalVenta,
+      'fk_venta': pkVenta,
+    });
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error al registrar el detalle de la venta: $e')),
+    );
+  }
+}
+
+
+
+/////////////////////////
 void _showToppingsSheet(int index) {
   List<int> selectedToppingsLocal = [];
   List<int> selectedToppingsLocal2 = []; // Para los toppings de topping2
@@ -247,7 +302,7 @@ void _showToppingsSheet(int index) {
                       Expanded(
                         child: ListView(
                           children: [
-                            const Text('Toppings de la tabla "topping2"', style: TextStyle(fontSize: 16)),
+                            const Text('Toppings extra"', style: TextStyle(fontSize: 16)),
                             CheckboxListTile(
                               title: const Text('Sin Toppings'),
                               value: sinToppings2Selected,
@@ -346,6 +401,7 @@ void _showToppingsSheet(int index) {
       ),
       drawer: CustomDrawer(),
       body: Padding(
+        
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -411,11 +467,126 @@ void _showToppingsSheet(int index) {
                     ),
                   );
                 },
+                
               ),
             ),
+             // Botón para navegar a la pantalla de Ticket de Venta
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TicketVentaScreen()),
+              );
+            },
+            child: Text('Ver Ticket de Venta'),
+          ),
           ],
         ),
       ),
+      
+    );
+  }
+}
+
+class TicketVentaScreen extends StatefulWidget {
+  @override
+  _TicketVentaScreenState createState() => _TicketVentaScreenState();
+}
+
+class _TicketVentaScreenState extends State<TicketVentaScreen> {
+  List<dynamic> _ticketData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchTicketData(); // obtener los datos de los tickets
+  }
+
+  Future<void> _fetchTicketData() async {
+    try {
+      final response = await Supabase.instance.client.rpc('obtener_tickets');
+      print('Full Response: $response');
+
+      if (response is List) {
+        print('Response is a list with ${response.length} items.');
+        setState(() {
+          _ticketData = response;
+        });
+      } else {
+        print('Los datos no son una lista. Tipo recibido: ${response.runtimeType}');
+      }
+    } catch (e) {
+      print('Caught error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
+  }
+
+  void _imprimirTicket() {
+    // Si los videos de youtube no se equivocan aqui va la logica de impresion
+    print('Botón de imprimir ticket presionado');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print('Longitud de _ticketData: ${_ticketData.length}');
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Tickets'),
+        backgroundColor: Colors.teal,
+      ),
+      body: _ticketData.isEmpty
+          ? Center(child: Text('No hay datos de ventas.'))
+          : Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: _ticketData.length,
+                    itemBuilder: (context, index) {
+                      final producto = _ticketData[index];
+
+                      // Impresión 
+                      print('Producto $index: $producto');
+
+                     
+                      final nombreProducto = producto['producto_nombre'] ?? 'Nombre no disponible';
+                      final precioProducto = producto['producto_precio'] ?? 0;
+                      final cantidad = producto['cantidad_producto'] ?? 0;
+                      final totalVenta = producto['total_venta'] ?? 0;
+                      final fecha = producto['fecha'] ?? 'Fecha no disponible';
+
+                      final toppingNombre = producto['topping_nombre'] ?? 'Sin topping';
+                      final toppingPrecio = producto['topping_precio'] ?? 0;
+                      final topping2Nombre = producto['topping2_nombre'] ?? 'Sin topping';
+                      final topping2Precio = producto['topping2_precio'] ?? 0;
+
+                      return Card(
+                        child: ListTile(
+                          title: Text('$nombreProducto'),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Precio Producto: \$${precioProducto.toStringAsFixed(2)}'),
+                              Text('Topping 1: $toppingNombre (\$${toppingPrecio.toStringAsFixed(2)})'),
+                              Text('Topping 2: $topping2Nombre (\$${topping2Precio.toStringAsFixed(2)})'),
+                               Text('Cantidad: $cantidad'),
+                              Text('Fecha: $fecha'),
+                              Text('Total Venta: \$${totalVenta.toStringAsFixed(2)}'),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: _imprimirTicket,
+                  child: Text('Imprimir Ticket'),
+                ),
+              ],
+            ),
     );
   }
 }

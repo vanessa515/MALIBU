@@ -5,6 +5,7 @@ import 'package:malibu/screen/registrar_topp.dart';
 import 'package:malibu/screen/home.dart';
 import 'package:get/get.dart';
 import 'package:malibu/screen/registrar_prod.dart';
+import 'package:malibu/screen/toppings_modificaciones.dart';
 
 
 //Conexion a base de datos----------------------------
@@ -27,16 +28,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "Hola mundo :D",
+      title: "Malibu",
    
       getPages: 
       [GetPage(name: '/', page: ()=> Home() ),
        GetPage(name: '/registrocat', page: ()=> RegistroCategoria() ),
        GetPage(name: '/registroprod', page: ()=> RegistroProducto() ),
        GetPage(name: '/registrartopp', page: ()=> RegistroTopping() ),
-          GetPage(name: '/productomod', page: ()=> ProductosModificaciones() )
+       GetPage(name: '/productomod', page: ()=> ProductosModificaciones() ),
+       GetPage(name: '/toppingsmodificaciones', page: ()=>  ToppingMOD() ),
+       GetPage(name: '/ticketsh', page: ()=>  TicketVentaScreen() ),
       ],
-      
+     
       initialRoute: '/',
       theme: ThemeData(
       useMaterial3: true, 

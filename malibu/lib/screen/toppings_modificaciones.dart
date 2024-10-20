@@ -3,46 +3,46 @@ import 'package:malibu/constants/custom_appbar.dart';
 import 'package:malibu/constants/custom_drawer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class ProductosModificaciones extends StatefulWidget {
-  const ProductosModificaciones({super.key});
+class ToppingMOD extends StatefulWidget {
+  const ToppingMOD({super.key});
 
   @override
-  _ProductosModificacionesState createState() => _ProductosModificacionesState();
+  _ToppingMODState createState() => _ToppingMODState();
 }
 
-class _ProductosModificacionesState extends State<ProductosModificaciones> {
+class _ToppingMODState extends State<ToppingMOD> {
   final SupabaseClient supabase = Supabase.instance.client;
-  List<dynamic> productos = [];
+  List<dynamic> toppings = [];
 
   @override
   void initState() {
     super.initState();
-    _getProductos();
+    _getToppings();
   }
 
-  Future<void> _getProductos() async {
-    final response = await supabase.from('producto').select('*');
+  Future<void> _getToppings() async {
+    final response = await supabase.from('topping').select('*');
     if (response != null) {
       setState(() {
-        productos = response;
+        toppings = response;
       });
     }
   }
 
-  Future<void> _deleteProducto(int id) async {
-    await supabase.from('producto').delete().eq('pk_producto', id);
-    _getProductos(); // Recargar la lista de productos después de eliminar
+  Future<void> _deleteTopping(int id) async {
+    await supabase.from('topping').delete().eq('pk_topping', id);
+    _getToppings(); 
   }
 
-  void _editarProducto(dynamic producto) {
+  void _editarTopping(dynamic topping) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => EditarProductoScreen(producto: producto),
+        builder: (context) => EditarToppingScreen(topping: topping),
       ),
     ).then((value) {
       if (value == true) {
-        _getProductos(); // Recargar la lista de productos si se ha editado alguno
+        _getToppings(); 
       }
     });
   }
@@ -56,58 +56,61 @@ class _ProductosModificacionesState extends State<ProductosModificaciones> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppbar(
-        titulo: 'Funciones productos',
+        titulo: 'Funciones toppings',
         colorsito: Colors.teal,
       ),
       drawer: CustomDrawer(),
-      body: productos.isEmpty
+      body: toppings.isEmpty
           ? Center(child: CircularProgressIndicator())
           : ListView.builder(
-              itemCount: productos.length,
+              itemCount: toppings.length,
               itemBuilder: (context, index) {
-                final producto = productos[index];
+                final topping = toppings[index];
                 return Card(
-                  margin: EdgeInsets.all(10),
-                  child: ListTile(
-                    leading: Image.network(
-                      getImageUrl(producto['foto']), 
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                    ),
-                    title: Text(producto['nombre']),
-                    subtitle: Text('Precio: \$${producto['precio']}'),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () => _editarProducto(producto),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () => _deleteProducto(producto['pk_producto']),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
+  margin: EdgeInsets.all(10),
+  child: ListTile(
+    leading: topping['foto'] != null
+        ? Image.network(
+            getImageUrl(topping['foto']),
+            width: 50,
+            height: 50,
+            fit: BoxFit.cover,
+          )
+        : const Icon(Icons.image), // Icono por defecto
+    title: Text(topping['nombre'] ?? 'Sin nombre'), // Manejar nombre nulo
+    subtitle: Text('Precio: \$${topping['precio'] ?? 0}'), // Manejar precio nulo
+    trailing: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        IconButton(
+          icon: Icon(Icons.edit),
+          onPressed: () => _editarTopping(topping),
+        ),
+        IconButton(
+          icon: Icon(Icons.delete),
+          onPressed: () => _deleteTopping(topping['pk_topping']),
+        ),
+      ],
+    ),
+  ),
+);
+
               },
             ),
     );
   }
 }
 
-class EditarProductoScreen extends StatefulWidget {
-  final dynamic producto;
+class EditarToppingScreen extends StatefulWidget {
+  final dynamic topping;
 
-  const EditarProductoScreen({super.key, required this.producto});
+  const EditarToppingScreen({super.key, required this.topping});
 
   @override
-  _EditarProductoScreenState createState() => _EditarProductoScreenState();
+  _EditarToppingScreenState createState() => _EditarToppingScreenState();
 }
 
-class _EditarProductoScreenState extends State<EditarProductoScreen> {
+class _EditarToppingScreenState extends State<EditarToppingScreen> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nombreController;
   late TextEditingController _precioController;
@@ -115,20 +118,20 @@ class _EditarProductoScreenState extends State<EditarProductoScreen> {
   @override
   void initState() {
     super.initState();
-    _nombreController = TextEditingController(text: widget.producto['nombre']);
-    _precioController = TextEditingController(text: widget.producto['precio'].toString());
+    _nombreController = TextEditingController(text: widget.topping['nombre']);
+    _precioController = TextEditingController(text: widget.topping['precio'].toString());
   }
 
-  Future<void> _updateProducto() async {
+  Future<void> _updateTopping() async {
     if (_formKey.currentState!.validate()) {
-      // Actualizar el producto en la base de datos
+ 
       await Supabase.instance.client
-          .from('producto')
+          .from('topping')
           .update({
             'nombre': _nombreController.text,
             'precio': double.parse(_precioController.text),
           })
-          .eq('pk_producto', widget.producto['pk_producto']);
+          .eq('pk_topping', widget.topping['pk_topping']);
 
       // Volver a la pantalla anterior e indicar que se ha realizado una actualización
       Navigator.pop(context, true);
@@ -139,7 +142,7 @@ class _EditarProductoScreenState extends State<EditarProductoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CustomAppbar(
-        titulo: 'Editar producto',
+        titulo: 'Editar topping',
         colorsito: Colors.teal,
       ),
       body: Padding(
@@ -171,8 +174,8 @@ class _EditarProductoScreenState extends State<EditarProductoScreen> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: _updateProducto,
-                child: Text('Actualizar Producto'),
+                onPressed: _updateTopping,
+                child: Text('Actualizar Topping'),
               ),
             ],
           ),
