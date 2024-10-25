@@ -50,7 +50,7 @@ class _TicketVentaScreenState extends State<TicketVentaScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tickets'),
+        title: Text('Historial de ventas(tickets)'),
         backgroundColor: Colors.teal,
       ),
       body: _ticketData.isEmpty

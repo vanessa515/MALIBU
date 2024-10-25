@@ -12,28 +12,63 @@ class Home extends StatefulWidget {
 
 class _ListaProductosState extends State<Home> {
   List<dynamic> _productos = [];
+  List<Map<String, dynamic>> _categorias = []; // Lista para almacenar las categorías
+  int? _selectedCategoriaId;
   List<dynamic> _toppings = [];
-  List<dynamic> _toppings2 = []; // Agregamos la segunda lista de toppings
+  List<dynamic> _toppings2 = [];
   List<int> _selectedToppings = [];
-  List<int> _selectedToppings2 = []; // Agregamos la lista para toppings2
+  List<int> _selectedToppings2 = [];
   List<int> _cantidad = [];
 
   @override
   void initState() {
     super.initState();
+    _fetchCategorias();
     _fetchProductos();
     _fetchToppings();
-    _fetchToppings2(); // Cargar la segunda tabla de toppings
+    _fetchToppings2();
   }
 
-  Future<void> _fetchProductos() async {
+  // Método para obtener categorías de la tabla 'categoria'
+  Future<void> _fetchCategorias() async {
     try {
-      final response = await Supabase.instance.client.from("producto").select();
+      final response = await Supabase.instance.client.from("categoria").select();
 
       if (response != null && response.isNotEmpty) {
         setState(() {
-          _productos = response;
-          _cantidad = List.generate(response.length, (_) => 1);
+          _categorias = List<Map<String, dynamic>>.from(response);
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('No se encontraron categorías')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
+  }
+
+  // Método para obtener productos, con filtrado por categoría
+  Future<void> _fetchProductos([int? categoriaId]) async {
+    try {
+      var query = Supabase.instance.client.from("producto").select();
+
+      if (categoriaId != null) {
+        query = query.eq('fk_categoria', categoriaId);
+      }
+
+      final response = await query;
+
+      if (response != null && response.isNotEmpty) {
+        final productosFiltrados = response.where((producto) {
+          return producto['nombre'] != null && producto['precio'] != null && producto['foto'] != null;
+        }).toList();
+
+        setState(() {
+          _productos = productosFiltrados;
+          _cantidad = List.generate(productosFiltrados.length, (_) => 1);
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -46,6 +81,7 @@ class _ListaProductosState extends State<Home> {
       );
     }
   }
+
 
   Future<void> _fetchToppings() async {
     try {
@@ -393,99 +429,106 @@ void _showToppingsSheet(int index) {
 
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppbar(
-        titulo: 'Home',
-        colorsito: Colors.teal,
-      ),
-      drawer: CustomDrawer(),
-      body: Padding(
-        
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-         
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: _productos.length,
-                itemBuilder: (context, index) {
-                  final producto = _productos[index];
-                  double precioTotal = producto['precio'] * _cantidad[index];
-                  double toppingTotal = _calculateToppingPrice(_selectedToppings);
-                  double total = precioTotal + toppingTotal;
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: CustomAppbar(
+      titulo: 'Home',
+      colorsito: Colors.teal,
+    ),
+    drawer: CustomDrawer(),
+    body: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Verifica que se carguen las categorías antes de mostrar el DropdownButton
+          if (_categorias.isNotEmpty) 
+           DropdownButton<int>(
+  hint: const Text('Selecciona una categoría'),
+  value: _selectedCategoriaId,
+  items: [
+    DropdownMenuItem<int>(
+      value: null, // Valor especial para "Todos"
+      child: const Text('Todos'),
+    ),
+    ..._categorias.map<DropdownMenuItem<int>>((categoria) {
+      return DropdownMenuItem<int>(
+        value: categoria['pk_categoria'], // Clave primaria de la categoría
+        child: Text(categoria['nombre_cat']), // Nombre de la categoría
+      );
+    }).toList(),
+  ],
+  onChanged: (int? value) {
+    setState(() {
+      _selectedCategoriaId = value;
+      _fetchProductos(value); // Filtrar productos por categoría o mostrar todos
+    });
+  },
+),
 
-                  return Card(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    child: ListTile(
-                      title: Text(producto['nombre']),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Precio unitario: \$${producto['precio']}'),
-                          Text('Precio total: \$${total.toStringAsFixed(2)}'),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.remove),
-                                onPressed: () {
-                                  setState(() {
-                                    if (_cantidad[index] > 1) {
-                                      _cantidad[index]--;
-                                    }
-                                  });
-                                },
-                              ),
-                              Text(_cantidad[index].toString()),
-                              IconButton(
-                                icon: const Icon(Icons.add),
-                                onPressed: () {
-                                  setState(() {
-                                    _cantidad[index]++;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          ElevatedButton(
-                            onPressed: () => _showToppingsSheet(index),
-                            child: const Text('Seleccionar Toppings'),
-                          ),
-                        ],
-                      ),
-                      leading: producto['foto'] != null
-                          ? Image.network(
-                              _getImageUrl(producto['foto']),
-                              width: 50,
-                              height: 50,
-                              fit: BoxFit.cover,
-                            )
-                          : const Icon(Icons.image),
+          if (_categorias.isEmpty) // Mostrar un mensaje si no hay categorías
+            const Text('No hay categorías disponibles'),
+          
+          Expanded(
+            child: ListView.builder(
+              itemCount: _productos.length,
+              itemBuilder: (context, index) {
+                final producto = _productos[index];
+                double precioTotal = producto['precio'] * _cantidad[index];
+
+                return Card(
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  child: ListTile(
+                    title: Text(producto['nombre'] ?? 'Producto sin nombre'),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Precio unitario: \$${producto['precio']?.toStringAsFixed(2) ?? '0.00'}'),
+                        Text('Precio total: \$${precioTotal.toStringAsFixed(2)}'),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.remove),
+                              onPressed: () {
+                                setState(() {
+                                  if (_cantidad[index] > 1) {
+                                    _cantidad[index]--;
+                                  }
+                                });
+                              },
+                            ),
+                            Text(_cantidad[index].toString()),
+                            IconButton(
+                              icon: const Icon(Icons.add),
+                              onPressed: () {
+                                setState(() {
+                                  _cantidad[index]++;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  );
-                },
-                
-              ),
+                    leading: producto['foto'] != null
+                        ? Image.network(
+                            _getImageUrl(producto['foto']),
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          )
+                        : const Icon(Icons.image),
+                  ),
+                );
+              },
             ),
-             // Botón para navegar a la pantalla de Ticket de Venta
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => TicketVentaScreen()),
-              );
-            },
-            child: Text('Ver Ticket de Venta'),
           ),
-          ],
-        ),
+        ],
       ),
-      
-    );
-  }
+    ),
+  );
+}
 }
 
 class TicketVentaScreen extends StatefulWidget {

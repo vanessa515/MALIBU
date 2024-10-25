@@ -92,6 +92,18 @@ class CustomDrawer extends StatelessWidget {
               },
               
             ),
+
+             Divider( color: Colors.black),
+              ListTile(
+              leading: Icon(Icons.book),
+              title: Text("Historial venta por dia"),
+              subtitle: Text(''),
+              onTap: (){
+                Get.toNamed('/historialVXD');
+                
+              },
+              
+            ),
             
           ],
 

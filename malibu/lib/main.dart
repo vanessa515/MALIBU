@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:malibu/screen/historialVXD.dart';
 import 'package:malibu/screen/productos_modificaciones.dart';
 import 'package:malibu/screen/registrar_cat.dart';
 import 'package:malibu/screen/registrar_topp.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
        GetPage(name: '/productomod', page: ()=> ProductosModificaciones() ),
        GetPage(name: '/toppingsmodificaciones', page: ()=>  ToppingMOD() ),
        GetPage(name: '/ticketsh', page: ()=>  TicketVentaScreen() ),
+       GetPage(name: '/historialVXD', page: ()=>  HISTORIALVXD() ),
       ],
      
       initialRoute: '/',
