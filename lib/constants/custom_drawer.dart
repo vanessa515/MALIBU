@@ -58,7 +58,52 @@ class CustomDrawer extends StatelessWidget {
               },
               
             ),
-            
+            Divider( color: Colors.black),
+              ListTile(
+              leading: Icon(Icons.settings),
+              title: Text("Funciones Productos"),
+              subtitle: Text(''),
+              onTap: (){
+                Get.toNamed('/productomod');
+                
+              },
+              
+            ),
+             Divider( color: Colors.black),
+              ListTile(
+              leading: Icon(Icons.settings),
+              title: Text("Funciones Toppings"),
+              subtitle: Text(''),
+              onTap: (){
+                Get.toNamed('/toppingsmodificaciones');
+                
+              },
+              
+            ),
+
+            Divider( color: Colors.black),
+              ListTile(
+              leading: Icon(Icons.book),
+              title: Text("Tickets historial"),
+              subtitle: Text(''),
+              onTap: (){
+                Get.toNamed('/ticketsh');
+                
+              },
+              
+            ),
+
+             Divider( color: Colors.black),
+              ListTile(
+              leading: Icon(Icons.book),
+              title: Text("Historial venta por dia"),
+              subtitle: Text(''),
+              onTap: (){
+                Get.toNamed('/historialVXD');
+                
+              },
+              
+            ),
             
           ],
 

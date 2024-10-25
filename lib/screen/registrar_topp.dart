@@ -3,8 +3,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../constants/custom_appbar.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
-import 'dart:typed_data'; // Para manejar bytes en web
-import 'package:flutter/foundation.dart' show kIsWeb; // Para verificar si estamos en web
+import 'dart:typed_data';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class RegistroTopping extends StatefulWidget {
   const RegistroTopping({super.key});
@@ -22,7 +22,6 @@ class _RegistroToppingState extends State<RegistroTopping> {
   Uint8List? _webImage; // Para almacenar la imagen en web
   String? _imageName; // Para almacenar el nombre de la imagen
 
- 
   Future<void> _pickImage() async {
     try {
       final result = await FilePicker.platform.pickFiles(
@@ -64,7 +63,8 @@ class _RegistroToppingState extends State<RegistroTopping> {
       try {
         double precio = double.tryParse(_precioController.text) ?? 0.0;
 
-        final response = await Supabase.instance.client
+        // Insertar en la tabla "topping"
+        final responseTopping = await Supabase.instance.client
             .from("topping")
             .insert({
               'nombre': _nombreController.text,
@@ -74,26 +74,43 @@ class _RegistroToppingState extends State<RegistroTopping> {
             })
             .select();
 
+        // Insertar en la tabla "topping2" si el registro en "topping" fue exitoso
+        if (responseTopping.isNotEmpty) {
+          final responseTopping2 = await Supabase.instance.client
+              .from("topping2")
+              .insert({
+                'nombre': _nombreController.text,
+                'precio': precio,
+                'foto': _imageName, // Registrar el mismo nombre de la imagen
+                'estatus': 1,
+              })
+              .select();
+
+          if (responseTopping2.isNotEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Topping registrado en ambas tablas exitosamente')),
+            );
+            _nombreController.clear();
+            _precioController.clear();
+            setState(() {
+              _image = null;
+              _webImage = null;
+              _imageName = null; // Reiniciar el nombre de la imagen
+            });
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Error al registrar en la segunda tabla')),
+            );
+          }
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error al registrar en la primera tabla')),
+          );
+        }
+
         setState(() {
           _isSubmitting = false;
         });
-
-        if (response.isNotEmpty) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Producto registrado exitosamente')),
-          );
-          _nombreController.clear();
-          _precioController.clear();
-          setState(() {
-            _image = null;
-            _webImage = null;
-            _imageName = null; // Reiniciar el nombre de la imagen
-          });
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error al registrar producto')),
-          );
-        }
       } catch (e) {
         setState(() {
           _isSubmitting = false;
@@ -156,9 +173,6 @@ class _RegistroToppingState extends State<RegistroTopping> {
                   return null;
                 },
               ),
-              const SizedBox(height: 20),
-              // Dropdown para seleccionar categoría
-             
               const SizedBox(height: 20),
               // Mostrar imagen según la plataforma
               _image != null

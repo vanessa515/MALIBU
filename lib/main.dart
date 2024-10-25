@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:malibu/screen/historialVXD.dart';
+import 'package:malibu/screen/productos_modificaciones.dart';
 import 'package:malibu/screen/registrar_cat.dart';
 import 'package:malibu/screen/registrar_topp.dart';
 import 'package:malibu/screen/home.dart';
 import 'package:get/get.dart';
 import 'package:malibu/screen/registrar_prod.dart';
+import 'package:malibu/screen/toppings_modificaciones.dart';
 
 //Conexion a base de datos----------------------------
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -25,6 +28,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
+<<<<<<< HEAD:lib/main.dart
       title: "Hola mundo :D",
       getPages: [
         GetPage(name: '/', page: () => Home()),
@@ -32,6 +36,21 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/registroprod', page: () => RegistroProducto()),
         GetPage(name: '/registrartopp', page: () => RegistroTopping()),
       ],
+=======
+      title: "Malibu",
+   
+      getPages: 
+      [GetPage(name: '/', page: ()=> Home() ),
+       GetPage(name: '/registrocat', page: ()=> RegistroCategoria() ),
+       GetPage(name: '/registroprod', page: ()=> RegistroProducto() ),
+       GetPage(name: '/registrartopp', page: ()=> RegistroTopping() ),
+       GetPage(name: '/productomod', page: ()=> ProductosModificaciones() ),
+       GetPage(name: '/toppingsmodificaciones', page: ()=>  ToppingMOD() ),
+       GetPage(name: '/ticketsh', page: ()=>  TicketVentaScreen() ),
+       GetPage(name: '/historialVXD', page: ()=>  HISTORIALVXD() ),
+      ],
+     
+>>>>>>> analista:malibu/lib/main.dart
       initialRoute: '/',
       theme: ThemeData(
         useMaterial3: true,
