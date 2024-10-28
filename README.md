@@ -1,4 +1,4 @@
-# malibu
+# MALIBU
 
 A new Flutter project.
 
