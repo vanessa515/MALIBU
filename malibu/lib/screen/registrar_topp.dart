@@ -63,18 +63,18 @@ class _RegistroToppingState extends State<RegistroTopping> {
       try {
         double precio = double.tryParse(_precioController.text) ?? 0.0;
 
-        // Insertar en la tabla "topping"
+      
         final responseTopping = await Supabase.instance.client
             .from("topping")
             .insert({
               'nombre': _nombreController.text,
               'precio': precio,
-              'foto': _imageName, // Registrar el nombre de la imagen aquí
+              'foto': _imageName, 
               'estatus': 1,
             })
             .select();
 
-        // Insertar en la tabla "topping2" si el registro en "topping" fue exitoso
+  
         if (responseTopping.isNotEmpty) {
           final responseTopping2 = await Supabase.instance.client
               .from("topping2")
@@ -95,7 +95,7 @@ class _RegistroToppingState extends State<RegistroTopping> {
             setState(() {
               _image = null;
               _webImage = null;
-              _imageName = null; // Reiniciar el nombre de la imagen
+              _imageName = null; 
             });
           } else {
             ScaffoldMessenger.of(context).showSnackBar(

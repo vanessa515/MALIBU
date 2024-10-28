@@ -19,8 +19,8 @@ class _RegistroProductoState extends State<RegistroProducto> {
   final TextEditingController _precioController = TextEditingController();
   bool _isSubmitting = false;
   File? _image;
-  Uint8List? _webImage; // Para almacenar la imagen en web
-  String? _imageName; // Para almacenar el nombre de la imagen
+  Uint8List? _webImage; 
+  String? _imageName; 
 
   List<dynamic> _categorias = [];
   dynamic _categoriaSeleccionada;
@@ -58,13 +58,13 @@ class _RegistroProductoState extends State<RegistroProducto> {
           // En web usamos los bytes
           setState(() {
             _webImage = result.files.first.bytes;
-            _imageName = result.files.first.name; // Guardar el nombre de la imagen
+            _imageName = result.files.first.name; 
           });
         } else {
-          // En móviles/escritorio usamos la ruta del archivo
+      
           setState(() {
             _image = File(result.files.first.path!);
-            _imageName = result.files.first.name; // Guardar el nombre de la imagen
+            _imageName = result.files.first.name; 
           });
         }
       } else {
@@ -95,7 +95,7 @@ class _RegistroProductoState extends State<RegistroProducto> {
               'precio': precio,
               'fk_categoria': _categoriaSeleccionada['pk_categoria'],
               'estatus': 1,
-              'foto': _imageName, // Registrar el nombre de la imagen aquí
+              'foto': _imageName, 
             })
             .select();
 

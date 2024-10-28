@@ -426,9 +426,7 @@ void _showToppingsSheet(int index) {
 }
 
 
-
-
-  @override
+@override
 Widget build(BuildContext context) {
   return Scaffold(
     appBar: CustomAppbar(
@@ -443,28 +441,28 @@ Widget build(BuildContext context) {
         children: [
           // Verifica que se carguen las categorías antes de mostrar el DropdownButton
           if (_categorias.isNotEmpty) 
-           DropdownButton<int>(
-  hint: const Text('Selecciona una categoría'),
-  value: _selectedCategoriaId,
-  items: [
-    DropdownMenuItem<int>(
-      value: null, // Valor especial para "Todos"
-      child: const Text('Todos'),
-    ),
-    ..._categorias.map<DropdownMenuItem<int>>((categoria) {
-      return DropdownMenuItem<int>(
-        value: categoria['pk_categoria'], // Clave primaria de la categoría
-        child: Text(categoria['nombre_cat']), // Nombre de la categoría
-      );
-    }).toList(),
-  ],
-  onChanged: (int? value) {
-    setState(() {
-      _selectedCategoriaId = value;
-      _fetchProductos(value); // Filtrar productos por categoría o mostrar todos
-    });
-  },
-),
+            DropdownButton<int>(
+              hint: const Text('Selecciona una categoría'),
+              value: _selectedCategoriaId,
+              items: [
+                DropdownMenuItem<int>(
+                  value: null, // Valor especial para "Todos"
+                  child: const Text('Todos'),
+                ),
+                ..._categorias.map<DropdownMenuItem<int>>((categoria) {
+                  return DropdownMenuItem<int>(
+                    value: categoria['pk_categoria'], // Clave primaria de la categoría
+                    child: Text(categoria['nombre_cat']), // Nombre de la categoría
+                  );
+                }).toList(),
+              ],
+              onChanged: (int? value) {
+                setState(() {
+                  _selectedCategoriaId = value;
+                  _fetchProductos(value); // Filtrar productos por categoría o mostrar todos
+                });
+              },
+            ),
 
           if (_categorias.isEmpty) // Mostrar un mensaje si no hay categorías
             const Text('No hay categorías disponibles'),
@@ -487,25 +485,34 @@ Widget build(BuildContext context) {
                         Text('Precio total: \$${precioTotal.toStringAsFixed(2)}'),
                         const SizedBox(height: 8),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            IconButton(
-                              icon: const Icon(Icons.remove),
-                              onPressed: () {
-                                setState(() {
-                                  if (_cantidad[index] > 1) {
-                                    _cantidad[index]--;
-                                  }
-                                });
-                              },
+                            Row(
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.remove),
+                                  onPressed: () {
+                                    setState(() {
+                                      if (_cantidad[index] > 1) {
+                                        _cantidad[index]--;
+                                      }
+                                    });
+                                  },
+                                ),
+                                Text(_cantidad[index].toString()),
+                                IconButton(
+                                  icon: const Icon(Icons.add),
+                                  onPressed: () {
+                                    setState(() {
+                                      _cantidad[index]++;
+                                    });
+                                  },
+                                ),
+                              ],
                             ),
-                            Text(_cantidad[index].toString()),
-                            IconButton(
-                              icon: const Icon(Icons.add),
-                              onPressed: () {
-                                setState(() {
-                                  _cantidad[index]++;
-                                });
-                              },
+                            ElevatedButton(
+                              onPressed: () => _showToppingsSheet(index),
+                              child: const Text('Seleccionar Toppings'),
                             ),
                           ],
                         ),
