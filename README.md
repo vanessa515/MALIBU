@@ -1,6 +1,6 @@
 # MALIBU
 
-A new Flutter project.
+Sistema punto de venta para Malibu
 
 ## Getting Started
 
