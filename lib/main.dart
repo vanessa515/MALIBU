@@ -28,15 +28,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-<<<<<<< HEAD:lib/main.dart
-      title: "Hola mundo :D",
-      getPages: [
-        GetPage(name: '/', page: () => Home()),
-        GetPage(name: '/registrocat', page: () => RegistroCategoria()),
-        GetPage(name: '/registroprod', page: () => RegistroProducto()),
-        GetPage(name: '/registrartopp', page: () => RegistroTopping()),
-      ],
-=======
       title: "Malibu",
    
       getPages: 
@@ -50,7 +41,6 @@ class MyApp extends StatelessWidget {
        GetPage(name: '/historialVXD', page: ()=>  HISTORIALVXD() ),
       ],
      
->>>>>>> analista:malibu/lib/main.dart
       initialRoute: '/',
       theme: ThemeData(
         useMaterial3: true,
