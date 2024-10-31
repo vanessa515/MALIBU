@@ -103,7 +103,8 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset('assets/logos/logo.jpg', height: 120),
+                Image.asset('../assets/logos/logo.jpg', height: 120),
+                
                 SizedBox(height: 40),
 
                 Text(
