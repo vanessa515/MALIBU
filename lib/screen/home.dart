@@ -509,6 +509,10 @@ Widget build(BuildContext context) {
                             ),
                           ],
                         ),
+                        ElevatedButton(
+                              onPressed: () => _showToppingsSheet(index),
+                              child: const Text('Seleccionar Toppings'),
+                            ),
                       ],
                     ),
                     leading: producto['foto'] != null
