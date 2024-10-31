@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:malibu/screen/historialVXD.dart';
+import 'package:malibu/screen/login.dart';
+import 'package:malibu/screen/logout.dart';
 import 'package:malibu/screen/productos_modificaciones.dart';
 import 'package:malibu/screen/registrar_cat.dart';
 import 'package:malibu/screen/registrar_topp.dart';
@@ -33,6 +35,9 @@ class MyApp extends StatelessWidget {
       getPages: 
       [GetPage(name: '/', page: ()=> Home() ),
        GetPage(name: '/registrocat', page: ()=> RegistroCategoria() ),
+       GetPage(name: '/logoout', page: () => Logout()),
+       GetPage(name: '/login', page: () => LoginScreen()),
+       GetPage(name: '/registrocat', page: () => RegistroCategoria()),
        GetPage(name: '/registroprod', page: ()=> RegistroProducto() ),
        GetPage(name: '/registrartopp', page: ()=> RegistroTopping() ),
        GetPage(name: '/productomod', page: ()=> ProductosModificaciones() ),
@@ -41,7 +46,7 @@ class MyApp extends StatelessWidget {
        GetPage(name: '/historialVXD', page: ()=>  HISTORIALVXD() ),
       ],
      
-      initialRoute: '/',
+      initialRoute: '/login',
       theme: ThemeData(
         useMaterial3: true,
       ),
