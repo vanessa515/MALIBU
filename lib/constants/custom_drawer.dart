@@ -104,6 +104,18 @@ class CustomDrawer extends StatelessWidget {
               },
               
             ),
+
+            Divider( color: Colors.black),
+              ListTile(
+              leading: Icon(Icons.logout),
+              title: Text("Cerrar Sesión"),
+              subtitle: Text(''),
+              onTap: (){
+                Get.toNamed('/logoout');
+                
+              },
+              
+            ),
             
           ],
 
