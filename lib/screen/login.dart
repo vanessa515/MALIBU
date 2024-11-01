@@ -37,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
           .eq('email', emailController.text.trim())
           .single();
 
-      if (response != null && response['password'] == passwordController.text) {
+      if (response['password'] == passwordController.text) {
         final roleId = response['role_id'] as int;
         
         Get.snackbar(

@@ -34,7 +34,7 @@ class _ListaProductosState extends State<Home> {
     try {
       final response = await Supabase.instance.client.from("categoria").select();
 
-      if (response != null && response.isNotEmpty) {
+      if (response.isNotEmpty) {
         setState(() {
           _categorias = List<Map<String, dynamic>>.from(response);
         });
@@ -61,7 +61,7 @@ class _ListaProductosState extends State<Home> {
 
       final response = await query;
 
-      if (response != null && response.isNotEmpty) {
+      if (response.isNotEmpty) {
         final productosFiltrados = response.where((producto) {
           return producto['nombre'] != null && producto['precio'] != null && producto['foto'] != null;
         }).toList();
@@ -87,7 +87,7 @@ class _ListaProductosState extends State<Home> {
     try {
       final response = await Supabase.instance.client.from("topping").select();
 
-      if (response != null && response.isNotEmpty) {
+      if (response.isNotEmpty) {
         setState(() {
           _toppings = response;
         });
@@ -107,7 +107,7 @@ class _ListaProductosState extends State<Home> {
     try {
       final response = await Supabase.instance.client.from("topping2").select();
 
-      if (response != null && response.isNotEmpty) {
+      if (response.isNotEmpty) {
         setState(() {
           _toppings2 = response;
         });
@@ -172,12 +172,12 @@ Future<void> _registerProductWithToppings(
           'fk_topping2': toppingId2, // Agregar el fk_topping2 aquí
         }).select('pk_producto_topping').single();
 
-        if (insertedData != null && insertedData['pk_producto_topping'] != null) {
+        if (insertedData['pk_producto_topping'] != null) {
           productoToppingIds.add(insertedData['pk_producto_topping']);
         }
 
         // Registrar la venta si aún no ha sido registrada
-        if (pkVenta == null && insertedData != null) {
+        if (pkVenta == null) {
           // Registrar la venta con la cantidad total
           pkVenta = await _registerSale(cantidad, insertedData['pk_producto_topping']);
         }
@@ -224,7 +224,7 @@ Future<int?> _registerSale(int cantidad, int fkProductoTopping) async {
         .select('pk_venta')
         .single();
 
-    final pkVenta = insertedData?['pk_venta'];
+    final pkVenta = insertedData['pk_venta'];
 
     if (pkVenta == null) {
       throw Exception('Error al obtener el ID de la venta');

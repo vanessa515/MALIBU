@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:malibu/constants/custom_drawer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../constants/custom_appbar.dart';
 
 
 class TicketVentaScreen extends StatefulWidget {
