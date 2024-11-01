@@ -35,12 +35,10 @@ class _RegistroProductoState extends State<RegistroProducto> {
     try {
       final response = await Supabase.instance.client.from("categoria").select();
 
-      if (response != null) {
-        setState(() {
-          _categorias = response;
-        });
-      }
-    } on Exception catch (e) {
+      setState(() {
+        _categorias = response;
+      });
+        } on Exception catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error al cargar categorías: $e')),
       );
