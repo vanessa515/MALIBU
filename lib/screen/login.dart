@@ -3,14 +3,6 @@ import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginScreen extends StatefulWidget {
-  //Variables de colores
-  Color color_1 = Color.fromARGB(255, 255, 192, 152);
-  Color color_2 = Color.fromARGB(255, 69, 65, 129);
-  Color color_3 = Color.fromARGB(255, 0, 0, 0);
-
-  //Variables de imagenes
-  String logo_img = "../assets/logos/logo.png";
-
   LoginScreen({super.key});
 
   @override
@@ -100,10 +92,19 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  //Variables de colores
+  Color color_bg = Color.fromARGB(200, 210, 190, 152);
+  Color color_font = Color.fromARGB(255, 69, 65, 129);
+  Color color_3 = Color.fromARGB(255, 0, 0, 0);
+
+  //Variables de imagenes
+  String logo_img = "../assets/logos/logo.png";
+  String logo_rmvbg = "../assets/logos/logo_bgremove.png";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 192, 152),
+      backgroundColor: (color_bg),
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
@@ -113,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Container(
                   child: Image.asset(
-                    '../assets/logos/logo_bgremove.png',
+                    logo_rmvbg,
                     height: 250,
                   ),
                 ),
@@ -123,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF414581),
+                    color: color_font,
                   ),
                 ),
                 SizedBox(height: 20),
