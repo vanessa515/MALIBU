@@ -93,8 +93,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   //Variables de colores
-  Color color_bg = Color.fromARGB(200, 210, 190, 152);
+  Color color_bg = Color.fromARGB(255, 230, 190, 152);
   Color color_font = Color.fromARGB(255, 69, 65, 129);
+  Color color_btnlogin = Color.fromARGB(255, 255, 255, 255);
   Color color_3 = Color.fromARGB(255, 0, 0, 0);
 
   //Variables de imagenes
@@ -104,7 +105,9 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //Background de login
       backgroundColor: (color_bg),
+
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
@@ -112,13 +115,18 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                //Imagen del logo - contenedor
                 Container(
                   child: Image.asset(
                     logo_rmvbg,
                     height: 250,
                   ),
                 ),
+
+                //Espaciado 1
                 SizedBox(height: 25),
+
+                //Texto de bienvenida
                 Text(
                   'Bienvenido',
                   style: TextStyle(
@@ -127,7 +135,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: color_font,
                   ),
                 ),
+
+                //Espaciado 2
                 SizedBox(height: 20),
+
+                //Texto de ingreso de correo electrónico
                 LayoutBuilder(
                   builder: (context, constraints) {
                     double cardWidth =
@@ -136,11 +148,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     return Center(
                       child: Container(
                         width: cardWidth,
+
+                        //Contenedor del login
                         child: Card(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
-                          color: Color(0xFF414581),
+                          color: color_font,
                           elevation: 5,
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
@@ -171,7 +185,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                   onEditingComplete: () =>
                                       FocusScope.of(context).nextFocus(),
                                 ),
+
+                                //Espaciado 3
                                 SizedBox(height: 20),
+
                                 TextField(
                                   controller: passwordController,
                                   obscureText: true,
@@ -196,11 +213,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                   style: TextStyle(color: Color(0xFFFFFFFF)),
                                   onSubmitted: (_) => _signIn(),
                                 ),
+
+                                //Espaciado 4
                                 SizedBox(height: 20),
+
                                 ElevatedButton(
                                   onPressed: isLoading ? null : _signIn,
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Color(0xFFFFC098),
+                                    backgroundColor: color_btnlogin,
                                     padding: EdgeInsets.symmetric(
                                         vertical: 15, horizontal: 100),
                                     shape: RoundedRectangleBorder(

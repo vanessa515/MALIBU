@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 class CustomDrawer extends StatelessWidget {
   //Variables de colores
-  final Color color_1 = Color.fromARGB(255, 255, 192, 152);
+  final Color color_1 = Color.fromARGB(255, 230, 192, 152);
   final Color color_2 = Color.fromARGB(255, 69, 65, 129);
   final Color color_3 = Color.fromARGB(255, 0, 0, 0);
 
