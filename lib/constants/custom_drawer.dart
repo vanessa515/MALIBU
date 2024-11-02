@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CustomDrawer extends StatelessWidget {
+  
   //Variables de colores
   final Color color_1 = Color.fromARGB(255, 255, 192, 152);
   final Color color_2 = Color.fromARGB(255, 69, 65, 129);
   final Color color_3 = Color.fromARGB(255, 0, 0, 0);
 
   //Variables de imagenes
-  final String logo_img = '../../assets/logos/logo.png';
+  final String logo_img = '../assets/logos/logo.png';
+  final String logo_rmvbg = '../assets/logos/logo_bgremove.png';
 
   CustomDrawer({super.key});
 
@@ -20,10 +22,12 @@ class CustomDrawer extends StatelessWidget {
       child: SafeArea(
         child: ListView(
           children: [
-
             //Header del menu (Logo)
             DrawerHeader(
-              child: Image.asset(logo_img, height: 100,),
+              child: Image.asset(
+                logo_rmvbg,
+                height: 100,
+              ),
             ),
 
             //Menu en listado
