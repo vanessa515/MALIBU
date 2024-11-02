@@ -3,7 +3,15 @@ import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  //Variables de colores
+  Color color_1 = Color.fromARGB(255, 255, 192, 152);
+  Color color_2 = Color.fromARGB(255, 69, 65, 129);
+  Color color_3 = Color.fromARGB(255, 0, 0, 0);
+
+  //Variables de imagenes
+  String logo_img = "../assets/logos/logo.png";
+
+  LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -39,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (response['password'] == passwordController.text) {
         final roleId = response['role_id'] as int;
-        
+
         Get.snackbar(
           'Éxito',
           'Inicio de sesión exitoso',
@@ -48,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
         );
 
         await Future.delayed(Duration(seconds: 1));
-        
+
         if (roleId == 1) {
           Get.offAllNamed('/admin');
         } else if (roleId == 2) {
@@ -70,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (e) {
       print('Error: $e');
       String errorMessage = 'Error al iniciar sesión';
-      
+
       if (e.toString().contains('no rows returned')) {
         errorMessage = 'Usuario no encontrado';
       } else if (e.toString().contains('Contraseña incorrecta')) {
@@ -95,18 +103,21 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFFFFFF),
+      backgroundColor: Color.fromARGB(255, 255, 192, 152),
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(16.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset('../assets/logos/logo.jpg', height: 120),
-                
-                SizedBox(height: 40),
-
+                Container(
+                  child: Image.asset(
+                    '../assets/logos/logo_bgremove.png',
+                    height: 250,
+                  ),
+                ),
+                SizedBox(height: 25),
                 Text(
                   'Bienvenido',
                   style: TextStyle(
@@ -116,12 +127,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 SizedBox(height: 20),
-
                 LayoutBuilder(
                   builder: (context, constraints) {
-                    double cardWidth = constraints.maxWidth > 600
-                        ? 500
-                        : double.infinity;
+                    double cardWidth =
+                        constraints.maxWidth > 600 ? 500 : double.infinity;
 
                     return Center(
                       child: Container(
@@ -141,50 +150,58 @@ class _LoginScreenState extends State<LoginScreen> {
                                   keyboardType: TextInputType.emailAddress,
                                   decoration: InputDecoration(
                                     labelText: 'Correo electrónico',
-                                    labelStyle: TextStyle(color: Color(0xFFFFFFFF)),
-                                    prefixIcon: Icon(Icons.email, color: Color(0xFFFFFFFF)),
+                                    labelStyle:
+                                        TextStyle(color: Color(0xFFFFFFFF)),
+                                    prefixIcon: Icon(Icons.email,
+                                        color: Color(0xFFFFFFFF)),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Color(0xFFFFFFFF)),
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFFFFFFF)),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Color(0xFFFFFFFF)),
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFFFFFFF)),
                                     ),
                                   ),
                                   style: TextStyle(color: Color(0xFFFFFFFF)),
-                                  onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                                  onEditingComplete: () =>
+                                      FocusScope.of(context).nextFocus(),
                                 ),
                                 SizedBox(height: 20),
-
                                 TextField(
                                   controller: passwordController,
                                   obscureText: true,
                                   decoration: InputDecoration(
                                     labelText: 'Contraseña',
-                                    labelStyle: TextStyle(color: Color(0xFFFFFFFF)),
-                                    prefixIcon: Icon(Icons.lock, color: Color(0xFFFFFFFF)),
+                                    labelStyle:
+                                        TextStyle(color: Color(0xFFFFFFFF)),
+                                    prefixIcon: Icon(Icons.lock,
+                                        color: Color(0xFFFFFFFF)),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Color(0xFFFFFFFF)),
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFFFFFFF)),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Color(0xFFFFFFFF)),
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFFFFFFF)),
                                     ),
                                   ),
                                   style: TextStyle(color: Color(0xFFFFFFFF)),
                                   onSubmitted: (_) => _signIn(),
                                 ),
                                 SizedBox(height: 20),
-
                                 ElevatedButton(
                                   onPressed: isLoading ? null : _signIn,
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Color(0xFFFFC098),
-                                    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 100),
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 15, horizontal: 100),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
@@ -195,7 +212,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                           width: 20,
                                           child: CircularProgressIndicator(
                                             strokeWidth: 2,
-                                            valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                    Colors.black),
                                           ),
                                         )
                                       : Text(
