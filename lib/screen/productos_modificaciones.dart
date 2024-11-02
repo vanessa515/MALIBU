@@ -22,12 +22,10 @@ class _ProductosModificacionesState extends State<ProductosModificaciones> {
 
   Future<void> _getProductos() async {
     final response = await supabase.from('producto').select('*');
-    if (response != null) {
-      setState(() {
-        productos = response;
-      });
+    setState(() {
+      productos = response;
+    });
     }
-  }
 
   Future<void> _deleteProducto(int id) async {
     await supabase.from('producto').delete().eq('pk_producto', id);

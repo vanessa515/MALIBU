@@ -22,12 +22,10 @@ class _ToppingMODState extends State<ToppingMOD> {
 
   Future<void> _getToppings() async {
     final response = await supabase.from('topping').select('*');
-    if (response != null) {
-      setState(() {
-        toppings = response;
-      });
+    setState(() {
+      toppings = response;
+    });
     }
-  }
 
   Future<void> _deleteTopping(int id) async {
     await supabase.from('topping').delete().eq('pk_topping', id);
