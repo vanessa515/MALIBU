@@ -93,8 +93,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   //Variables de colores
-  Color color_1 = Color.fromARGB(200, 210, 190, 152);
-  Color color_2 = Color.fromARGB(255, 69, 65, 129);
+  Color color_bg = Color.fromARGB(200, 210, 190, 152);
+  Color color_font = Color.fromARGB(255, 69, 65, 129);
   Color color_3 = Color.fromARGB(255, 0, 0, 0);
 
   //Variables de imagenes
@@ -104,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: (color_1),
+      backgroundColor: (color_bg),
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
@@ -124,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF414581),
+                    color: color_font,
                   ),
                 ),
                 SizedBox(height: 20),
