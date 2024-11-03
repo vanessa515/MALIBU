@@ -7,6 +7,7 @@ import '../constants/custom_appbar.dart';
 Color color_bg = Color.fromARGB(255, 230, 190, 152);
 Color color_font = Color(0xFF454181);
 Color color_white = Color.fromARGB(255, 255, 255, 255);
+Color color_cancelar = Color.fromARGB(255, 244, 63, 63);
 Color color_3 = Color.fromARGB(255, 0, 0, 0);
 
 //Variables de imagenes
@@ -389,6 +390,7 @@ class _ListaProductosState extends State<Home> {
                                             }
                                           });
                                         },
+                                  hoverColor: color_font,
                                   secondary: topping['imagen'] != null
                                       ? Image.network(
                                           _getImageUrl(topping['imagen']),
@@ -481,6 +483,7 @@ class _ListaProductosState extends State<Home> {
                                             }
                                           });
                                         },
+                                  hoverColor: color_font,
                                   secondary: topping2['imagen'] != null
                                       ? Image.network(
                                           _getImageUrl(topping2['imagen']),
@@ -517,13 +520,80 @@ class _ListaProductosState extends State<Home> {
                           );
                           Navigator.of(context).pop();
                         },
-                        child: const Text('Registrar'),
+
+                        // Diseño del boton Registrar
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll(
+                            color_font,
+                          ),
+                          foregroundColor: WidgetStatePropertyAll(
+                            color_white,
+                          ),
+                          overlayColor: WidgetStateProperty.resolveWith(
+                            (states) => states.contains(WidgetState.pressed)
+                                ? color_white
+                                : null,
+                          ), // Efecto al presionar
+                          padding: WidgetStatePropertyAll(
+                            EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 15,
+                            ),
+                          ),
+                          shape: WidgetStatePropertyAll(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          ),
+                        ),
+
+                        child: Text(
+                          'Registrar',
+                          style: TextStyle(
+                            color: color_white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
+
+                      // Boton de cancelar
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: const Text('Cancelar'),
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll(
+                            color_font,
+                          ), // Fondo del botón
+                          foregroundColor: WidgetStatePropertyAll(
+                            color_white,
+                          ), // Color del texto
+                          overlayColor: WidgetStateProperty.resolveWith(
+                            (states) => states.contains(WidgetState.pressed)
+                                ? color_white
+                                : null,
+                          ), // Efecto al presionar
+                          padding: WidgetStatePropertyAll(
+                            const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 15,
+                            ),
+                          ),
+                          shape: WidgetStatePropertyAll(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          ),
+                        ),
+                        child: Text(
+                          'Cancelar',
+                          style: TextStyle(
+                            color: color_white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ],
                   ),
