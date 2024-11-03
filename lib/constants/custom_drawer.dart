@@ -2,112 +2,221 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({super.key});
+  //Variables de colores
+  final Color color_1 = Color.fromARGB(255, 230, 192, 152);
+  final Color color_2 = Color.fromARGB(255, 69, 65, 129);
+  final Color color_3 = Color.fromARGB(255, 0, 0, 0);
+
+  //Variables de imagenes
+  final String logo_img = '../assets/logos/logo.png';
+  final String logo_rmvbg = '../assets/logos/logo_bgremove.png';
+
+  CustomDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return 
-   Drawer(
-      backgroundColor: Colors.white,
+    return Drawer(
+      backgroundColor: color_1,
       width: 304,
       child: SafeArea(
         child: ListView(
           children: [
+            //Header del menu (Logo)
             DrawerHeader(
-              child:  Icon ( Icons.star ),
+              child: Image.asset(
+                logo_rmvbg,
+                height: 150,
+                width: 150,
+              ),
             ),
+
+            //Menu en listado
             ListTile(
-              leading: Icon(Icons.home),
-              title: Text("INICIO"),
-              subtitle: Text('HOME'),
-              onTap: (){
+              leading: Icon(
+                Icons.home,
+                size: 30,
+                color: color_2,
+              ),
+              title: Text(
+                "INICIO",
+                style: TextStyle(
+                  color: color_3,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
                 Get.toNamed('/');
               },
             ),
-             Divider( color: Colors.black),
-              ListTile(
-              leading: Icon(Icons.app_registration),
-              title: Text("Registrar categoria"),
-              subtitle: Text(''),
-              onTap: (){
+
+            //Espaciado 1
+            Divider(color: color_2),
+
+            ListTile(
+              leading: Icon(
+                Icons.add,
+                size: 30,
+                color: color_2,
+              ),
+              title: Text(
+                "Registrar categoria",
+                style: TextStyle(
+                  color: color_3,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
                 Get.toNamed('/registrocat');
-                
               },
-              
             ),
-            Divider( color: Colors.black),
-              ListTile(
-              leading: Icon(Icons.add),
-              title: Text("Registrar productos"),
-              subtitle: Text(''),
-              onTap: (){
+
+            //Espaciado 2
+            Divider(color: color_2),
+
+            ListTile(
+              leading: Icon(
+                Icons.add,
+                size: 30,
+                color: color_2,
+              ),
+              title: Text(
+                "Registrar productos",
+                style: TextStyle(
+                  color: color_3,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
                 Get.toNamed('/registroprod');
-                
               },
-              
             ),
-            
-             Divider( color: Colors.black),
-              ListTile(
-              leading: Icon(Icons.add),
-              title: Text("Registrar toppings"),
-              subtitle: Text(''),
-              onTap: (){
+
+            //Espaciado 3
+            Divider(color: color_2),
+
+            ListTile(
+              leading: Icon(
+                Icons.add,
+                size: 30,
+                color: color_2,
+              ),
+              title: Text(
+                "Registrar toppings",
+                style: TextStyle(
+                  color: color_3,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
                 Get.toNamed('/registrartopp');
-                
               },
-              
             ),
-            Divider( color: Colors.black),
-              ListTile(
-              leading: Icon(Icons.settings),
-              title: Text("Funciones Productos"),
-              subtitle: Text(''),
-              onTap: (){
+
+            //Espaciado 4
+            Divider(color: color_2),
+
+            ListTile(
+              leading: Icon(
+                Icons.settings,
+                size: 30,
+                color: color_2,
+              ),
+              title: Text(
+                "Funciones Productos",
+                style: TextStyle(
+                  color: color_3,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
                 Get.toNamed('/productomod');
-                
               },
-              
             ),
-             Divider( color: Colors.black),
-              ListTile(
-              leading: Icon(Icons.settings),
-              title: Text("Funciones Toppings"),
-              subtitle: Text(''),
-              onTap: (){
+
+            //Espaciado 5
+            Divider(color: color_2),
+
+            ListTile(
+              leading: Icon(
+                Icons.settings,
+                size: 30,
+                color: color_2,
+              ),
+              title: Text(
+                "Funciones Toppings",
+                style: TextStyle(
+                  color: color_3,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
                 Get.toNamed('/toppingsmodificaciones');
-                
               },
-              
             ),
 
-            Divider( color: Colors.black),
-              ListTile(
-              leading: Icon(Icons.book),
-              title: Text("Tickets historial"),
-              subtitle: Text(''),
-              onTap: (){
+            //Espaciado 6
+            Divider(color: color_2),
+
+            ListTile(
+              leading: Icon(
+                Icons.task,
+                size: 30,
+                color: color_2,
+              ),
+              title: Text(
+                "Tickets historial",
+                style: TextStyle(
+                  color: color_3,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
                 Get.toNamed('/ticketsh');
-                
               },
-              
             ),
 
-             Divider( color: Colors.black),
-              ListTile(
-              leading: Icon(Icons.book),
-              title: Text("Historial venta por dia"),
-              subtitle: Text(''),
-              onTap: (){
+            //Espaciado 7
+            Divider(color: color_2),
+
+            ListTile(
+              leading: Icon(
+                Icons.book,
+                size: 30,
+                color: color_2,
+              ),
+              title: Text(
+                "Historial venta por dia",
+                style: TextStyle(
+                  color: color_3,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
                 Get.toNamed('/historialVXD');
-                
               },
-              
             ),
-            
-          ],
 
-          
+            //Espaciado 8
+            Divider(color: color_2),
+
+            ListTile(
+              leading: Icon(
+                Icons.logout,
+                size: 30,
+                color: color_2,
+              ),
+              title: Text(
+                "Cerrar Sesión",
+                style: TextStyle(
+                  color: color_3,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
+                Get.toNamed('/logoout');
+              },
+            ),
+          ],
         ),
       ),
     );
