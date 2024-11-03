@@ -20,8 +20,18 @@ class _LoginScreenState extends State<LoginScreen> {
       Get.snackbar(
         'Error',
         'Por favor, complete todos los campos',
-        backgroundColor: Colors.red.withOpacity(0.1),
-        duration: Duration(seconds: 3),
+        backgroundColor: Colors.red.withOpacity(0.5),
+        duration: Duration(seconds: 2),
+        snackPosition: SnackPosition.BOTTOM,
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).size.height *
+              0.12, // Espacio desde la parte superior
+          left: MediaQuery.of(context).size.width *
+              0.33, // Margen izquierdo para centrar
+          right: MediaQuery.of(context).size.width *
+              0.33, // Margen derecho para centrar
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       );
       return;
     }
@@ -41,10 +51,19 @@ class _LoginScreenState extends State<LoginScreen> {
         final roleId = response['role_id'] as int;
 
         Get.snackbar(
-          'Éxito',
+          'Bienvenido',
           'Inicio de sesión exitoso',
-          backgroundColor: Colors.green.withOpacity(0.1),
-          duration: Duration(seconds: 2),
+          backgroundColor: Colors.green.withOpacity(0.5),
+          duration: Duration(seconds: 1),
+          margin: EdgeInsets.only(
+            top: MediaQuery.of(context).size.height *
+                0.30, // Espacio desde la parte superior
+            left: MediaQuery.of(context).size.width *
+                0.33, // Margen izquierdo para centrar
+            right: MediaQuery.of(context).size.width *
+                0.33, // Margen derecho para centrar
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
         );
 
         await Future.delayed(Duration(seconds: 1));
@@ -64,8 +83,17 @@ class _LoginScreenState extends State<LoginScreen> {
       Get.snackbar(
         'Error',
         'Error de conexión con la base de datos',
-        backgroundColor: Colors.red.withOpacity(0.1),
+        backgroundColor: Colors.red.withOpacity(0.3),
         duration: Duration(seconds: 3),
+        margin: EdgeInsets.only(
+          top: MediaQuery.of(context).size.height *
+              0.30, // Espacio desde la parte superior
+          left: MediaQuery.of(context).size.width *
+              0.33, // Margen izquierdo para centrar
+          right: MediaQuery.of(context).size.width *
+              0.33, // Margen derecho para centrar
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       );
     } catch (e) {
       print('Error: $e');
@@ -95,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
   //Variables de colores
   Color color_bg = Color.fromARGB(255, 230, 190, 152);
   Color color_font = Color.fromARGB(255, 69, 65, 129);
-  Color color_btnlogin = Color.fromARGB(255, 255, 255, 255);
+  Color color_white = Color.fromARGB(255, 255, 255, 255);
   Color color_3 = Color.fromARGB(255, 0, 0, 0);
 
   //Variables de imagenes
@@ -157,18 +185,22 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: color_font,
                           elevation: 5,
                           child: Padding(
-                            padding: const EdgeInsets.all(16.0),
+                            padding: EdgeInsets.all(16.0),
                             child: Column(
                               children: [
+                                //Input de ingresar CORREO
                                 TextField(
                                   controller: emailController,
                                   keyboardType: TextInputType.emailAddress,
                                   decoration: InputDecoration(
                                     labelText: 'Correo electrónico',
-                                    labelStyle:
-                                        TextStyle(color: Color(0xFFFFFFFF)),
-                                    prefixIcon: Icon(Icons.email,
-                                        color: Color(0xFFFFFFFF)),
+                                    labelStyle: TextStyle(
+                                      color: Color(0xFFFFFFFF),
+                                    ),
+                                    prefixIcon: Icon(
+                                      Icons.email,
+                                      color: color_white,
+                                    ),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
@@ -181,7 +213,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                           BorderSide(color: Color(0xFFFFFFFF)),
                                     ),
                                   ),
-                                  style: TextStyle(color: Color(0xFFFFFFFF)),
+                                  style: TextStyle(
+                                    color: Color(0xFFFFFFFF),
+                                  ),
                                   onEditingComplete: () =>
                                       FocusScope.of(context).nextFocus(),
                                 ),
@@ -189,6 +223,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 //Espaciado 3
                                 SizedBox(height: 20),
 
+                                //Input de ingresar CONTRASEÑA
                                 TextField(
                                   controller: passwordController,
                                   obscureText: true,
@@ -220,7 +255,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ElevatedButton(
                                   onPressed: isLoading ? null : _signIn,
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: color_btnlogin,
+                                    backgroundColor: color_white,
                                     padding: EdgeInsets.symmetric(
                                         vertical: 15, horizontal: 100),
                                     shape: RoundedRectangleBorder(
