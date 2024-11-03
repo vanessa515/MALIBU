@@ -140,6 +140,7 @@ class _ListaProductosState extends State<Home> {
     return toppingTotal;
   }
 ////////////////////////////////
+// Dentro de tu función _registerProductWithToppings
 Future<void> _registerProductWithToppings(
   int fkProducto, 
   List<int> toppingIds, 
@@ -159,13 +160,12 @@ Future<void> _registerProductWithToppings(
     var producto = _productos.firstWhere((p) => p['pk_producto'] == fkProducto);
     double precioProducto = producto['precio'];
 
-    // Calcular el precio de los toppings
-    double precioToppings = _calculateToppingPrice(toppingIds) + _calculateToppingPrice(toppingIds2);
+    // Calcular solo el precio de los toppings de toppingIds2
+    double precioToppings = _calculateToppingPrice(toppingIds2); // solo se usa toppingIds2 aquí
 
     // Registro de toppings y venta
     for (var toppingId in toppingIds) {
       for (var toppingId2 in toppingIds2) {
-        // Registrar producto con toppings en la tabla 'producto_topping'
         final insertedData = await Supabase.instance.client.from('producto_topping').insert({
           'fk_producto': fkProducto,
           'fk_topping': toppingId,
@@ -178,17 +178,14 @@ Future<void> _registerProductWithToppings(
 
         // Registrar la venta si aún no ha sido registrada
         if (pkVenta == null && insertedData != null) {
-          // Registrar la venta con la cantidad total
           pkVenta = await _registerSale(cantidad, insertedData['pk_producto_topping']);
         }
       }
     }
 
-    // Calcular el total de la venta (producto + toppings)
     totalVenta = (precioProducto + precioToppings) * cantidad;
 
     if (pkVenta != null) {
-      // Registrar el detalle de la venta con el total calculado
       await _registerSaleDetail(pkVenta, totalVenta);
     } else {
       throw Exception('No se pudo registrar la venta');
@@ -198,7 +195,7 @@ Future<void> _registerProductWithToppings(
     setState(() {
       _cantidad[_productos.indexWhere((producto) => producto['pk_producto'] == fkProducto)] = 0;
       _selectedToppings.clear();
-      _selectedToppings2.clear(); // Limpiar selección de toppings2
+      _selectedToppings2.clear();
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -305,7 +302,7 @@ void _showToppingsSheet(int index) {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(topping['nombre']),
-                                    Text('\$${topping['precio'].toStringAsFixed(2)}'),
+                                    
                                   ],
                                 ),
                                 value: selectedTopping == topping['pk_topping'],
