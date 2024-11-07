@@ -19,30 +19,48 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   //Variables de imagenes
   final String logo_img = "../assets/logos/logo.png";
   final String logo_rmvbg = "../assets/logos/logo_bgremove.png";
+  final String logo_malibu = "../assets/logos/logo_malibu.png";
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(titulo),
-      backgroundColor: colorsito,
-      centerTitle: false,
-      elevation: 30,
-      shadowColor: Colors.black,
-      
-
-/*       actions: [
-        IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.call),
+      //Titulo centralizado
+      title: Text(
+        titulo,
+        style: TextStyle(
+          color: color_font,
+          fontWeight: FontWeight.bold,
+          fontSize: 25,
         ),
-        IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.video_call),
-        )
-      ], */
+        overflow: TextOverflow.ellipsis,
+      ),
+
+      centerTitle: false,
+      flexibleSpace: FlexibleSpaceBar(
+        titlePadding: EdgeInsets.only(bottom: 5.0),
+        title: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              //Espaciado entre logo y titulo
+              SizedBox(width: 50),
+
+              Image.asset(
+                logo_malibu,
+                height: 80,
+              ),
+            ],
+          ),
+        ),
+      ),
+
+      //Color de fondo y color del texto
+      backgroundColor: color_bg,
+      foregroundColor: color_font,
+      elevation: 0, // <-- Borde del appbar
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => Size.fromHeight(30);
 }

@@ -157,72 +157,78 @@ class _ListaProductosState extends State<Home> {
 
 ////////////////////////////////
 // Dentro de tu función _registerProductWithToppings
-  Future<void> _registerProductWithToppings(
-  int fkProducto, 
-  List<int> toppingIds, 
-  List<int> toppingIds2, 
-  int cantidad
-) async {
-  try {
-    if (toppingIds.isEmpty && toppingIds2.isEmpty) {
-      toppingIds.add(0); // Si no hay toppings, se asigna "sin topping"
-    }
+  Future<void> _registerProductWithToppings(int fkProducto,
+      List<int> toppingIds, List<int> toppingIds2, int cantidad) async {
+    try {
+      if (toppingIds.isEmpty && toppingIds2.isEmpty) {
+        toppingIds.add(0); // Si no hay toppings, se asigna "sin topping"
+      }
 
-    List<int> productoToppingIds = [];
-    double totalVenta = 0.0;
-    int? pkVenta;
+      List<int> productoToppingIds = [];
+      double totalVenta = 0.0;
+      int? pkVenta;
 
-    // Calcular el precio del producto
-    var producto = _productos.firstWhere((p) => p['pk_producto'] == fkProducto);
-    double precioProducto = producto['precio'];
+      // Calcular el precio del producto
+      var producto =
+          _productos.firstWhere((p) => p['pk_producto'] == fkProducto);
+      double precioProducto = producto['precio'];
 
-    // Calcular solo el precio de los toppings de toppingIds2
-    double precioToppings = _calculateToppingPrice(toppingIds2); // solo se usa toppingIds2 aquí
+      // Calcular solo el precio de los toppings de toppingIds2
+      double precioToppings =
+          _calculateToppingPrice(toppingIds2); // solo se usa toppingIds2 aquí
 
-    // Registro de toppings y venta
-    for (var toppingId in toppingIds) {
-      for (var toppingId2 in toppingIds2) {
-        final insertedData = await Supabase.instance.client.from('producto_topping').insert({
-          'fk_producto': fkProducto,
-          'fk_topping': toppingId,
-          'fk_topping2': toppingId2, // Agregar el fk_topping2 aquí
-        }).select('pk_producto_topping').single();
+      // Registro de toppings y venta
+      for (var toppingId in toppingIds) {
+        for (var toppingId2 in toppingIds2) {
+          final insertedData = await Supabase.instance.client
+              .from('producto_topping')
+              .insert({
+                'fk_producto': fkProducto,
+                'fk_topping': toppingId,
+                'fk_topping2': toppingId2, // Agregar el fk_topping2 aquí
+              })
+              .select('pk_producto_topping')
+              .single();
 
-        if (insertedData != null && insertedData['pk_producto_topping'] != null) {
-          productoToppingIds.add(insertedData['pk_producto_topping']);
-        }
+          if (insertedData != null &&
+              insertedData['pk_producto_topping'] != null) {
+            productoToppingIds.add(insertedData['pk_producto_topping']);
+          }
 
-        // Registrar la venta si aún no ha sido registrada
-        if (pkVenta == null && insertedData != null) {
-          pkVenta = await _registerSale(cantidad, insertedData['pk_producto_topping']);
+          // Registrar la venta si aún no ha sido registrada
+          if (pkVenta == null && insertedData != null) {
+            pkVenta = await _registerSale(
+                cantidad, insertedData['pk_producto_topping']);
+          }
         }
       }
+
+      totalVenta = (precioProducto + precioToppings) * cantidad;
+
+      if (pkVenta != null) {
+        await _registerSaleDetail(pkVenta, totalVenta);
+      } else {
+        throw Exception('No se pudo registrar la venta');
+      }
+
+      // Resetear estado en la UI
+      setState(() {
+        _cantidad[_productos.indexWhere(
+            (producto) => producto['pk_producto'] == fkProducto)] = 0;
+        _selectedToppings.clear();
+        _selectedToppings2.clear();
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Producto y toppings registrados exitosamente')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al registrar: $e')),
+      );
     }
-
-    totalVenta = (precioProducto + precioToppings) * cantidad;
-
-    if (pkVenta != null) {
-      await _registerSaleDetail(pkVenta, totalVenta);
-    } else {
-      throw Exception('No se pudo registrar la venta');
-    }
-
-    // Resetear estado en la UI
-    setState(() {
-      _cantidad[_productos.indexWhere((producto) => producto['pk_producto'] == fkProducto)] = 0;
-      _selectedToppings.clear();
-      _selectedToppings2.clear();
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Producto y toppings registrados exitosamente')),
-    );
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Error al registrar: $e')),
-    );
   }
-}
 
 // Función para registrar la venta y retornar 'pk_venta'
   Future<int?> _registerSale(int cantidad, int fkProductoTopping) async {
@@ -356,7 +362,6 @@ class _ListaProductosState extends State<Home> {
                                           color: color_font,
                                         ),
                                       ),
-                                     
                                     ],
                                   ),
                                   value:
@@ -598,9 +603,12 @@ class _ListaProductosState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       // Cabecera de la appBar
-      appBar: CustomAppbar(
-        titulo: 'Inicio',
-        colorsito: Colors.teal,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(80),
+        child: CustomAppbar(
+          titulo: 'Ventas',
+          colorsito: color_bg,
+        ),
       ),
 
       // Menu lateral
