@@ -5,14 +5,18 @@ import '../constants/custom_appbar.dart';
 
 //Variables de colores
 Color color_bg = Color.fromARGB(255, 230, 190, 152);
-Color color_font = Color(0xFF454181);
+Color color_font = Color.fromARGB(255, 69, 65, 129);
 Color color_white = Color.fromARGB(255, 255, 255, 255);
 Color color_cancelar = Color.fromARGB(255, 244, 63, 63);
 Color color_3 = Color.fromARGB(255, 0, 0, 0);
+Color color_effects = Colors.black.withOpacity(0.3);
 
 //Variables de imagenes
 String logo_img = "../assets/logos/logo.png";
 String logo_rmvbg = "../assets/logos/logo_bgremove.png";
+String bg_1 = "../assets/logos/img_bg_3840x2160.jpg";
+String bg_2 = "../assets/logos/patron_cuadro-hd.jpeg";
+String bg_3 = "../assets/logos/cut_bg.jpg";
 
 class Home extends StatefulWidget {
   Home({super.key});
@@ -615,109 +619,180 @@ class _ListaProductosState extends State<Home> {
       drawer: CustomDrawer(),
 
       // Contenido central
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Verifica que se carguen las categorías antes de mostrar el DropdownButton
-            if (_categorias.isNotEmpty)
-              DropdownButton<int>(
-                hint: const Text('Selecciona una categoría'),
-                value: _selectedCategoriaId,
-                items: [
-                  DropdownMenuItem<int>(
-                    value: null, // Valor especial para "Todos"
-                    child: const Text('Todos'),
-                  ),
-                  ..._categorias.map<DropdownMenuItem<int>>((categoria) {
-                    return DropdownMenuItem<int>(
-                      value: categoria[
-                          'pk_categoria'], // Clave primaria de la categoría
-                      child: Text(
-                          categoria['nombre_cat']), // Nombre de la categoría
-                    );
-                  }).toList(),
-                ],
-                onChanged: (int? value) {
-                  setState(() {
-                    _selectedCategoriaId = value;
-                    _fetchProductos(
-                        value); // Filtrar productos por categoría o mostrar todos
-                  });
-                },
+      body: Stack(
+        children: [
+          // Fondo 1
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(bg_2),
+                fit: BoxFit.cover,
               ),
+            ),
+          ),
 
-            if (_categorias.isEmpty) // Mostrar un mensaje si no hay categorías
-              const Text('No hay categorías disponibles'),
+          // Fondo 2
+          Container(
+            color: color_effects,
+          ),
 
-            Expanded(
-              child: ListView.builder(
-                itemCount: _productos.length,
-                itemBuilder: (context, index) {
-                  final producto = _productos[index];
-                  double precioTotal = producto['precio'] * _cantidad[index];
+          Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Verifica que se carguen las categorías antes de mostrar el DropdownButton (Selector de tipo de bebida)
+                if (_categorias.isNotEmpty)
+                  Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+                    decoration: BoxDecoration(
+                      color: color_font,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: color_white,
+                        width: 1,
+                      ),
+                    ),
 
-                  return Card(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    child: ListTile(
-                      title: Text(producto['nombre'] ?? 'Producto sin nombre'),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                              'Precio unitario: \$${producto['precio']?.toStringAsFixed(2) ?? '0.00'}'),
-                          Text(
-                              'Precio total: \$${precioTotal.toStringAsFixed(2)}'),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.remove),
-                                onPressed: () {
-                                  setState(() {
-                                    if (_cantidad[index] > 1) {
-                                      _cantidad[index]--;
-                                    }
-                                  });
-                                },
+                    // %%%%%%%%%%%%%%%%%%%%%%%%%%%% Cuerpo del selector
+                    child: DropdownButton<int>(
+                      hint: Text(
+                        'Selecciona una categoría',
+                        style: TextStyle(
+                          color: color_white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                      // %%%%%%%%%%%%%%%%%%%%%%%%% Atributos de selector
+                      borderRadius: BorderRadius.circular(5),
+                      dropdownColor: color_font,
+                      icon: Icon(
+                        Icons.arrow_drop_down,
+                        color: color_white,
+                      ),
+                      underline: SizedBox(),
+                      value: _selectedCategoriaId,
+
+                      items: [
+                        DropdownMenuItem<int>(
+                          value: null, // Valor especial para "Todos"
+                          child: Text(
+                            'Todos',
+                            style: TextStyle(
+                              color: color_white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        ..._categorias.map<DropdownMenuItem<int>>((categoria) {
+                          return DropdownMenuItem<int>(
+                            value: categoria[
+                                'pk_categoria'], // Clave primaria de la categoría
+                            child: Text(
+                              categoria['nombre_cat'], // Nombre de la categoría
+                              style: TextStyle(
+                                color: color_white,
+                                fontWeight: FontWeight.bold,
                               ),
-                              Text(_cantidad[index].toString()),
-                              IconButton(
-                                icon: const Icon(Icons.add),
-                                onPressed: () {
-                                  setState(() {
-                                    _cantidad[index]++;
-                                  });
-                                },
+                            ),
+                          );
+                        }).toList(),
+                      ],
+                      onChanged: (int? value) {
+                        setState(
+                          () {
+                            _selectedCategoriaId = value;
+                            _fetchProductos(
+                              value,
+                            ); // Filtrar productos por categoría o mostrar todos
+                          },
+                        );
+                      },
+                    ),
+                  ),
+
+                if (_categorias
+                    .isEmpty) // Mostrar un mensaje si no hay categorías
+                  const Text('No hay categorías disponibles'),
+
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: _productos.length,
+                    itemBuilder: (context, index) {
+                      final producto = _productos[index];
+                      double precioTotal =
+                          producto['precio'] * _cantidad[index];
+
+                      return Card(
+                        margin: EdgeInsets.symmetric(vertical: 8),
+                        child: ListTile(
+                          title:
+                              Text(producto['nombre'] ?? 'Producto sin nombre'),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                  'Precio unitario: \$${producto['precio']?.toStringAsFixed(2) ?? '0.00'}'),
+                              Text(
+                                  'Precio total: \$${precioTotal.toStringAsFixed(2)}'),
+
+                              // Espacio dentro de las cards
+                              SizedBox(height: 5),
+
+                              Row(
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.remove),
+                                    onPressed: () {
+                                      setState(() {
+                                        if (_cantidad[index] > 1) {
+                                          _cantidad[index]--;
+                                        }
+                                      });
+                                    },
+                                  ),
+                                  Text(_cantidad[index].toString()),
+                                  IconButton(
+                                    icon: Icon(Icons.add),
+                                    onPressed: () {
+                                      setState(() {
+                                        _cantidad[index]++;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                              ElevatedButton(
+                                onPressed: () => _showToppingsSheet(index),
+                                child: const Text('Seleccionar Toppings'),
                               ),
                             ],
                           ),
-                          ElevatedButton(
-                            onPressed: () => _showToppingsSheet(index),
-                            child: const Text('Seleccionar Toppings'),
-                          ),
-                        ],
-                      ),
-                      leading: producto['foto'] != null
-                          ? Image.network(
-                              _getImageUrl(producto['foto']),
-                              width: 50,
-                              height: 50,
-                              fit: BoxFit.cover,
-                            )
-                          : const Icon(Icons.image),
-                    ),
-                  );
-                },
-              ),
+                          leading: producto['foto'] != null
+                              ? Image.network(
+                                  _getImageUrl(producto['foto']),
+                                  width: 50,
+                                  height: 50,
+                                  fit: BoxFit.cover,
+                                )
+                              : Icon(Icons.image),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
+
+/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Clases e instancias para la logica de tickets */
 
 class TicketVentaScreen extends StatefulWidget {
   @override
@@ -760,6 +835,8 @@ class _TicketVentaScreenState extends State<TicketVentaScreen> {
     print('Botón de imprimir ticket presionado');
   }
 
+  /* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  Segundo Scaffold (cuerpo de diseño) */
+
   @override
   Widget build(BuildContext context) {
     print('Longitud de _ticketData: ${_ticketData.length}');
@@ -767,7 +844,7 @@ class _TicketVentaScreenState extends State<TicketVentaScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Tickets'),
-        backgroundColor: Colors.teal,
+        backgroundColor: color_bg,
       ),
       body: _ticketData.isEmpty
           ? Center(child: Text('No hay datos de ventas.'))
