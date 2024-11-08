@@ -8,7 +8,7 @@ Color color_bg = Color.fromARGB(255, 230, 190, 152);
 Color color_font = Color.fromARGB(255, 69, 65, 129);
 Color color_white = Color.fromARGB(255, 255, 255, 255);
 Color color_cancelar = Color.fromARGB(255, 244, 63, 63);
-Color color_3 = Color.fromARGB(255, 0, 0, 0);
+Color color_black = Color.fromARGB(255, 0, 0, 0);
 Color color_effects = Colors.black.withOpacity(0.3);
 
 //Variables de imagenes
@@ -713,12 +713,26 @@ class _ListaProductosState extends State<Home> {
                     ),
                   ),
 
+                // %%%%%%%%%%%%%%%%%%%%%%%%%%%% Mensaje en caso de que el selector este vacio
                 if (_categorias
                     .isEmpty) // Mostrar un mensaje si no hay categorías
-                  const Text('No hay categorías disponibles'),
+                  Text(
+                    'No hay categorías disponibles',
+                    style: TextStyle(
+                      color: color_black,
+                    ),
+                  ),
 
+                // %%%%%%%%%%%%%%%%%%%%%%%% Aqui empieza el diseño de las cards
                 Expanded(
-                  child: ListView.builder(
+                  child: GridView.builder(
+                    padding: EdgeInsets.all(6),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 5, // Numero de columnas
+                      crossAxisSpacing: 8, // Espacio horizontal entre cards
+                      mainAxisSpacing: 8, // Espacio vertical entre cards
+                      childAspectRatio: 0.736, // ajusta el aspecto de las cards
+                    ),
                     itemCount: _productos.length,
                     itemBuilder: (context, index) {
                       final producto = _productos[index];
@@ -726,25 +740,75 @@ class _ListaProductosState extends State<Home> {
                           producto['precio'] * _cantidad[index];
 
                       return Card(
-                        margin: EdgeInsets.symmetric(vertical: 8),
-                        child: ListTile(
-                          title:
-                              Text(producto['nombre'] ?? 'Producto sin nombre'),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        color: color_font,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          side: BorderSide(
+                            color: color_white,
+                            width: 1,
+                          ),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
+                              producto['foto'] != null
+                                  ? ClipRRect(
+                                      borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(15),
+                                      ),
+                                      child: Image.network(
+                                        _getImageUrl(producto['foto']),
+                                        width: double.infinity,
+                                        height: 200,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
+                                  : Icon(
+                                      Icons.image,
+                                      color: color_white,
+                                      size: 250,
+                                    ),
+
+                              SizedBox(height: 8),
+
                               Text(
-                                  'Precio unitario: \$${producto['precio']?.toStringAsFixed(2) ?? '0.00'}'),
+                                producto['nombre'] ?? 'Producto sin nombre',
+                                style: TextStyle(
+                                  color: color_white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+
                               Text(
-                                  'Precio total: \$${precioTotal.toStringAsFixed(2)}'),
+                                'Precio unitario: \$${producto['precio']?.toStringAsFixed(2) ?? '0.00'}',
+                                style: TextStyle(
+                                  color: color_white,
+                                  fontSize: 16,
+                                ),
+                              ),
+
+                              Text(
+                                'Precio total: \$${precioTotal.toStringAsFixed(2)}',
+                                style: TextStyle(
+                                  color: color_white,
+                                  fontSize: 16,
+                                ),
+                              ),
 
                               // Espacio dentro de las cards
-                              SizedBox(height: 5),
+                              SizedBox(height: 8),
 
                               Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   IconButton(
-                                    icon: Icon(Icons.remove),
+                                    icon: Icon(
+                                      Icons.remove,
+                                      color: color_white,
+                                    ),
                                     onPressed: () {
                                       setState(() {
                                         if (_cantidad[index] > 1) {
@@ -753,9 +817,19 @@ class _ListaProductosState extends State<Home> {
                                       });
                                     },
                                   ),
-                                  Text(_cantidad[index].toString()),
+                                  Text(
+                                    _cantidad[index].toString(),
+                                    style: TextStyle(
+                                      color: color_white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                   IconButton(
-                                    icon: Icon(Icons.add),
+                                    icon: Icon(
+                                      Icons.add,
+                                      color: color_white,
+                                    ),
                                     onPressed: () {
                                       setState(() {
                                         _cantidad[index]++;
@@ -764,20 +838,26 @@ class _ListaProductosState extends State<Home> {
                                   ),
                                 ],
                               ),
+
+                              // Botón para seleccionar toppings
                               ElevatedButton(
                                 onPressed: () => _showToppingsSheet(index),
-                                child: const Text('Seleccionar Toppings'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: color_bg,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                ),
+                                child: Text(
+                                  'Seleccionar Toppings',
+                                  style: TextStyle(
+                                    color: color_font,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
-                          leading: producto['foto'] != null
-                              ? Image.network(
-                                  _getImageUrl(producto['foto']),
-                                  width: 50,
-                                  height: 50,
-                                  fit: BoxFit.cover,
-                                )
-                              : Icon(Icons.image),
                         ),
                       );
                     },
