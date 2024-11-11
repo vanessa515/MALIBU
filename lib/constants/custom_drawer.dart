@@ -164,6 +164,27 @@ class CustomDrawer extends StatelessWidget {
                 color: color_2,
               ),
               title: Text(
+                "Inventario",
+                style: TextStyle(
+                  color: color_3,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
+                Get.toNamed('/inventario');
+              },
+            ),
+
+            //Espaciado 7
+            Divider(color: color_2),
+
+            ListTile(
+              leading: Icon(
+                Icons.task,
+                size: 30,
+                color: color_2,
+              ),
+              title: Text(
                 "Tickets historial",
                 style: TextStyle(
                   color: color_3,
