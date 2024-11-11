@@ -5,6 +5,19 @@ import 'package:malibu/screen/logout.dart';
 import 'package:malibu/screen/productos_modificaciones.dart';
 import 'package:malibu/screen/registrar_cat.dart';
 import 'package:malibu/screen/registrar_topp.dart';
+import 'package:malibu/screen/registrar_unidad.dart';
+import 'package:malibu/screen/registrar_medida.dart';
+import 'package:malibu/screen/registrar_prodin.dart';
+import 'package:malibu/screen/inventario.dart';
+import 'package:malibu/screen/medidas.dart';
+import 'package:malibu/screen/unidades.dart';
+import 'package:malibu/screen/entradain.dart';
+import 'package:malibu/screen/salidain.dart';
+import 'package:malibu/screen/verentradas.dart';
+import 'package:malibu/screen/versalidas.dart';
+import 'package:malibu/screen/unidades_modificaciones.dart';
+import 'package:malibu/screen/medidas_modificaciones.dart';
+import 'package:malibu/screen/productoin_modificaciones.dart';
 import 'package:malibu/screen/home.dart';
 import 'package:get/get.dart';
 import 'package:malibu/screen/registrar_prod.dart';
@@ -40,6 +53,19 @@ class MyApp extends StatelessWidget {
        GetPage(name: '/registrocat', page: () => RegistroCategoria()),
        GetPage(name: '/registroprod', page: ()=> RegistroProducto() ),
        GetPage(name: '/registrartopp', page: ()=> RegistroTopping() ),
+       GetPage(name: '/inventario', page: () => Inventario()),
+       GetPage(name: '/registrarproductoin', page: () => RegistroProductoIn()),
+       GetPage(name: '/registrarunidad', page: () => RegistroUnidad()),
+       GetPage(name: '/registrarmedida', page: () => RegistroMedida()),
+       GetPage(name: '/unidades', page: () => Unidades()),
+       GetPage(name: '/medidas', page: () => Medidas()),
+       GetPage(name: '/entradain', page: () => EntradaIn()),
+       GetPage(name: '/salidain', page: () => SalidaOut()),
+       GetPage(name: '/verentradas', page: () => VerEntradas()),
+       GetPage(name: '/versalidas', page: () => VerSalidas()),
+       GetPage(name: '/editarmedida', page: () => EditarMedidas()),
+       GetPage(name: '/editarunidad', page: () => EditarUnidad()),
+       GetPage(name: '/editarproductoin', page: () => EditarProductoIn()),
        GetPage(name: '/productomod', page: ()=> ProductosModificaciones() ),
        GetPage(name: '/toppingsmodificaciones', page: ()=>  ToppingMOD() ),
        GetPage(name: '/ticketsh', page: ()=>  TicketVentaScreen() ),
