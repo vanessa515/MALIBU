@@ -159,8 +159,7 @@ class _ListaProductosState extends State<Home> {
     return toppingTotal;
   }
 
-////////////////////////////////
-// Dentro de tu función _registerProductWithToppings
+////////////////////////////////// Dentro de tu función _registerProductWithToppings
   Future<void> _registerProductWithToppings(int fkProducto,
       List<int> toppingIds, List<int> toppingIds2, int cantidad) async {
     try {
@@ -262,8 +261,7 @@ class _ListaProductosState extends State<Home> {
     }
   }
 
-///////////////////////////
-// Función para registrar el detalle de la venta
+///////////////////////////// Función para registrar el detalle de la venta
   Future<void> _registerSaleDetail(int pkVenta, double totalVenta) async {
     try {
       await Supabase.instance.client.from('detalle_venta').insert({
@@ -292,7 +290,7 @@ class _ListaProductosState extends State<Home> {
     // %%%%%%%%%%%%% Diseño de la Vista del Modal de seleccion de los toppings
     showModalBottomSheet(
       context: context,
-      backgroundColor: color_bg,
+      backgroundColor: color_white,
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setStateLocal) {
@@ -621,21 +619,6 @@ class _ListaProductosState extends State<Home> {
       // Contenido central
       body: Stack(
         children: [
-          // Fondo 1
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(bg_2),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-
-          // Fondo 2
-          Container(
-            color: color_effects,
-          ),
-
           Padding(
             padding: EdgeInsets.all(16.0),
             child: Column(
