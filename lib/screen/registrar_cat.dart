@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../constants/custom_appbar.dart';
 
+//Variables de colores
+Color color_bg = Color.fromARGB(255, 230, 190, 152);
+Color color_font = Color.fromARGB(255, 69, 65, 129);
+Color color_white = Color.fromARGB(255, 255, 255, 255);
+Color color_cancelar = Color.fromARGB(255, 244, 63, 63);
+Color color_black = Color.fromARGB(255, 0, 0, 0);
+Color color_effects = Colors.black.withOpacity(0.3);
 
 class RegistroCategoria extends StatefulWidget {
   const RegistroCategoria({super.key});
@@ -22,13 +29,11 @@ class _RegistroCategoriaState extends State<RegistroCategoria> {
       });
 
       try {
-        final response = await Supabase.instance.client
-            .from("categoria")
-            .insert({
-              'nombre_cat': _nombreController.text,
-              'estatus': 1, 
-            })
-            .select(); 
+        final response =
+            await Supabase.instance.client.from("categoria").insert({
+          'nombre_cat': _nombreController.text,
+          'estatus': 1,
+        }).select();
 
         setState(() {
           _isSubmitting = false;
@@ -64,11 +69,13 @@ class _RegistroCategoriaState extends State<RegistroCategoria> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppbar(
-        titulo: 'REGISTRO CATEGORIAS',
-        colorsito: Colors.teal,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(80),
+        child: CustomAppbar(
+          titulo: 'Ventas',
+          colorsito: color_bg,
+        ),
       ),
-    
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(

@@ -6,6 +6,8 @@ class CustomDrawer extends StatelessWidget {
   final Color color_1 = Color.fromARGB(255, 230, 192, 152);
   final Color color_2 = Color.fromARGB(255, 69, 65, 129);
   final Color color_3 = Color.fromARGB(255, 0, 0, 0);
+  final Color color_4 = Color.fromARGB(255, 250, 250, 250);
+  final Color color_5 = Color.fromARGB(255, 230, 202, 173);
 
   //Variables de imagenes
   final String logo_img = '../assets/logos/logo.png';
@@ -16,7 +18,7 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: color_1,
+      backgroundColor: color_4,
       width: 304,
       child: SafeArea(
         child: ListView(

@@ -4,12 +4,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../constants/custom_appbar.dart';
 
 //Variables de colores
-Color color_bg = Color.fromARGB(255, 230, 190, 152);
-Color color_font = Color.fromARGB(255, 69, 65, 129);
-Color color_white = Color.fromARGB(255, 255, 255, 255);
-Color color_cancelar = Color.fromARGB(255, 244, 63, 63);
-Color color_black = Color.fromARGB(255, 0, 0, 0);
-Color color_effects = Colors.black.withOpacity(0.3);
+final Color color_bg = Color.fromARGB(255, 230, 190, 152);
+final Color color_bg2 = Color.fromARGB(255, 254, 235, 216);
+final Color color_font = Color.fromARGB(255, 69, 65, 129);
+final Color color_white = Color.fromARGB(255, 255, 255, 255);
+final Color color_white2 = Color.fromARGB(255, 250, 250, 250);
+final Color color_cancelar = Color.fromARGB(255, 244, 63, 63);
+final Color color_black = Color.fromARGB(255, 0, 0, 0);
+final Color color_effects = Colors.black.withOpacity(0.3);
 
 //Variables de imagenes
 String logo_img = "../assets/logos/logo.png";
@@ -277,7 +279,7 @@ class _ListaProductosState extends State<Home> {
     }
   }
 
-  // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Modal para la seleccion de los toppings
+  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Modal para la seleccion de los toppings
 
   // logica del modal
   void _showToppingsSheet(int index) {
@@ -294,6 +296,8 @@ class _ListaProductosState extends State<Home> {
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setStateLocal) {
+            double screenWidth = MediaQuery.of(context).size.width;
+
             return Padding(
               padding: EdgeInsets.all(16.0),
               child: Column(
@@ -302,7 +306,7 @@ class _ListaProductosState extends State<Home> {
                   Text(
                     'Selecciona los Toppings',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: screenWidth < 600 ? 18 : 20,
                       fontWeight: FontWeight.bold,
                       color: color_font,
                     ),
@@ -313,185 +317,377 @@ class _ListaProductosState extends State<Home> {
 
                   //CheckboxListTile para seleccionar los toppings
                   Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Toppings de la tabla "topping"
-                        Expanded(
-                          child: ListView(
+                    child: screenWidth < 600
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                'Toppings de la tabla "topping"',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: color_font,
-                                ),
-                              ),
-                              CheckboxListTile(
-                                title: Text(
-                                  'Sin Toppings',
-                                  style: TextStyle(
-                                    color: color_font,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                value: sinToppingsSelected,
-                                onChanged: (bool? isChecked) {
-                                  setStateLocal(() {
-                                    sinToppingsSelected = isChecked ?? false;
-                                    if (sinToppingsSelected) {
-                                      selectedToppingsLocal.clear();
-                                    }
-                                    selectedTopping =
-                                        null; // Restablece el topping seleccionado
-                                  });
-                                },
-                              ),
-                              ..._toppings
-                                  .where(
-                                      (topping) => topping['pk_topping'] != 0)
-                                  .map((topping) {
-                                return CheckboxListTile(
-                                  title: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        topping['nombre'],
+                              // Toppings de la tabla "topping"
+                              Expanded(
+                                child: ListView(
+                                  children: [
+                                    Text(
+                                      'Toppings',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: color_font,
+                                      ),
+                                    ),
+                                    CheckboxListTile(
+                                      title: Text(
+                                        'Sin Toppings',
                                         style: TextStyle(
-                                          fontSize: 16,
                                           color: color_font,
+                                          fontSize: 16,
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                  value:
-                                      selectedTopping == topping['pk_topping'],
-                                  onChanged: sinToppingsSelected ||
-                                          selectedTopping != null
-                                      ? null
-                                      : (bool? isChecked) {
-                                          setStateLocal(() {
-                                            selectedTopping = isChecked == true
-                                                ? topping['pk_topping']
-                                                : null;
+                                      value: sinToppingsSelected,
+                                      onChanged: (bool? isChecked) {
+                                        setStateLocal(() {
+                                          sinToppingsSelected =
+                                              isChecked ?? false;
+                                          if (sinToppingsSelected) {
                                             selectedToppingsLocal.clear();
-                                            if (isChecked == true) {
-                                              selectedToppingsLocal
-                                                  .add(topping['pk_topping']);
-                                            }
-                                          });
-                                        },
-                                  hoverColor: color_font,
-                                  secondary: topping['imagen'] != null
-                                      ? Image.network(
-                                          _getImageUrl(topping['imagen']),
-                                          width: 50,
-                                          height: 50,
-                                        )
-                                      : null,
-                                );
-                              }).toList(),
+                                          }
+                                          selectedTopping =
+                                              null; // Restablece el topping seleccionado
+                                        });
+                                      },
+                                    ),
+                                    ..._toppings
+                                        .where((topping) =>
+                                            topping['pk_topping'] != 0)
+                                        .map((topping) {
+                                      return CheckboxListTile(
+                                        title: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              topping['nombre'],
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: color_font,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        value: selectedTopping ==
+                                            topping['pk_topping'],
+                                        onChanged: sinToppingsSelected ||
+                                                selectedTopping != null
+                                            ? null
+                                            : (bool? isChecked) {
+                                                setStateLocal(() {
+                                                  selectedTopping = isChecked ==
+                                                          true
+                                                      ? topping['pk_topping']
+                                                      : null;
+                                                  selectedToppingsLocal.clear();
+                                                  if (isChecked == true) {
+                                                    selectedToppingsLocal.add(
+                                                        topping['pk_topping']);
+                                                  }
+                                                });
+                                              },
+                                        hoverColor: color_font,
+                                        secondary: topping['imagen'] != null
+                                            ? Image.network(
+                                                _getImageUrl(topping['imagen']),
+                                                width: 50,
+                                                height: 50,
+                                              )
+                                            : null,
+                                      );
+                                    }).toList(),
+                                  ],
+                                ),
+                              ),
+
+                              // Separador entre los toppings
+                              VerticalDivider(
+                                thickness: 1,
+                                width: 20,
+                                color: color_white,
+                              ),
+
+                              // Toppings de la tabla "topping2"
+                              Expanded(
+                                child: ListView(
+                                  children: [
+                                    Text(
+                                      'Toppings extra"',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: color_font,
+                                      ),
+                                    ),
+                                    CheckboxListTile(
+                                      title: Text(
+                                        'Sin Toppings',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: color_font,
+                                        ),
+                                      ),
+                                      value: sinToppings2Selected,
+                                      onChanged: (bool? isChecked) {
+                                        setStateLocal(() {
+                                          sinToppings2Selected =
+                                              isChecked ?? false;
+                                          if (sinToppings2Selected) {
+                                            selectedToppingsLocal2.clear();
+                                          }
+                                        });
+                                      },
+                                    ),
+                                    ..._toppings2
+                                        .where((topping2) =>
+                                            topping2['pk_topping2'] != 0)
+                                        .map((topping2) {
+                                      return CheckboxListTile(
+                                        title: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              topping2['nombre'],
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: color_font,
+                                              ),
+                                            ),
+                                            Text(
+                                              '\$${topping2['precio'].toStringAsFixed(2)}',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: color_font,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        value: sinToppings2Selected
+                                            ? false
+                                            : selectedToppingsLocal2.contains(
+                                                topping2['pk_topping2']),
+                                        onChanged: sinToppings2Selected
+                                            ? null
+                                            : (bool? isChecked) {
+                                                setStateLocal(() {
+                                                  if (isChecked == true) {
+                                                    selectedToppingsLocal2.add(
+                                                        topping2[
+                                                            'pk_topping2']);
+                                                  } else {
+                                                    selectedToppingsLocal2
+                                                        .remove(topping2[
+                                                            'pk_topping2']);
+                                                  }
+                                                });
+                                              },
+                                        hoverColor: color_font,
+                                        secondary: topping2['imagen'] != null
+                                            ? Image.network(
+                                                _getImageUrl(
+                                                    topping2['imagen']),
+                                                width: 50,
+                                                height: 50,
+                                              )
+                                            : null,
+                                      );
+                                    }).toList(),
+                                  ],
+                                ),
+                              ),
                             ],
-                          ),
-                        ),
-
-                        // Separador entre los toppings
-                        VerticalDivider(
-                          thickness: 1,
-                          width: 20,
-                          color: color_white,
-                        ),
-
-                        // Toppings de la tabla "topping2"
-                        Expanded(
-                          child: ListView(
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                'Toppings extra"',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: color_font,
+                              // Toppings de la tabla "topping"
+                              Expanded(
+                                child: ListView(
+                                  children: [
+                                    Text(
+                                      'Toppings',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: color_font,
+                                      ),
+                                    ),
+                                    CheckboxListTile(
+                                      title: Text(
+                                        'Sin Toppings',
+                                        style: TextStyle(
+                                          color: color_font,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      value: sinToppingsSelected,
+                                      onChanged: (bool? isChecked) {
+                                        setStateLocal(() {
+                                          sinToppingsSelected =
+                                              isChecked ?? false;
+                                          if (sinToppingsSelected) {
+                                            selectedToppingsLocal.clear();
+                                          }
+                                          selectedTopping =
+                                              null; // Restablece el topping seleccionado
+                                        });
+                                      },
+                                    ),
+                                    ..._toppings
+                                        .where((topping) =>
+                                            topping['pk_topping'] != 0)
+                                        .map((topping) {
+                                      return CheckboxListTile(
+                                        title: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              topping['nombre'],
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: color_font,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        value: selectedTopping ==
+                                            topping['pk_topping'],
+                                        onChanged: sinToppingsSelected ||
+                                                selectedTopping != null
+                                            ? null
+                                            : (bool? isChecked) {
+                                                setStateLocal(() {
+                                                  selectedTopping = isChecked ==
+                                                          true
+                                                      ? topping['pk_topping']
+                                                      : null;
+                                                  selectedToppingsLocal.clear();
+                                                  if (isChecked == true) {
+                                                    selectedToppingsLocal.add(
+                                                        topping['pk_topping']);
+                                                  }
+                                                });
+                                              },
+                                        hoverColor: color_font,
+                                        secondary: topping['imagen'] != null
+                                            ? Image.network(
+                                                _getImageUrl(topping['imagen']),
+                                                width: 50,
+                                                height: 50,
+                                              )
+                                            : null,
+                                      );
+                                    }).toList(),
+                                  ],
                                 ),
                               ),
-                              CheckboxListTile(
-                                title: Text(
-                                  'Sin Toppings',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: color_font,
-                                  ),
-                                ),
-                                value: sinToppings2Selected,
-                                onChanged: (bool? isChecked) {
-                                  setStateLocal(() {
-                                    sinToppings2Selected = isChecked ?? false;
-                                    if (sinToppings2Selected) {
-                                      selectedToppingsLocal2.clear();
-                                    }
-                                  });
-                                },
+
+                              // Separador entre los toppings
+                              VerticalDivider(
+                                thickness: 1,
+                                width: 20,
+                                color: color_white,
                               ),
-                              ..._toppings2
-                                  .where((topping2) =>
-                                      topping2['pk_topping2'] != 0)
-                                  .map((topping2) {
-                                return CheckboxListTile(
-                                  title: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        topping2['nombre'],
+
+                              // Toppings de la tabla "topping2"
+                              Expanded(
+                                child: ListView(
+                                  children: [
+                                    Text(
+                                      'Toppings extra"',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: color_font,
+                                      ),
+                                    ),
+                                    CheckboxListTile(
+                                      title: Text(
+                                        'Sin Toppings',
                                         style: TextStyle(
                                           fontSize: 16,
                                           color: color_font,
                                         ),
                                       ),
-                                      Text(
-                                        '\$${topping2['precio'].toStringAsFixed(2)}',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: color_font,
+                                      value: sinToppings2Selected,
+                                      onChanged: (bool? isChecked) {
+                                        setStateLocal(() {
+                                          sinToppings2Selected =
+                                              isChecked ?? false;
+                                          if (sinToppings2Selected) {
+                                            selectedToppingsLocal2.clear();
+                                          }
+                                        });
+                                      },
+                                    ),
+                                    ..._toppings2
+                                        .where((topping2) =>
+                                            topping2['pk_topping2'] != 0)
+                                        .map((topping2) {
+                                      return CheckboxListTile(
+                                        title: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              topping2['nombre'],
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: color_font,
+                                              ),
+                                            ),
+                                            Text(
+                                              '\$${topping2['precio'].toStringAsFixed(2)}',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: color_font,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  value: sinToppings2Selected
-                                      ? false
-                                      : selectedToppingsLocal2
-                                          .contains(topping2['pk_topping2']),
-                                  onChanged: sinToppings2Selected
-                                      ? null
-                                      : (bool? isChecked) {
-                                          setStateLocal(() {
-                                            if (isChecked == true) {
-                                              selectedToppingsLocal2
-                                                  .add(topping2['pk_topping2']);
-                                            } else {
-                                              selectedToppingsLocal2.remove(
-                                                  topping2['pk_topping2']);
-                                            }
-                                          });
-                                        },
-                                  hoverColor: color_font,
-                                  secondary: topping2['imagen'] != null
-                                      ? Image.network(
-                                          _getImageUrl(topping2['imagen']),
-                                          width: 50,
-                                          height: 50,
-                                        )
-                                      : null,
-                                );
-                              }).toList(),
+                                        value: sinToppings2Selected
+                                            ? false
+                                            : selectedToppingsLocal2.contains(
+                                                topping2['pk_topping2']),
+                                        onChanged: sinToppings2Selected
+                                            ? null
+                                            : (bool? isChecked) {
+                                                setStateLocal(() {
+                                                  if (isChecked == true) {
+                                                    selectedToppingsLocal2.add(
+                                                        topping2[
+                                                            'pk_topping2']);
+                                                  } else {
+                                                    selectedToppingsLocal2
+                                                        .remove(topping2[
+                                                            'pk_topping2']);
+                                                  }
+                                                });
+                                              },
+                                        hoverColor: color_font,
+                                        secondary: topping2['imagen'] != null
+                                            ? Image.network(
+                                                _getImageUrl(
+                                                    topping2['imagen']),
+                                                width: 50,
+                                                height: 50,
+                                              )
+                                            : null,
+                                      );
+                                    }).toList(),
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
-                        ),
-                      ],
-                    ),
                   ),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -604,6 +800,7 @@ class _ListaProductosState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: color_bg2,
       // Cabecera de la appBar
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(80),
@@ -630,10 +827,10 @@ class _ListaProductosState extends State<Home> {
                     padding:
                         EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
                     decoration: BoxDecoration(
-                      color: color_font,
+                      color: color_white,
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                        color: color_white,
+                        color: color_font,
                         width: 1,
                       ),
                     ),
@@ -650,11 +847,12 @@ class _ListaProductosState extends State<Home> {
 
                       // %%%%%%%%%%%%%%%%%%%%%%%%% Atributos de selector
                       borderRadius: BorderRadius.circular(5),
-                      dropdownColor: color_font,
+                      dropdownColor: color_white,
                       icon: Icon(
                         Icons.arrow_drop_down,
-                        color: color_white,
+                        color: color_font,
                       ),
+
                       underline: SizedBox(),
                       value: _selectedCategoriaId,
 
@@ -664,7 +862,7 @@ class _ListaProductosState extends State<Home> {
                           child: Text(
                             'Todos',
                             style: TextStyle(
-                              color: color_white,
+                              color: color_font,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -676,7 +874,7 @@ class _ListaProductosState extends State<Home> {
                             child: Text(
                               categoria['nombre_cat'], // Nombre de la categoría
                               style: TextStyle(
-                                color: color_white,
+                                color: color_font,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -709,12 +907,12 @@ class _ListaProductosState extends State<Home> {
                 // %%%%%%%%%%%%%%%%%%%%%%%% Aqui empieza el diseño de las cards
                 Expanded(
                   child: GridView.builder(
-                    padding: EdgeInsets.all(6),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 5, // Numero de columnas
+                    padding: EdgeInsets.all(15),
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 300, // Numero de columnas
                       crossAxisSpacing: 8, // Espacio horizontal entre cards
                       mainAxisSpacing: 8, // Espacio vertical entre cards
-                      childAspectRatio: 0.736, // ajusta el aspecto de las cards
+                      childAspectRatio: 0.680, // ajusta el aspecto de las cards
                     ),
                     itemCount: _productos.length,
                     itemBuilder: (context, index) {
@@ -723,123 +921,142 @@ class _ListaProductosState extends State<Home> {
                           producto['precio'] * _cantidad[index];
 
                       return Card(
-                        color: color_font,
+                        color: color_white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
                           side: BorderSide(
-                            color: color_white,
+                            color: color_font,
                             width: 1,
                           ),
                         ),
                         child: Padding(
                           padding: EdgeInsets.all(10.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              producto['foto'] != null
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(15),
-                                      ),
-                                      child: Image.network(
-                                        _getImageUrl(producto['foto']),
-                                        width: double.infinity,
-                                        height: 200,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )
-                                  : Icon(
-                                      Icons.image,
-                                      color: color_white,
-                                      size: 250,
-                                    ),
+                          child: LayoutBuilder(
+                            builder: (context, constraints) {
+                              double fontSizeTitle =
+                                  constraints.maxWidth * 0.08;
+                              double fontSizeSubTitle =
+                                  constraints.maxWidth * 0.06;
+                              double iconSize = constraints.maxWidth * 0.13;
 
-                              SizedBox(height: 8),
-
-                              Text(
-                                producto['nombre'] ?? 'Producto sin nombre',
-                                style: TextStyle(
-                                  color: color_white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-
-                              Text(
-                                'Precio unitario: \$${producto['precio']?.toStringAsFixed(2) ?? '0.00'}',
-                                style: TextStyle(
-                                  color: color_white,
-                                  fontSize: 16,
-                                ),
-                              ),
-
-                              Text(
-                                'Precio total: \$${precioTotal.toStringAsFixed(2)}',
-                                style: TextStyle(
-                                  color: color_white,
-                                  fontSize: 16,
-                                ),
-                              ),
-
-                              // Espacio dentro de las cards
-                              SizedBox(height: 8),
-
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.remove,
-                                      color: color_white,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        if (_cantidad[index] > 1) {
-                                          _cantidad[index]--;
-                                        }
-                                      });
-                                    },
+                                  producto['foto'] != null
+                                      ? ClipRRect(
+                                          borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(15),
+                                          ),
+                                          child: Image.network(
+                                            _getImageUrl(producto['foto']),
+                                            width: double.infinity,
+                                            height: constraints.maxHeight *
+                                                0.502, //La altura de la imagen se escala dependiendo del tamaño de la card
+                                            fit: BoxFit.cover,
+                                          ),
+                                        )
+                                      : Icon(
+                                          Icons.image,
+                                          color: color_font,
+                                          size: constraints.maxWidth *
+                                              0.7, //Escala el tamaño del icono
+                                        ),
+
+                                  SizedBox(
+                                    height: constraints.maxHeight * 0.02,
                                   ),
+
                                   Text(
-                                    _cantidad[index].toString(),
+                                    producto['nombre'] ?? 'Producto sin nombre',
                                     style: TextStyle(
-                                      color: color_white,
-                                      fontSize: 16,
+                                      color: color_font,
+                                      fontSize: fontSizeTitle,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.add,
-                                      color: color_white,
+
+                                  Text(
+                                    'Precio unitario: \$${producto['precio']?.toStringAsFixed(2) ?? '0.00'}',
+                                    style: TextStyle(
+                                      color: color_font,
+                                      fontSize: fontSizeSubTitle,
                                     ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _cantidad[index]++;
-                                      });
-                                    },
+                                  ),
+
+                                  Text(
+                                    'Precio total: \$${precioTotal.toStringAsFixed(2)}',
+                                    style: TextStyle(
+                                      color: color_font,
+                                      fontSize: fontSizeSubTitle,
+                                    ),
+                                  ),
+
+                                  // Espacio dentro de las cards
+                                  SizedBox(
+                                    height: constraints.maxHeight * 0.02,
+                                  ),
+
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      IconButton(
+                                        icon: Icon(
+                                          Icons.remove,
+                                          color: color_font,
+                                          size: iconSize,
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            if (_cantidad[index] > 1) {
+                                              _cantidad[index]--;
+                                            }
+                                          });
+                                        },
+                                      ),
+                                      Text(
+                                        _cantidad[index].toString(),
+                                        style: TextStyle(
+                                          color: color_font,
+                                          fontSize: fontSizeSubTitle,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      IconButton(
+                                        icon: Icon(
+                                          Icons.add,
+                                          color: color_font,
+                                          size: iconSize,
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            _cantidad[index]++;
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+
+                                  // Botón para seleccionar toppings
+                                  ElevatedButton(
+                                    onPressed: () => _showToppingsSheet(index),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: color_font,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      'Seleccionar Toppings',
+                                      style: TextStyle(
+                                        color: color_white,
+                                        fontSize: fontSizeSubTitle,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
                                 ],
-                              ),
-
-                              // Botón para seleccionar toppings
-                              ElevatedButton(
-                                onPressed: () => _showToppingsSheet(index),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: color_bg,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                ),
-                                child: Text(
-                                  'Seleccionar Toppings',
-                                  style: TextStyle(
-                                    color: color_font,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ],
+                              );
+                            },
                           ),
                         ),
                       );
