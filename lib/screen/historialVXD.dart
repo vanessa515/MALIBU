@@ -1,6 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:malibu/constants/custom_appbar.dart';
+import 'package:malibu/screen/home.dart';
+import 'package:malibu/screen/registrar_prod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+//Variables de colores
+final Color color_bg = Color.fromARGB(255, 230, 190, 152);
+final Color color_bg2 = Color.fromARGB(255, 254, 235, 216);
+final Color color_font = Color.fromARGB(255, 69, 65, 129);
+final Color color_white = Color.fromARGB(255, 255, 255, 255);
+final Color color_white2 = Color.fromARGB(255, 250, 250, 250);
+final Color color_cancelar = Color.fromARGB(255, 244, 63, 63);
+final Color color_grey = Colors.grey;
+final Color color_black = Color.fromARGB(255, 0, 0, 0);
+final Color color_effects = Colors.black.withOpacity(0.3);
 
 class HISTORIALVXD extends StatefulWidget {
   const HISTORIALVXD({super.key});
@@ -39,7 +53,7 @@ class _HISTORIALVXDState extends State<HISTORIALVXD> {
   Future<void> _fetchTicketData() async {
     try {
       final response = await Supabase.instance.client.rpc('obtener_tickets');
-      
+
       if (response is List) {
         setState(() {
           for (var venta in response) {
@@ -53,7 +67,8 @@ class _HISTORIALVXDState extends State<HISTORIALVXD> {
           }
         });
       } else {
-        print('Los datos no son una lista. Tipo recibido: ${response.runtimeType}');
+        print(
+            'Los datos no son una lista. Tipo recibido: ${response.runtimeType}');
       }
     } catch (e) {
       print('Caught error: $e');
@@ -65,7 +80,8 @@ class _HISTORIALVXDState extends State<HISTORIALVXD> {
 
   Future<void> _fetchDetallesVentaOptions() async {
     try {
-      final response = await Supabase.instance.client.from('detalle_venta').select();
+      final response =
+          await Supabase.instance.client.from('detalle_venta').select();
 
       if (response is List) {
         setState(() {
@@ -97,15 +113,13 @@ class _HISTORIALVXDState extends State<HISTORIALVXD> {
       });
 
       try {
-        final response = await Supabase.instance.client
-            .from("caja")
-            .insert({
-              'sueldo': _sueldoController.text,
-              'otros': _otrosController.text,
-              'motivos': _motivosController.text,
-              'fk_detalle_venta': _selectedDetalleVenta, // Asigna el detalle seleccionado
-            })
-            .select();
+        final response = await Supabase.instance.client.from("caja").insert({
+          'sueldo': _sueldoController.text,
+          'otros': _otrosController.text,
+          'motivos': _motivosController.text,
+          'fk_detalle_venta':
+              _selectedDetalleVenta, // Asigna el detalle seleccionado
+        }).select();
 
         setState(() {
           _isSubmitting = false;
@@ -138,102 +152,231 @@ class _HISTORIALVXDState extends State<HISTORIALVXD> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Historial de Ventas por Día'),
-        backgroundColor: Colors.teal,
+      backgroundColor: color_bg2,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(80),
+        child: CustomAppbar(
+          titulo: 'Historial de Ventas por Día',
+          colorsito: color_bg,
+        ),
       ),
-      body: Column(
-        children: [
-          Form(
-            key: _formKey,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: _sueldoController,
-                    decoration: InputDecoration(labelText: 'Sueldo'),
-                    validator: (value) => value!.isEmpty ? 'Campo requerido' : null,
-                  ),
-                  TextFormField(
-                    controller: _otrosController,
-                    decoration: InputDecoration(labelText: 'Otros'),
-                    validator: (value) => value!.isEmpty ? 'Campo requerido' : null,
-                  ),
-                  TextFormField(
-                    controller: _motivosController,
-                    decoration: InputDecoration(labelText: 'Motivos'),
-                    validator: (value) => value!.isEmpty ? 'Campo requerido' : null,
-                  ),
-                  DropdownButtonFormField(
-                    value: _selectedDetalleVenta,
-                    items: _detallesVentaOptions.map((detalle) {
-                      return DropdownMenuItem(
-                        value: detalle['pk_detalle_venta'], // Asume que la clave primaria es 'id'
-                        child: Text(detalle['fecha']), // Muestra el nombre del detalle
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedDetalleVenta = value;
-                      });
-                    },
-                    decoration: InputDecoration(labelText: 'Seleccionar Detalle de Venta'),
-                    validator: (value) => value == null ? 'Seleccione un detalle de venta' : null,
-                  ),
-                  SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: _isSubmitting ? null : _registrarCaja,
-                    child: _isSubmitting
-                        ? CircularProgressIndicator()
-                        : Text('Registrar Caja'),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: _ventasPorFecha.isEmpty
-                ? const Center(child: Text('No hay datos de ventas.'))
-                : ListView.builder(
-                    itemCount: _ventasPorFecha.keys.length,
-                    itemBuilder: (context, index) {
-                      String fecha = _ventasPorFecha.keys.elementAt(index);
-                      List<dynamic> ventasDelDia = _ventasPorFecha[fecha]!;
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isMobile = constraints.maxWidth < 600;
 
-                      double totalVentasDelDia = _calcularTotalPorDia(ventasDelDia);
-
-                      return ExpansionTile(
-                        title: Text('Ventas del $fecha (Total del día: \$${totalVentasDelDia.toStringAsFixed(2)})'),
-                        children: ventasDelDia.map((venta) {
-                          final nombreProducto = venta['producto_nombre'] ?? 'Nombre no disponible';
-                          final precioProducto = venta['producto_precio'] ?? 0;
-                          final cantidad = venta['cantidad_producto'] ?? 0;
-                          final totalVenta = venta['total_venta'] ?? 0;
-                          final toppingNombre = venta['topping_nombre'] ?? 'Sin topping';
-                          final toppingPrecio = venta['topping_precio'] ?? 0;
-                          final topping2Nombre = venta['topping2_nombre'] ?? 'Sin topping';
-                          final topping2Precio = venta['topping2_precio'] ?? 0;
-
-                          return ListTile(
-                            title: Text(nombreProducto),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Precio Producto: \$${precioProducto.toStringAsFixed(2)}'),
-                                Text('Topping 1: $toppingNombre (\$${toppingPrecio.toStringAsFixed(2)})'),
-                                Text('Topping 2: $topping2Nombre (\$${topping2Precio.toStringAsFixed(2)})'),
-                                Text('Cantidad: $cantidad'),
-                                Text('Total Venta: \$${totalVenta.toStringAsFixed(2)}'),
-                              ],
+          return Column(
+            children: [
+              Form(
+                key: _formKey,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: _sueldoController,
+                              decoration: InputDecoration(
+                                labelText: 'Sueldo',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                filled: true,
+                                fillColor: color_white2,
+                                prefixIcon: Icon(
+                                  Icons.attach_money,
+                                ),
+                              ),
+                              validator: (value) =>
+                                  value!.isEmpty ? 'Campo requerido' : null,
                             ),
+                          ),
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: TextFormField(
+                              controller: _otrosController,
+                              decoration: InputDecoration(
+                                labelText: 'Otros',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                filled: true,
+                                fillColor: color_white2,
+                              ),
+                              validator: (value) =>
+                                  value!.isEmpty ? 'Campo requerido' : null,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      TextFormField(
+                        controller: _motivosController,
+                        decoration: InputDecoration(
+                          labelText: 'Motivos',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          filled: true,
+                          fillColor: color_white2,
+                        ),
+                        validator: (value) =>
+                            value!.isEmpty ? 'Campo requerido' : null,
+                      ),
+                      SizedBox(height: 10),
+                      DropdownButtonFormField(
+                        value: _selectedDetalleVenta,
+                        items: _detallesVentaOptions.map((detalle) {
+                          return DropdownMenuItem(
+                            value: detalle['pk_detalle_venta'],
+                            child: Text(detalle['fecha']),
                           );
                         }).toList(),
-                      );
-                    },
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedDetalleVenta = value;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          labelText: 'Seleccionar Detalle de Venta',
+                          border: OutlineInputBorder(),
+                          filled: true,
+                          fillColor: color_white2,
+                        ),
+                        validator: (value) => value == null
+                            ? 'Seleccione un detalle de venta'
+                            : null,
+                      ),
+                      SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: _isSubmitting ? null : _registrarCaja,
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 16.0,
+                            horizontal: 24.0,
+                          ),
+                          backgroundColor: color_font,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                        child: _isSubmitting
+                            ? CircularProgressIndicator()
+                            : Text(
+                                'Registrar Caja',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: color_white2,
+                                ),
+                              ),
+                      ),
+                    ],
                   ),
-          ),
-        ],
+                ),
+              ),
+              Expanded(
+                child: _ventasPorFecha.isEmpty
+                    ? Center(child: Text('No hay datos de ventas.'))
+                    : ListView.builder(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        itemCount: _ventasPorFecha.keys.length,
+                        itemBuilder: (context, index) {
+                          String fecha = _ventasPorFecha.keys.elementAt(index);
+                          List<dynamic> ventasDelDia = _ventasPorFecha[fecha]!;
+                          double totalVentasDelDia =
+                              _calcularTotalPorDia(ventasDelDia);
+
+                          return Card(
+                            margin: EdgeInsets.symmetric(vertical: 8.0),
+                            child: ExpansionTile(
+                              title: Text(
+                                'Ventas del $fecha',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: isMobile ? 16 : 18,
+                                ),
+                              ),
+                              subtitle: Text(
+                                'Total del día: \$${totalVentasDelDia.toStringAsFixed(2)}',
+                                style: TextStyle(
+                                  color: color_green,
+                                  fontSize: isMobile ? 14 : 16,
+                                ),
+                              ),
+                              children: ventasDelDia.map((venta) {
+                                final nombreProducto =
+                                    venta['producto_nombre'] ??
+                                        'Nombre no disponible';
+                                final precioProducto =
+                                    venta['producto_precio'] ?? 0;
+                                final cantidad =
+                                    venta['cantidad_producto'] ?? 0;
+                                final totalVenta = venta['total_venta'] ?? 0;
+                                final toppingNombre =
+                                    venta['topping_nombre'] ?? 'Sin topping';
+                                final toppingPrecio =
+                                    venta['topping_precio'] ?? 0;
+                                final topping2Nombre =
+                                    venta['topping2_nombre'] ?? 'Sin topping';
+                                final topping2Precio =
+                                    venta['topping2_precio'] ?? 0;
+
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 12.0, vertical: 6.0),
+                                  child: ListTile(
+                                    tileColor: color_grey,
+                                    title: Text(
+                                      nombreProducto,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: isMobile ? 14 : 16,
+                                      ),
+                                    ),
+                                    subtitle: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Precio Producto: \$${precioProducto.toStringAsFixed(2)}',
+                                          style: TextStyle(
+                                              fontSize: isMobile ? 12 : 14),
+                                        ),
+                                        Text(
+                                          'Topping 1: $toppingNombre (\$${toppingPrecio.toStringAsFixed(2)})',
+                                          style: TextStyle(
+                                              fontSize: isMobile ? 12 : 14),
+                                        ),
+                                        Text(
+                                          'Topping 2: $topping2Nombre (\$${topping2Precio.toStringAsFixed(2)})',
+                                          style: TextStyle(
+                                              fontSize: isMobile ? 12 : 14),
+                                        ),
+                                        Text(
+                                          'Cantidad: $cantidad',
+                                          style: TextStyle(
+                                              fontSize: isMobile ? 12 : 14),
+                                        ),
+                                        Text(
+                                          'Total Venta: \$${totalVenta.toStringAsFixed(2)}',
+                                          style: TextStyle(
+                                              fontSize: isMobile ? 12 : 14),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          );
+                        },
+                      ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:malibu/constants/custom_drawer.dart';
+import 'package:malibu/screen/registrar_prod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../constants/custom_appbar.dart';
 
@@ -12,6 +13,7 @@ final Color color_white2 = Color.fromARGB(255, 250, 250, 250);
 final Color color_cancelar = Color.fromARGB(255, 244, 63, 63);
 final Color color_black = Color.fromARGB(255, 0, 0, 0);
 final Color color_effects = Colors.black.withOpacity(0.3);
+final Color color_green = Colors.green;
 
 //Variables de imagenes
 String logo_img = "../assets/logos/logo.png";
@@ -1122,30 +1124,35 @@ class _TicketVentaScreenState extends State<TicketVentaScreen> {
     print('Longitud de _ticketData: ${_ticketData.length}');
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Tickets'),
-        backgroundColor: color_bg,
+      backgroundColor: color_bg2,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(80),
+        child: CustomAppbar(
+          titulo: 'Tickets',
+          colorsito: color_bg,
+        ),
       ),
       body: _ticketData.isEmpty
-          ? Center(child: Text('No hay datos de ventas.'))
+          ? Center(
+              child: Text(
+                'No hay datos de ventas.',
+                style: TextStyle(fontSize: 18, color: color_grey),
+              ),
+            )
           : Column(
               children: [
                 Expanded(
                   child: ListView.builder(
+                    padding: EdgeInsets.all(10.0),
                     itemCount: _ticketData.length,
                     itemBuilder: (context, index) {
                       final producto = _ticketData[index];
-
-                      // Impresión
-                      print('Producto $index: $producto');
-
                       final nombreProducto =
                           producto['producto_nombre'] ?? 'Nombre no disponible';
                       final precioProducto = producto['producto_precio'] ?? 0;
                       final cantidad = producto['cantidad_producto'] ?? 0;
                       final totalVenta = producto['total_venta'] ?? 0;
                       final fecha = producto['fecha'] ?? 'Fecha no disponible';
-
                       final toppingNombre =
                           producto['topping_nombre'] ?? 'Sin topping';
                       final toppingPrecio = producto['topping_precio'] ?? 0;
@@ -1154,21 +1161,64 @@ class _TicketVentaScreenState extends State<TicketVentaScreen> {
                       final topping2Precio = producto['topping2_precio'] ?? 0;
 
                       return Card(
-                        child: ListTile(
-                          title: Text('$nombreProducto'),
-                          subtitle: Column(
+                        elevation: 5,
+                        margin: EdgeInsets.symmetric(vertical: 8.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                  'Precio Producto: \$${precioProducto.toStringAsFixed(2)}'),
+                                nombreProducto,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Precio: \$${precioProducto.toStringAsFixed(2)}',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                  Text(
+                                    'Cantidad: $cantidad',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 5),
                               Text(
-                                  'Topping 1: $toppingNombre (\$${toppingPrecio.toStringAsFixed(2)})'),
+                                'Topping 1: $toppingNombre (\$${toppingPrecio.toStringAsFixed(2)})',
+                                style:
+                                    TextStyle(fontSize: 14, color: color_grey),
+                              ),
                               Text(
-                                  'Topping 2: $topping2Nombre (\$${topping2Precio.toStringAsFixed(2)})'),
-                              Text('Cantidad: $cantidad'),
-                              Text('Fecha: $fecha'),
+                                'Topping 2: $topping2Nombre (\$${topping2Precio.toStringAsFixed(2)})',
+                                style:
+                                    TextStyle(fontSize: 14, color: color_grey),
+                              ),
+                              Divider(color: color_grey),
                               Text(
-                                  'Total Venta: \$${totalVenta.toStringAsFixed(2)}'),
+                                'Fecha: $fecha',
+                                style:
+                                    TextStyle(fontSize: 14, color: color_grey),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                'Total Venta: \$${totalVenta.toStringAsFixed(2)}',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: color_green,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -1176,12 +1226,22 @@ class _TicketVentaScreenState extends State<TicketVentaScreen> {
                     },
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: _imprimirTicket,
-                  child: Text('Imprimir Ticket'),
-                ),
               ],
             ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _imprimirTicket,
+        label: Text(
+          'Imprimir Ticket',
+          style: TextStyle(
+            color: color_white,
+          ),
+        ),
+        icon: Icon(
+          Icons.print,
+          color: color_white,
+        ),
+        backgroundColor: color_font,
+      ),
     );
   }
 }

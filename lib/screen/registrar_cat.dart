@@ -115,7 +115,7 @@ class _RegistroCategoriaState extends State<RegistroCategoria> {
                               ),
                             ),
 
-                            const SizedBox(height: 20),
+                            SizedBox(height: 20),
 
                             // Campo de texto
                             TextFormField(
@@ -149,6 +149,7 @@ class _RegistroCategoriaState extends State<RegistroCategoria> {
                                       color: color_font,
                                     ),
                                   )
+
                                 : ElevatedButton(
                                     onPressed: _registrarCategoria,
                                     style: ElevatedButton.styleFrom(
@@ -160,6 +161,7 @@ class _RegistroCategoriaState extends State<RegistroCategoria> {
                                             BorderRadius.circular(8.0),
                                       ),
                                     ),
+
                                     child: Text(
                                       'Registrar Categoría',
                                       style: TextStyle(

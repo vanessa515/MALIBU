@@ -152,7 +152,9 @@ class _RegistroProductoState extends State<RegistroProducto> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       backgroundColor: color_bg2,
+
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(80),
         child: CustomAppbar(
@@ -160,6 +162,7 @@ class _RegistroProductoState extends State<RegistroProducto> {
           colorsito: color_bg,
         ),
       ),
+      
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Center(
@@ -222,7 +225,7 @@ class _RegistroProductoState extends State<RegistroProducto> {
                         borderSide: BorderSide(color: color_font),
                       ),
                       prefixIcon: Icon(
-                        Icons.monetization_on_outlined,
+                        Icons.attach_money_outlined,
                         color: color_font,
                       ),
                     ),
