@@ -6,6 +6,17 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
+//Variables de colores
+final Color color_bg = Color.fromARGB(255, 230, 190, 152);
+final Color color_bg2 = Color.fromARGB(255, 254, 235, 216);
+final Color color_font = Color.fromARGB(255, 69, 65, 129);
+final Color color_white = Color.fromARGB(255, 255, 255, 255);
+final Color color_white2 = Color.fromARGB(255, 250, 250, 250);
+final Color color_cancelar = Color.fromARGB(255, 244, 63, 63);
+final Color color_grey = Colors.grey;
+final Color color_black = Color.fromARGB(255, 0, 0, 0);
+final Color color_effects = Colors.black.withOpacity(0.3);
+
 class RegistroTopping extends StatefulWidget {
   const RegistroTopping({super.key});
 
@@ -33,13 +44,15 @@ class _RegistroToppingState extends State<RegistroTopping> {
           // En web usamos los bytes
           setState(() {
             _webImage = result.files.first.bytes;
-            _imageName = result.files.first.name; // Guardar el nombre de la imagen
+            _imageName =
+                result.files.first.name; // Guardar el nombre de la imagen
           });
         } else {
           // En móviles/escritorio usamos la ruta del archivo
           setState(() {
             _image = File(result.files.first.path!);
-            _imageName = result.files.first.name; // Guardar el nombre de la imagen
+            _imageName =
+                result.files.first.name; // Guardar el nombre de la imagen
           });
         }
       } else {
@@ -64,31 +77,29 @@ class _RegistroToppingState extends State<RegistroTopping> {
         double precio = double.tryParse(_precioController.text) ?? 0.0;
 
         // Insertar en la tabla "topping"
-        final responseTopping = await Supabase.instance.client
-            .from("topping")
-            .insert({
-              'nombre': _nombreController.text,
-              'precio': precio,
-              'foto': _imageName, // Registrar el nombre de la imagen aquí
-              'estatus': 1,
-            })
-            .select();
+        final responseTopping =
+            await Supabase.instance.client.from("topping").insert({
+          'nombre': _nombreController.text,
+          'precio': precio,
+          'foto': _imageName, // Registrar el nombre de la imagen aquí
+          'estatus': 1,
+        }).select();
 
         // Insertar en la tabla "topping2" si el registro en "topping" fue exitoso
         if (responseTopping.isNotEmpty) {
-          final responseTopping2 = await Supabase.instance.client
-              .from("topping2")
-              .insert({
-                'nombre': _nombreController.text,
-                'precio': precio,
-                'foto': _imageName, // Registrar el mismo nombre de la imagen
-                'estatus': 1,
-              })
-              .select();
+          final responseTopping2 =
+              await Supabase.instance.client.from("topping2").insert({
+            'nombre': _nombreController.text,
+            'precio': precio,
+            'foto': _imageName, // Registrar el mismo nombre de la imagen
+            'estatus': 1,
+          }).select();
 
           if (responseTopping2.isNotEmpty) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Topping registrado en ambas tablas exitosamente')),
+              SnackBar(
+                  content:
+                      Text('Topping registrado en ambas tablas exitosamente')),
             );
             _nombreController.clear();
             _precioController.clear();
@@ -132,67 +143,137 @@ class _RegistroToppingState extends State<RegistroTopping> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppbar(
-        titulo: 'REGISTRO TOPPING',
-        colorsito: Colors.teal,
+      backgroundColor: color_bg2,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(80),
+        child: CustomAppbar(
+          titulo: 'Registro de Toppings',
+          colorsito: color_bg,
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _nombreController,
-                decoration: InputDecoration(
-                  labelText: 'Nombre del Topping',
-                  border: OutlineInputBorder(),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16.0),
+        child: Center(
+          child: Container(
+            constraints: BoxConstraints(maxWidth: 500),
+            decoration: BoxDecoration(
+              color: color_white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: color_grey,
+                  blurRadius: 10,
+                  spreadRadius: 2,
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, ingrese un nombre de producto';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _precioController,
-                decoration: InputDecoration(
-                  labelText: 'Precio del Topping',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, ingrese el precio del producto';
-                  }
-                  if (double.tryParse(value) == null) {
-                    return 'Por favor, ingrese un precio válido';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-              // Mostrar imagen según la plataforma
-              _image != null
-                  ? Image.file(_image!, height: 150)
-                  : _webImage != null
-                      ? Image.memory(_webImage!, height: 150)
-                      : Text('No se ha seleccionado ninguna imagen'),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _pickImage,
-                child: Text('Seleccionar Imagen'),
-              ),
-              const SizedBox(height: 20),
-              _isSubmitting
-                  ? CircularProgressIndicator()
-                  : ElevatedButton(
-                      onPressed: _registrarTopping,
-                      child: Text('Registrar Topping'),
+              ],
+            ),
+            padding: EdgeInsets.all(20.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'Registrar Topping',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: color_font,
                     ),
-            ],
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: _nombreController,
+                    decoration: InputDecoration(
+                      labelText: 'Nombre del Topping',
+                      border: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: color_font),
+                      ),
+                      prefixIcon: Icon(
+                        Icons.production_quantity_limits_outlined,
+                        color: color_font,
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, ingrese un nombre de topping';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: _precioController,
+                    decoration: InputDecoration(
+                      labelText: 'Precio del Topping',
+                      border: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: color_font),
+                      ),
+                      prefixIcon: Icon(
+                        Icons.monetization_on_outlined,
+                        color: color_font,
+                      ),
+                    ),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, ingrese el precio del topping';
+                      }
+                      if (double.tryParse(value) == null) {
+                        return 'Por favor, ingrese un precio válido';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: color_grey, width: 1.0),
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    padding: EdgeInsets.all(10.0),
+                    child: _image != null
+                        ? Image.file(_image!, height: 150)
+                        : _webImage != null
+                            ? Image.memory(_webImage!, height: 150)
+                            : Text(
+                                'No se ha seleccionado ninguna imagen',
+                                style: TextStyle(color: color_grey),
+                              ),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton.icon(
+                    onPressed: _pickImage,
+                    icon: Icon(Icons.image),
+                    label: Text('Seleccionar Imagen'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: color_font,
+                      foregroundColor: color_white,
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  _isSubmitting
+                      ? Center(child: CircularProgressIndicator())
+                      : ElevatedButton(
+                          onPressed: _registrarTopping,
+                          child: Text(
+                            'Registrar Topping',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: color_font,
+                            foregroundColor: color_white,
+                            padding: const EdgeInsets.symmetric(vertical: 15),
+                          ),
+                        ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
