@@ -1,0 +1,246 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.malibu"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+9        android:targetSdkVersion="34" />
+10    <!--
+11         Required to query activities that can process text, see:
+12         https://developer.android.com/training/package-visibility and
+13         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
+14
+15         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin.
+16    -->
+17    <queries>
+17-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:39:5-44:15
+18        <intent>
+18-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:40:9-43:18
+19            <action android:name="android.intent.action.PROCESS_TEXT" />
+19-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:41:13-72
+19-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:41:21-70
+20
+21            <data android:mimeType="text/plain" />
+21-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:42:13-50
+21-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:42:19-48
+22        </intent>
+23        <intent>
+23-->[:file_picker] C:\project_malibu\MALIBU\build\file_picker\intermediates\merged_manifest\release\AndroidManifest.xml:12:9-16:18
+24            <action android:name="android.intent.action.GET_CONTENT" />
+24-->[:file_picker] C:\project_malibu\MALIBU\build\file_picker\intermediates\merged_manifest\release\AndroidManifest.xml:13:13-72
+24-->[:file_picker] C:\project_malibu\MALIBU\build\file_picker\intermediates\merged_manifest\release\AndroidManifest.xml:13:21-69
+25
+26            <data android:mimeType="*/*" />
+26-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:42:13-50
+26-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:42:19-48
+27        </intent>
+28    </queries>
+29
+30    <uses-permission
+30-->[:file_picker] C:\project_malibu\MALIBU\build\file_picker\intermediates\merged_manifest\release\AndroidManifest.xml:7:5-9:38
+31        android:name="android.permission.READ_EXTERNAL_STORAGE"
+31-->[:file_picker] C:\project_malibu\MALIBU\build\file_picker\intermediates\merged_manifest\release\AndroidManifest.xml:8:9-64
+32        android:maxSdkVersion="32" />
+32-->[:file_picker] C:\project_malibu\MALIBU\build\file_picker\intermediates\merged_manifest\release\AndroidManifest.xml:9:9-35
+33
+34    <permission
+34-->[androidx.core:core:1.13.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\f94475d0ee9d4fd73fbdbfc57d660a71\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
+35        android:name="com.example.malibu.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+35-->[androidx.core:core:1.13.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\f94475d0ee9d4fd73fbdbfc57d660a71\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
+36        android:protectionLevel="signature" />
+36-->[androidx.core:core:1.13.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\f94475d0ee9d4fd73fbdbfc57d660a71\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
+37
+38    <uses-permission android:name="com.example.malibu.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+38-->[androidx.core:core:1.13.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\f94475d0ee9d4fd73fbdbfc57d660a71\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
+38-->[androidx.core:core:1.13.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\f94475d0ee9d4fd73fbdbfc57d660a71\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
+39
+40    <application
+41        android:name="android.app.Application"
+41-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:4:9-42
+42        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+42-->[androidx.core:core:1.13.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\f94475d0ee9d4fd73fbdbfc57d660a71\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
+43        android:extractNativeLibs="true"
+44        android:icon="@mipmap/ic_launcher"
+44-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:5:9-43
+45        android:label="malibu" >
+45-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:3:9-31
+46        <activity
+46-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:6:9-27:20
+47            android:name="com.example.malibu.MainActivity"
+47-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:7:13-41
+48            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+48-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:12:13-163
+49            android:exported="true"
+49-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:8:13-36
+50            android:hardwareAccelerated="true"
+50-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:13:13-47
+51            android:launchMode="singleTop"
+51-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:9:13-43
+52            android:taskAffinity=""
+52-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:10:13-36
+53            android:theme="@style/LaunchTheme"
+53-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:11:13-47
+54            android:windowSoftInputMode="adjustResize" >
+54-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:14:13-55
+55
+56            <!--
+57                 Specifies an Android theme to apply to this Activity as soon as
+58                 the Android process has started. This theme is visible to the user
+59                 while the Flutter UI initializes. After that, this theme continues
+60                 to determine the Window background behind the Flutter UI.
+61            -->
+62            <meta-data
+62-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:19:13-22:17
+63                android:name="io.flutter.embedding.android.NormalTheme"
+63-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:20:15-70
+64                android:resource="@style/NormalTheme" />
+64-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:21:15-52
+65
+66            <intent-filter>
+66-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:23:13-26:29
+67                <action android:name="android.intent.action.MAIN" />
+67-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:24:17-68
+67-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:24:25-66
+68
+69                <category android:name="android.intent.category.LAUNCHER" />
+69-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:25:17-76
+69-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:25:27-74
+70            </intent-filter>
+71        </activity>
+72        <!--
+73             Don't delete the meta-data below.
+74             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+75        -->
+76        <meta-data
+76-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:30:9-32:33
+77            android:name="flutterEmbedding"
+77-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:31:13-44
+78            android:value="2" />
+78-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:32:13-30
+79
+80        <provider
+80-->[:image_picker_android] C:\project_malibu\MALIBU\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:9:9-17:20
+81            android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
+81-->[:image_picker_android] C:\project_malibu\MALIBU\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:10:13-82
+82            android:authorities="com.example.malibu.flutter.image_provider"
+82-->[:image_picker_android] C:\project_malibu\MALIBU\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:11:13-74
+83            android:exported="false"
+83-->[:image_picker_android] C:\project_malibu\MALIBU\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:12:13-37
+84            android:grantUriPermissions="true" >
+84-->[:image_picker_android] C:\project_malibu\MALIBU\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:13:13-47
+85            <meta-data
+85-->[:image_picker_android] C:\project_malibu\MALIBU\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:14:13-16:75
+86                android:name="android.support.FILE_PROVIDER_PATHS"
+86-->[:image_picker_android] C:\project_malibu\MALIBU\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:15:17-67
+87                android:resource="@xml/flutter_image_picker_file_paths" />
+87-->[:image_picker_android] C:\project_malibu\MALIBU\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:16:17-72
+88        </provider> <!-- Trigger Google Play services to install the backported photo picker module. -->
+89        <service
+89-->[:image_picker_android] C:\project_malibu\MALIBU\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:19:9-31:19
+90            android:name="com.google.android.gms.metadata.ModuleDependencies"
+90-->[:image_picker_android] C:\project_malibu\MALIBU\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:20:13-78
+91            android:enabled="false"
+91-->[:image_picker_android] C:\project_malibu\MALIBU\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:21:13-36
+92            android:exported="false" >
+92-->[:image_picker_android] C:\project_malibu\MALIBU\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:22:13-37
+93            <intent-filter>
+93-->[:image_picker_android] C:\project_malibu\MALIBU\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:24:13-26:29
+94                <action android:name="com.google.android.gms.metadata.MODULE_DEPENDENCIES" />
+94-->[:image_picker_android] C:\project_malibu\MALIBU\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:25:17-94
+94-->[:image_picker_android] C:\project_malibu\MALIBU\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:25:25-91
+95            </intent-filter>
+96
+97            <meta-data
+97-->[:image_picker_android] C:\project_malibu\MALIBU\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:28:13-30:36
+98                android:name="photopicker_activity:0:required"
+98-->[:image_picker_android] C:\project_malibu\MALIBU\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:29:17-63
+99                android:value="" />
+99-->[:image_picker_android] C:\project_malibu\MALIBU\build\image_picker_android\intermediates\merged_manifest\release\AndroidManifest.xml:30:17-33
+100        </service>
+101
+102        <activity
+102-->[:url_launcher_android] C:\project_malibu\MALIBU\build\url_launcher_android\intermediates\merged_manifest\release\AndroidManifest.xml:8:9-11:74
+103            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
+103-->[:url_launcher_android] C:\project_malibu\MALIBU\build\url_launcher_android\intermediates\merged_manifest\release\AndroidManifest.xml:9:13-74
+104            android:exported="false"
+104-->[:url_launcher_android] C:\project_malibu\MALIBU\build\url_launcher_android\intermediates\merged_manifest\release\AndroidManifest.xml:10:13-37
+105            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+105-->[:url_launcher_android] C:\project_malibu\MALIBU\build\url_launcher_android\intermediates\merged_manifest\release\AndroidManifest.xml:11:13-71
+106
+107        <uses-library
+107-->[androidx.window:window:1.2.0] C:\Users\jbac9\.gradle\caches\8.9\transforms\2c0ba2094c9347b44169ea5648c68564\transformed\jetified-window-1.2.0\AndroidManifest.xml:23:9-25:40
+108            android:name="androidx.window.extensions"
+108-->[androidx.window:window:1.2.0] C:\Users\jbac9\.gradle\caches\8.9\transforms\2c0ba2094c9347b44169ea5648c68564\transformed\jetified-window-1.2.0\AndroidManifest.xml:24:13-54
+109            android:required="false" />
+109-->[androidx.window:window:1.2.0] C:\Users\jbac9\.gradle\caches\8.9\transforms\2c0ba2094c9347b44169ea5648c68564\transformed\jetified-window-1.2.0\AndroidManifest.xml:25:13-37
+110        <uses-library
+110-->[androidx.window:window:1.2.0] C:\Users\jbac9\.gradle\caches\8.9\transforms\2c0ba2094c9347b44169ea5648c68564\transformed\jetified-window-1.2.0\AndroidManifest.xml:26:9-28:40
+111            android:name="androidx.window.sidecar"
+111-->[androidx.window:window:1.2.0] C:\Users\jbac9\.gradle\caches\8.9\transforms\2c0ba2094c9347b44169ea5648c68564\transformed\jetified-window-1.2.0\AndroidManifest.xml:27:13-51
+112            android:required="false" />
+112-->[androidx.window:window:1.2.0] C:\Users\jbac9\.gradle\caches\8.9\transforms\2c0ba2094c9347b44169ea5648c68564\transformed\jetified-window-1.2.0\AndroidManifest.xml:28:13-37
+113
+114        <provider
+114-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\jbac9\.gradle\caches\8.9\transforms\ac9c146471aef157a79b6408a3545c6e\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:24:9-32:20
+115            android:name="androidx.startup.InitializationProvider"
+115-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\jbac9\.gradle\caches\8.9\transforms\ac9c146471aef157a79b6408a3545c6e\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:25:13-67
+116            android:authorities="com.example.malibu.androidx-startup"
+116-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\jbac9\.gradle\caches\8.9\transforms\ac9c146471aef157a79b6408a3545c6e\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:26:13-68
+117            android:exported="false" >
+117-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\jbac9\.gradle\caches\8.9\transforms\ac9c146471aef157a79b6408a3545c6e\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:27:13-37
+118            <meta-data
+118-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\jbac9\.gradle\caches\8.9\transforms\ac9c146471aef157a79b6408a3545c6e\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:29:13-31:52
+119                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+119-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\jbac9\.gradle\caches\8.9\transforms\ac9c146471aef157a79b6408a3545c6e\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:30:17-78
+120                android:value="androidx.startup" />
+120-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\jbac9\.gradle\caches\8.9\transforms\ac9c146471aef157a79b6408a3545c6e\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:31:17-49
+121            <meta-data
+121-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\e98ce98b480c4cb5d17318d2ce2732d0\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
+122                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+122-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\e98ce98b480c4cb5d17318d2ce2732d0\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
+123                android:value="androidx.startup" />
+123-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\e98ce98b480c4cb5d17318d2ce2732d0\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
+124        </provider>
+125
+126        <receiver
+126-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\e98ce98b480c4cb5d17318d2ce2732d0\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
+127            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+127-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\e98ce98b480c4cb5d17318d2ce2732d0\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
+128            android:directBootAware="false"
+128-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\e98ce98b480c4cb5d17318d2ce2732d0\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
+129            android:enabled="true"
+129-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\e98ce98b480c4cb5d17318d2ce2732d0\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
+130            android:exported="true"
+130-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\e98ce98b480c4cb5d17318d2ce2732d0\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
+131            android:permission="android.permission.DUMP" >
+131-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\e98ce98b480c4cb5d17318d2ce2732d0\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
+132            <intent-filter>
+132-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\e98ce98b480c4cb5d17318d2ce2732d0\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
+133                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+133-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\e98ce98b480c4cb5d17318d2ce2732d0\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
+133-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\e98ce98b480c4cb5d17318d2ce2732d0\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
+134            </intent-filter>
+135            <intent-filter>
+135-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\e98ce98b480c4cb5d17318d2ce2732d0\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
+136                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+136-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\e98ce98b480c4cb5d17318d2ce2732d0\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
+136-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\e98ce98b480c4cb5d17318d2ce2732d0\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
+137            </intent-filter>
+138            <intent-filter>
+138-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\e98ce98b480c4cb5d17318d2ce2732d0\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
+139                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+139-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\e98ce98b480c4cb5d17318d2ce2732d0\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
+139-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\e98ce98b480c4cb5d17318d2ce2732d0\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
+140            </intent-filter>
+141            <intent-filter>
+141-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\e98ce98b480c4cb5d17318d2ce2732d0\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
+142                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+142-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\e98ce98b480c4cb5d17318d2ce2732d0\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
+142-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\e98ce98b480c4cb5d17318d2ce2732d0\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
+143            </intent-filter>
+144        </receiver>
+145    </application>
+146
+147</manifest>
