@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:malibu/screen/home.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../constants/custom_appbar.dart';
 
 //Variables de colores
-Color color_bg = Color.fromARGB(255, 230, 190, 152);
-Color color_font = Color.fromARGB(255, 69, 65, 129);
-Color color_white = Color.fromARGB(255, 255, 255, 255);
-Color color_cancelar = Color.fromARGB(255, 244, 63, 63);
-Color color_black = Color.fromARGB(255, 0, 0, 0);
-Color color_effects = Colors.black.withOpacity(0.3);
+final Color color_bg = Color.fromARGB(255, 230, 190, 152);
+final Color color_bg2 = Color.fromARGB(255, 254, 235, 216);
+final Color color_font = Color.fromARGB(255, 69, 65, 129);
+final Color color_white = Color.fromARGB(255, 255, 255, 255);
+final Color color_cancelar = Color.fromARGB(255, 244, 63, 63);
+final Color color_black = Color.fromARGB(255, 0, 0, 0);
+final Color color_effects = Colors.black.withOpacity(0.3);
 
 class RegistroCategoria extends StatefulWidget {
   const RegistroCategoria({super.key});
@@ -69,6 +71,9 @@ class _RegistroCategoriaState extends State<RegistroCategoria> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+      backgroundColor: color_bg2,
+
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(80),
         child: CustomAppbar(
@@ -76,35 +81,104 @@ class _RegistroCategoriaState extends State<RegistroCategoria> {
           colorsito: color_bg,
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _nombreController,
-                decoration: InputDecoration(
-                  labelText: 'Nombre de la Categoría',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, ingrese un nombre de categoría';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-              _isSubmitting
-                  ? CircularProgressIndicator()
-                  : ElevatedButton(
-                      onPressed: _registrarCategoria,
-                      child: Text('Registrar Categoría'),
+      
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          /* double width = constraints.maxWidth; */
+
+          return SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: 600),
+                  child: Card(
+                    elevation: 8,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.0),
                     ),
-            ],
-          ),
-        ),
+                    child: Padding(
+                      padding: EdgeInsets.all(24.0),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            // Título
+                            Text(
+                              'Registrar Categoría',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: color_font,
+                              ),
+                            ),
+
+                            const SizedBox(height: 20),
+
+                            // Campo de texto
+                            TextFormField(
+                              controller: _nombreController,
+                              decoration: InputDecoration(
+                                labelText: 'Nombre de la Categoría',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                filled: true,
+                                fillColor: color_white2,
+                                prefixIcon: Icon(
+                                  Icons.category,
+                                  color: color_font,
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Por favor, ingrese un nombre de categoría';
+                                }
+                                return null;
+                              },
+                            ),
+
+                            SizedBox(height: 20),
+
+                            // Botón de registro o indicador de carga
+                            _isSubmitting
+                                ? Center(
+                                    child: CircularProgressIndicator(
+                                      color: color_font,
+                                    ),
+                                  )
+                                : ElevatedButton(
+                                    onPressed: _registrarCategoria,
+                                    style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 16.0),
+                                      backgroundColor: color_font,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      'Registrar Categoría',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: color_white,
+                                      ),
+                                    ),
+                                  ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

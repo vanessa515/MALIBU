@@ -122,6 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   //Variables de colores
   Color color_bg = Color.fromARGB(255, 230, 190, 152);
+  final Color color_bg2 = Color.fromARGB(255, 254, 235, 216);
   Color color_font = Color.fromARGB(255, 69, 65, 129);
   Color color_white = Color.fromARGB(255, 255, 255, 255);
   Color color_3 = Color.fromARGB(255, 0, 0, 0);
@@ -134,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       //Background de login
-      backgroundColor: (color_white),
+      backgroundColor: (color_bg2),
 
       body: Center(
         child: SingleChildScrollView(
