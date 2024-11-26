@@ -27,6 +27,8 @@ import 'package:malibu/screen/toppings_modificaciones.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   await Supabase.initialize(
     url: 'https://xctdoftrftgaiwvfrdqj.supabase.co',
     anonKey:
