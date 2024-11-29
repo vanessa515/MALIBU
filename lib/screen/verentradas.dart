@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:malibu/constants/custom_appbar.dart';
 import 'package:malibu/constants/custom_drawer.dart';

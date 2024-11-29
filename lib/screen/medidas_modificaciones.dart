@@ -31,12 +31,10 @@ class _EditarMedidasState extends State<EditarMedidas> {
           .eq('pk_medida', pkMedida)
           .single();
 
-      if (response != null) {
-        setState(() {
-          _nombreController.text = response['nom_medida'] ?? ''; // Rellenar el campo con el nombre existente
-        });
-      }
-    } catch (e) {
+      setState(() {
+        _nombreController.text = response['nom_medida'] ?? ''; // Rellenar el campo con el nombre existente
+      });
+        } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error al cargar la medida: $e')),
       );

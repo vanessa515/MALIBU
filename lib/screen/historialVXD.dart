@@ -83,14 +83,10 @@ class _HISTORIALVXDState extends State<HISTORIALVXD> {
       final response =
           await Supabase.instance.client.from('detalle_venta').select();
 
-      if (response is List) {
-        setState(() {
-          _detallesVentaOptions = response;
-        });
-      } else {
-        print('Error al obtener detalles de venta: ${response.runtimeType}');
-      }
-    } catch (e) {
+      setState(() {
+        _detallesVentaOptions = response;
+      });
+        } catch (e) {
       print('Caught error: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error al obtener detalles de venta: $e')),

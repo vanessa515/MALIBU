@@ -95,17 +95,15 @@ class _EditarProductoInState extends State<EditarProductoIn> {
           .eq('pk_productoin', pkProductoin)
           .single();
 
-      if (response != null) {
-        setState(() {
-          _nombreController.text = response['nom_productoin'] ?? '';
-          _descripcionController.text = response['descripcion'] ?? '';
-          _cantidadController.text = response['cantidad'].toString();
-          _minimoController.text = response['minimo'].toString();
-          _selectedUnidad = response['fk_unidad'];
-          _selectedMedida = response['fk_medida'];
-        });
-      }
-    } catch (e) {
+      setState(() {
+        _nombreController.text = response['nom_productoin'] ?? '';
+        _descripcionController.text = response['descripcion'] ?? '';
+        _cantidadController.text = response['cantidad'].toString();
+        _minimoController.text = response['minimo'].toString();
+        _selectedUnidad = response['fk_unidad'];
+        _selectedMedida = response['fk_medida'];
+      });
+        } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error al cargar el producto: $e')),
       );

@@ -197,13 +197,12 @@ class _ListaProductosState extends State<Home> {
               .select('pk_producto_topping')
               .single();
 
-          if (insertedData != null &&
-              insertedData['pk_producto_topping'] != null) {
+          if (insertedData['pk_producto_topping'] != null) {
             productoToppingIds.add(insertedData['pk_producto_topping']);
           }
 
           // Registrar la venta si aún no ha sido registrada
-          if (pkVenta == null && insertedData != null) {
+          if (pkVenta == null) {
             pkVenta = await _registerSale(
                 cantidad, insertedData['pk_producto_topping']);
           }
