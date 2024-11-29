@@ -31,12 +31,10 @@ class _EditarUnidadState extends State<EditarUnidad> {
           .eq('pk_unidad', pkUnidad)
           .single();
 
-      if (response != null) {
-        setState(() {
-          _nombreController.text = response['nom_unidad'] ?? ''; // Rellenar el campo con el nombre existente
-        });
-      }
-    } catch (e) {
+      setState(() {
+        _nombreController.text = response['nom_unidad'] ?? ''; // Rellenar el campo con el nombre existente
+      });
+        } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error al cargar la unidad: $e')),
       );
