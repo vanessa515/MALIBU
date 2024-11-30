@@ -1,4 +1,8 @@
-2024/11/25-23:20:07.460 4ed0 Reusing MANIFEST C:\Users\jbac9\AppData\Local\Temp\flutter_tools.f2b8d316\flutter_tools_chrome_device.bfcf6ebd\Default\Site Characteristics Database/MANIFEST-000001
-2024/11/25-23:20:07.460 4ed0 Recovering log #3
-2024/11/25-23:20:07.460 4ed0 (ignoring error) C:\Users\jbac9\AppData\Local\Temp\flutter_tools.f2b8d316\flutter_tools_chrome_device.bfcf6ebd\Default\Site Characteristics Database/000003.log: dropping 163 bytes; Corruption: checksum mismatch
-2024/11/25-23:20:07.461 4ed0 Reusing old log C:\Users\jbac9\AppData\Local\Temp\flutter_tools.f2b8d316\flutter_tools_chrome_device.bfcf6ebd\Default\Site Characteristics Database/000003.log 
+2024/11/29-15:41:56.380 2324 Reusing MANIFEST C:\Users\jbac9\AppData\Local\Temp\flutter_tools.384bbfa9\flutter_tools_chrome_device.53c4fdb7\Default\Site Characteristics Database/MANIFEST-000001
+2024/11/29-15:41:56.381 2324 Recovering log #3
+2024/11/29-15:41:56.381 2324 (ignoring error) C:\Users\jbac9\AppData\Local\Temp\flutter_tools.384bbfa9\flutter_tools_chrome_device.53c4fdb7\Default\Site Characteristics Database/000003.log: dropping 241 bytes; Corruption: checksum mismatch
+2024/11/29-15:41:56.381 2324 Level-0 table #6: started
+2024/11/29-15:41:56.384 2324 Level-0 table #6: 865 bytes OK
+2024/11/29-15:41:56.384 2324 Recovering log #6
+2024/11/29-15:41:56.384 2324 Reusing old log C:\Users\jbac9\AppData\Local\Temp\flutter_tools.384bbfa9\flutter_tools_chrome_device.53c4fdb7\Default\Site Characteristics Database/000006.log 
+2024/11/29-15:41:56.387 2324 Delete type=0 #3

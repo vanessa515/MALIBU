@@ -215,7 +215,7 @@ class _RegistroProductoState extends State<RegistroProducto> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
                   TextFormField(
                     controller: _precioController,
                     decoration: InputDecoration(
@@ -268,14 +268,14 @@ class _RegistroProductoState extends State<RegistroProducto> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
                   Container(
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       border: Border.all(color: color_grey, width: 1.0),
                       borderRadius: BorderRadius.circular(5.0),
                     ),
-                    padding: const EdgeInsets.all(10.0),
+                    padding: EdgeInsets.all(10.0),
                     child: _image != null
                         ? Image.file(_image!, height: 150)
                         : _webImage != null
@@ -285,7 +285,7 @@ class _RegistroProductoState extends State<RegistroProducto> {
                                 style: TextStyle(color: color_grey),
                               ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
                   ElevatedButton.icon(
                     onPressed: _pickImage,
                     icon: Icon(Icons.image),
