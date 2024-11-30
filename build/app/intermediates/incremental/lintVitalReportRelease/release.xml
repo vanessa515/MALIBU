@@ -2,7 +2,7 @@
     name="release"
     package="com.example.malibu"
     minSdkVersion="21"
-    targetSdkVersion="34"
+    targetSdkVersion="33"
     shrinking="true"
     mergedManifest="C:\project_malibu\MALIBU\build\app\intermediates\merged_manifest\release\AndroidManifest.xml"
     manifestMergeReport="C:\project_malibu\MALIBU\build\app\outputs\logs\manifest-merger-release-report.txt"
