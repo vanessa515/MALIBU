@@ -172,7 +172,7 @@ class _InventarioState extends State<Inventario> {
         body: LayoutBuilder(
           builder: (context, constraints) {
             final isSmallScreen = constraints.maxWidth < 750;
-            double screenWidth = MediaQuery.of(context).size.width;
+            /* double screenWidth = MediaQuery.of(context).size.width; */
             double screenHeight = MediaQuery.of(context).size.height;
 
             /* double spaceButtonWidth = screenWidth * 0.40; */
