@@ -22,7 +22,6 @@ class Unidades extends StatefulWidget {
 }
 
 class _UnidadesState extends State<Unidades> {
-  Color color_1 = Color.fromARGB(255, 255, 192, 152);
   List<Map<String, dynamic>> unidadesActivas = [];
   bool cargando = false;
 
