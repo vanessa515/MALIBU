@@ -1,62 +1,10 @@
-2024/12/01-14:43:53.282 1ca0 Reusing MANIFEST C:\Users\jbac9\AppData\Local\Temp\flutter_tools.cfb00018\flutter_tools_chrome_device.c48acaa2\Default\Session Storage/MANIFEST-000001
-2024/12/01-14:43:53.283 1ca0 Recovering log #11
-2024/12/01-14:43:53.286 1ca0 Reusing old log C:\Users\jbac9\AppData\Local\Temp\flutter_tools.cfb00018\flutter_tools_chrome_device.c48acaa2\Default\Session Storage/000011.log 
-2024/12/01-14:43:53.287 1ca0 Delete type=0 #3
-2024/12/01-14:43:53.287 1ca0 Delete type=0 #8
-2024/12/01-16:14:21.878 9840 Level-0 table #15: started
-2024/12/01-16:14:21.889 9840 Level-0 table #15: 31199 bytes OK
-2024/12/01-16:14:21.894 9840 Delete type=0 #11
-2024/12/01-17:20:53.393 1ca0 Level-0 table #17: started
-2024/12/01-17:20:53.411 1ca0 Level-0 table #17: 29463 bytes OK
-2024/12/01-17:20:53.416 1ca0 Delete type=0 #14
-2024/12/01-17:20:53.419 9840 Compacting 4@0 + 1@1 files
-2024/12/01-17:20:53.430 9840 Generated table #18@0: 156 keys, 6839 bytes
-2024/12/01-17:20:53.431 9840 Compacted 4@0 + 1@1 files => 6839 bytes
-2024/12/01-17:20:53.433 9840 compacted to: files[ 0 1 1 0 0 0 0 ]
-2024/12/01-17:20:53.436 9840 Delete type=2 #7
-2024/12/01-17:20:53.436 9840 Delete type=2 #9
-2024/12/01-17:20:53.437 9840 Delete type=2 #12
-2024/12/01-17:20:53.438 9840 Delete type=2 #15
-2024/12/01-17:20:53.438 9840 Delete type=2 #17
-2024/12/01-18:02:52.375 1ca0 Level-0 table #20: started
-2024/12/01-18:02:52.384 1ca0 Level-0 table #20: 29232 bytes OK
-2024/12/01-18:02:52.388 1ca0 Delete type=0 #16
-2024/12/01-18:10:58.378 9840 Level-0 table #22: started
-2024/12/01-18:10:58.388 9840 Level-0 table #22: 29235 bytes OK
-2024/12/01-18:10:58.392 9840 Delete type=0 #19
-2024/12/01-18:20:44.122 1ca0 Level-0 table #24: started
-2024/12/01-18:20:44.133 1ca0 Level-0 table #24: 29360 bytes OK
-2024/12/01-18:20:44.136 1ca0 Delete type=0 #21
-2024/12/01-18:53:37.471 9840 Level-0 table #26: started
-2024/12/01-18:53:37.535 9840 Level-0 table #26: 29250 bytes OK
-2024/12/01-18:53:37.549 9840 Delete type=0 #23
-2024/12/01-18:53:37.557 1ca0 Compacting 4@0 + 1@1 files
-2024/12/01-18:53:37.572 1ca0 Generated table #27@0: 264 keys, 9253 bytes
-2024/12/01-18:53:37.572 1ca0 Compacted 4@0 + 1@1 files => 9253 bytes
-2024/12/01-18:53:37.574 1ca0 compacted to: files[ 0 1 1 0 0 0 0 ]
-2024/12/01-18:53:37.579 1ca0 Delete type=2 #18
-2024/12/01-18:53:37.581 1ca0 Delete type=2 #20
-2024/12/01-18:53:37.584 1ca0 Delete type=2 #22
-2024/12/01-18:53:37.586 1ca0 Delete type=2 #24
-2024/12/01-18:53:37.586 1ca0 Delete type=2 #26
-2024/12/01-19:36:36.528 9840 Level-0 table #29: started
-2024/12/01-19:36:36.541 9840 Level-0 table #29: 29411 bytes OK
-2024/12/01-19:36:36.545 9840 Delete type=0 #25
-2024/12/01-20:32:56.645 9840 Level-0 table #31: started
-2024/12/01-20:32:56.667 9840 Level-0 table #31: 29244 bytes OK
-2024/12/01-20:32:56.672 9840 Delete type=0 #28
-2024/12/01-21:07:49.961 9840 Level-0 table #33: started
-2024/12/01-21:07:49.985 9840 Level-0 table #33: 29520 bytes OK
-2024/12/01-21:07:49.994 9840 Delete type=0 #30
-2024/12/01-21:48:18.042 9840 Level-0 table #35: started
-2024/12/01-21:48:18.046 9840 Level-0 table #35: 29550 bytes OK
-2024/12/01-21:48:18.050 9840 Delete type=0 #32
-2024/12/01-21:48:18.052 1ca0 Compacting 4@0 + 1@1 files
-2024/12/01-21:48:18.058 1ca0 Generated table #36@0: 387 keys, 11916 bytes
-2024/12/01-21:48:18.058 1ca0 Compacted 4@0 + 1@1 files => 11916 bytes
-2024/12/01-21:48:18.059 1ca0 compacted to: files[ 0 1 1 0 0 0 0 ]
-2024/12/01-21:48:18.061 1ca0 Delete type=2 #27
-2024/12/01-21:48:18.061 1ca0 Delete type=2 #29
-2024/12/01-21:48:18.061 1ca0 Delete type=2 #31
-2024/12/01-21:48:18.062 1ca0 Delete type=2 #33
-2024/12/01-21:48:18.062 1ca0 Delete type=2 #35
+2024/12/02-01:02:48.380 3420 Reusing MANIFEST C:\Users\jbac9\AppData\Local\Temp\flutter_tools.8d648562\flutter_tools_chrome_device.ecb668f\Default\Session Storage/MANIFEST-000001
+2024/12/02-01:02:48.393 3420 Recovering log #38
+2024/12/02-01:02:48.395 3420 Reusing old log C:\Users\jbac9\AppData\Local\Temp\flutter_tools.8d648562\flutter_tools_chrome_device.ecb668f\Default\Session Storage/000038.log 
+2024/12/02-01:02:48.397 3420 Delete type=0 #3
+2024/12/02-01:02:48.398 3420 Delete type=2 #7
+2024/12/02-01:02:48.398 3420 Delete type=0 #8
+2024/12/02-01:02:48.398 3420 Delete type=2 #9
+2024/12/02-01:02:48.398 3420 Delete type=0 #11
+2024/12/02-01:02:48.398 3420 Delete type=2 #12
+2024/12/02-01:02:48.398 3420 Delete type=0 #34
