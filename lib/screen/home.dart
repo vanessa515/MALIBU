@@ -801,9 +801,8 @@ class _ListaProductosState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       backgroundColor: color_bg2,
-      
+
       // Cabecera de la appBar
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(80),

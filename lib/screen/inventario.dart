@@ -158,7 +158,7 @@ class _InventarioState extends State<Inventario> {
 
 /* ----------------------------------------------- AppBar ----------------------------------------------- */
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(80),
+          preferredSize: Size.fromHeight(80),
           child: CustomAppbar(
             titulo: 'Inventario',
             colorsito: color_bg,
@@ -171,48 +171,40 @@ class _InventarioState extends State<Inventario> {
 /* ----------------------------------------------- Cuerpo principal ----------------------------------------------- */
         body: LayoutBuilder(
           builder: (context, constraints) {
-            final isSmallScreen = constraints.maxWidth < 750;
-            /* double screenWidth = MediaQuery.of(context).size.width; */
+            final isSmallScreen = constraints.maxWidth < 890;
+            double screenWidth = MediaQuery.of(context).size.width;
             double screenHeight = MediaQuery.of(context).size.height;
 
-            /* double spaceButtonWidth = screenWidth * 0.40; */
-            double spaceButtonHeight = screenHeight * 0.25;
+            double buttonWidth = screenWidth * 0.15;
+            double buttonHeight = screenHeight * 0.08;
+            const double minButtonSize = 50.0;
+            const double maxButtonSize = 100.0;
 
-            double maxButtonSize = 25.0; // Tamaño máximo para los botones
-            spaceButtonHeight = spaceButtonHeight < maxButtonSize
-                ? spaceButtonHeight
-                : maxButtonSize; // Limita el tamaño máximo
+            //Limita el tamaño de los botones
+            buttonHeight = buttonHeight.clamp(minButtonSize, maxButtonSize);
+            buttonWidth = buttonWidth.clamp(minButtonSize, maxButtonSize);
 
 /* ----------------------------------------------- Grupo de Botones para opciones del inventario ----------------------------------------------- */
             return Column(
               children: [
                 // Botones de opciones
                 if (isSmallScreen)
+
                   // --------------------------------- Botones en la parte superior en pantallas pequeñas
+
                   SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    padding: EdgeInsets.symmetric(vertical: spaceButtonHeight),
-                    child: Wrap(
-                      alignment: WrapAlignment.spaceBetween,
-                      spacing: 2,
-                      runSpacing: 2,
-                      children: _buildButtons(isSmallScreen)
-                          .map(
-                            (boton) => Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: spaceButtonHeight,
-                              ),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.11,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.055,
-                                child: boton,
-                              ),
-                            ),
-                          )
-                          .toList(),
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: _buildButtons(
+                        isSmallScreen,
+                        buttonHeight,
+                        buttonWidth,
+                      ),
                     ),
                   ),
+
                 Expanded(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,14 +212,18 @@ class _InventarioState extends State<Inventario> {
                       if (!isSmallScreen)
                         // --------------------------- Botones a la izquierda en pantallas grandes
                         Container(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                          width: MediaQuery.of(context).size.width * 0.2,
+                          width: screenWidth * 0.2,
                           color: color_bg2,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: _buildButtons(isSmallScreen),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: _buildButtons(
+                                isSmallScreen,
+                                buttonHeight,
+                                buttonWidth,
+                              ),
+                            ),
                           ),
                         ),
 
@@ -235,219 +231,148 @@ class _InventarioState extends State<Inventario> {
                       Expanded(
                         child: SingleChildScrollView(
                           scrollDirection: Axis.vertical,
-                          // Centramos la tabla en la pantalla
                           child: Padding(
-                            padding: EdgeInsets.all(
-                                16.0), // Añadimos un margen para alejar la tabla de los bordes
-                            child: DataTable(
-                              dataRowMinHeight:
-                                  30, // Aumentamos la altura de las filas para que se vea más espacioso
-                              headingRowHeight:
-                                  56, // Mejoramos el tamaño de la fila de encabezado
-                              columnSpacing:
-                                  10, // Aumentamos el espacio entre las columnas para más claridad
-                              horizontalMargin:
-                                  10, // Margen horizontal para no pegarse a los bordes
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                color: color_white2,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: color_effects,
-                                    spreadRadius: 5,
-                                    blurRadius: 10,
-                                    offset: Offset(0, 3),
-                                  ),
-                                ],
-                              ),
-                              columns: <DataColumn>[
-                                DataColumn(
-                                  label: Text(
-                                    'Producto',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      color: color_font,
-                                    ),
-                                  ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Existencia',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      color: color_font,
-                                    ),
-                                  ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Mínimo',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      color: color_font,
-                                    ),
-                                  ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Ordenar',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      color: color_font,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                              rows: productoin.map((producto) {
-                                return DataRow(
-                                  cells: [
-                                    DataCell(
-                                      TextButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            isCardVisible = true;
-                                            productoSeleccionado = producto;
-                                          });
-                                        },
-                                        child: Text(
-                                          producto['nom_productoin'],
-                                          style: TextStyle(
-                                            color: Colors.pinkAccent,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                          ),
-                                        ),
+                            padding: EdgeInsets.all(16.0), // Margen externo
+                            child: LayoutBuilder(
+                              builder: (context, constraints) {
+                                // Calcula el tamaño dinámico de las fuentes según el ancho disponible
+                                final double screenWidth = constraints.maxWidth;
+                                final double fontSize = (screenWidth < 400)
+                                    ? 14
+                                    : 18; // Tamaño mínimo y estándar
+                                final double rowHeight =
+                                    (screenWidth < 400) ? 24 : 40;
+                                final double columnSpacing =
+                                    (screenWidth < 400) ? 8 : 12;
+
+                                return DataTable(
+                                  dataRowMinHeight:
+                                      rowHeight, // Altura mínima de las filas
+                                  headingRowHeight:
+                                      rowHeight + 12, // Altura del encabezado
+                                  columnSpacing:
+                                      columnSpacing, // Espaciado entre columnas
+                                  horizontalMargin: 8, // Margen horizontal
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: color_white2,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: color_effects,
+                                        spreadRadius: 5,
+                                        blurRadius: 10,
+                                        offset: Offset(0, 3),
                                       ),
-                                    ),
-                                    DataCell(
-                                      Text(
-                                        '${producto['stock']}',
+                                    ],
+                                  ),
+                                  columns: <DataColumn>[
+                                    DataColumn(
+                                      label: Text(
+                                        'Producto',
                                         style: TextStyle(
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ),
-                                    DataCell(
-                                      Text(
-                                        '${producto['minimo']}',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ),
-                                    DataCell(
-                                      Text(
-                                        producto['stock'] > producto['minimo']
-                                            ? 'Aceptable'
-                                            : 'Ordenar',
-                                        style: TextStyle(
-                                          color: producto['stock'] >
-                                                  producto['minimo']
-                                              ? Colors.green
-                                              : Colors.red,
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 16,
+                                          fontSize: fontSize,
+                                          color: color_font,
+                                        ),
+                                      ),
+                                    ),
+                                    DataColumn(
+                                      label: Text(
+                                        'Existencia',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: fontSize,
+                                          color: color_font,
+                                        ),
+                                      ),
+                                    ),
+                                    DataColumn(
+                                      label: Text(
+                                        'Mínimo',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: fontSize,
+                                          color: color_font,
+                                        ),
+                                      ),
+                                    ),
+                                    DataColumn(
+                                      label: Text(
+                                        'Ordenar',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: fontSize,
+                                          color: color_font,
                                         ),
                                       ),
                                     ),
                                   ],
+                                  rows: productoin.map((producto) {
+                                    return DataRow(
+                                      cells: [
+                                        DataCell(
+                                          TextButton(
+                                            onPressed: () {
+                                              setState(
+                                                () {
+                                                  mostrarModalProducto(
+                                                    context,
+                                                    producto,
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Text(
+                                              producto['nom_productoin'],
+                                              style: TextStyle(
+                                                color: Colors.pinkAccent,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: fontSize - 2,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        DataCell(
+                                          Text(
+                                            '${producto['stock']}',
+                                            style: TextStyle(
+                                              fontSize: fontSize - 2,
+                                            ),
+                                          ),
+                                        ),
+                                        DataCell(
+                                          Text(
+                                            '${producto['minimo']}',
+                                            style: TextStyle(
+                                              fontSize: fontSize - 2,
+                                            ),
+                                          ),
+                                        ),
+                                        DataCell(
+                                          Text(
+                                            producto['stock'] >
+                                                    producto['minimo']
+                                                ? 'Aceptable'
+                                                : 'Ordenar',
+                                            style: TextStyle(
+                                              color: producto['stock'] >
+                                                      producto['minimo']
+                                                  ? color_green
+                                                  : color_cancelar,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: fontSize - 2,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }).toList(),
                                 );
-                              }).toList(),
+                              },
                             ),
                           ),
                         ),
                       ),
-
-/* ----------------------------------------------- Card modal flotante de detalle dentro de la tabla ----------------------------------------------- */
-                      if (isCardVisible && productoSeleccionado != null)
-                        Positioned.fill(
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isCardVisible = false;
-                              });
-                            },
-                            child: Container(
-                              color: Colors.black54,
-                              child: Center(
-                                child: Card(
-                                  elevation: 8,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          'Producto: ${productoSeleccionado!['nom_productoin']}',
-                                          style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Text(
-                                            'Existencia: ${productoSeleccionado!['stock']} unidades'),
-                                        const SizedBox(height: 10),
-                                        Text(
-                                            'Minimo de existencias: ${productoSeleccionado!['minimo']} unidades'),
-                                        const SizedBox(height: 10),
-                                        Text(
-                                          'Descripción: ${productoSeleccionado!['descripcion']}. '
-                                          'Unidad: ${productoSeleccionado!['nom_unidad']} de ${productoSeleccionado!['cantidad']} ${productoSeleccionado!['nom_medida']}',
-                                        ),
-                                        const SizedBox(height: 20),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            OutlinedButton(
-                                              onPressed: () => Get.toNamed(
-                                                '/entradain',
-                                                arguments: {
-                                                  'pk_productoin':
-                                                      productoSeleccionado![
-                                                          'pk_productoin'],
-                                                },
-                                              ),
-                                              style: OutlinedButton.styleFrom(
-                                                side: const BorderSide(
-                                                    color: Colors.green),
-                                              ),
-                                              child: const Text('Añadir'),
-                                            ),
-                                            OutlinedButton(
-                                              onPressed: () => Get.toNamed(
-                                                '/salidain',
-                                                arguments: {
-                                                  'pk_productoin':
-                                                      productoSeleccionado![
-                                                          'pk_productoin'],
-                                                },
-                                              ),
-                                              style: OutlinedButton.styleFrom(
-                                                side: const BorderSide(
-                                                    color: Colors.orange),
-                                              ),
-                                              child: const Text('Restar'),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
                     ],
                   ),
                 ),
@@ -459,7 +384,11 @@ class _InventarioState extends State<Inventario> {
     );
   }
 
-  List<Widget> _buildButtons(bool isSmallScreen) {
+  List<Widget> _buildButtons(
+    bool isSmallScreen,
+    double buttonHeight,
+    double buttonWidth,
+  ) {
     final List<Map<String, dynamic>> opciones = [
       {
         'texto': 'Agregar producto',
@@ -480,35 +409,22 @@ class _InventarioState extends State<Inventario> {
       },
     ];
 
-    // Obtén el tamaño de la pantalla
-    double screenWidth = MediaQuery.of(context).size.width;
-
-    // Calcula un tamaño de ícono relativo en función del ancho de la pantalla
-    double iconSizeWidth = screenWidth * 0.05; // 7% del ancho de la pantalla
-
-    // Ajusta el tamaño del botón, pero limitando su valor mínimo
-    double buttonSize = screenWidth *
-        0.2; // 20% del ancho de la pantalla, puedes ajustarlo según tus necesidades
-    double maxButtonSize = 100.0; // Tamaño máximo para los botones
-    buttonSize = buttonSize < maxButtonSize
-        ? buttonSize
-        : maxButtonSize; // Limita el tamaño máximo
-
-    // Genera la lista de botones con espaciado condicional
-    final List<Widget> botones = [];
-    for (var i = 0; i < opciones.length; i++) {
-      botones.add(
-        ElevatedButton.icon(
-          onPressed: () => Get.toNamed(opciones[i]['ruta']),
-          icon: isSmallScreen
-              ? Icon(opciones[i]['icono'], size: iconSizeWidth)
-              : SizedBox.shrink(),
+    return opciones.map((opcion) {
+      return Padding(
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 5.0),
+        child: ElevatedButton.icon(
+          onPressed: () => Get.toNamed(opcion['ruta']),
+          icon: Icon(
+            opcion['icono'],
+            size: buttonHeight *
+                0.4, // Tamaño del icono relativo a la altura del botón
+          ),
           label: isSmallScreen
               ? SizedBox.shrink()
               : Text(
-                  opciones[i]['texto'],
+                  opcion['texto'],
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: buttonHeight * 0.25, // Tamaño de fuente relativo
                     color: color_white,
                   ),
                 ),
@@ -517,23 +433,227 @@ class _InventarioState extends State<Inventario> {
             backgroundColor: color_font,
             iconColor: color_white,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(20),
             ),
             elevation: 5,
-            padding: EdgeInsets.symmetric(
-              horizontal: buttonSize * 0.05,
-              vertical: buttonSize * 0.10,
-            ),
-            minimumSize: Size(buttonSize, buttonSize),
+            minimumSize: Size(buttonWidth, buttonHeight),
           ),
         ),
       );
-      if (!isSmallScreen && i < opciones.length - 1) {
-        // Añade espaciado entre botones, solo en pantallas grandes
-        botones.add(SizedBox(height: 30));
-      }
-    }
-
-    return botones;
+    }).toList();
   }
+}
+
+/* ----------------------------------------------- Card modal flotante de detalle dentro de la tabla ----------------------------------------------- */
+
+void mostrarModalProducto(
+    BuildContext context, Map<String, dynamic> productoSeleccionado) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // ---------------------------------- Título del producto
+                Text(
+                  'Producto: ${productoSeleccionado['nom_productoin']}',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+
+                SizedBox(height: 5),
+
+                // ---------------------------------- Existencias
+                Text(
+                  'Existencia: ${productoSeleccionado['stock']} unidades',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+
+                SizedBox(height: 5),
+
+                // ---------------------------------- Mínimo de existencia
+                Text(
+                  'Mínimo de existencias: ${productoSeleccionado['minimo']} unidades',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+
+                SizedBox(height: 5),
+
+                // ---------------------------------- Descripción
+                Text(
+                  'Descripción: ${productoSeleccionado['descripcion']}.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+
+                SizedBox(height: 5),
+
+                // ---------------------------------- Medidas y unidades
+                Text(
+                  'Unidad: ${productoSeleccionado['nom_unidad']} de ${productoSeleccionado['cantidad']} ${productoSeleccionado['nom_medida']}.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+
+                SizedBox(height: 30),
+
+                // ---------------------------------- Botones de acción
+                Wrap(
+                  spacing: 10,
+                  runSpacing: 10,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    // --------------------------------------------------------- Boton de entradas de prodcutos
+                    OutlinedButton.icon(
+                      onPressed: () => Get.toNamed(
+                        '/entradain',
+                        arguments: {
+                          'pk_productoin': productoSeleccionado['pk_productoin']
+                        },
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: color_font,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      icon: Icon(
+                        Icons.add,
+                        color: color_green,
+                        size: 18,
+                      ),
+                      label: Text(
+                        'Añadir',
+                        style: TextStyle(
+                          color: color_white,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+
+                    // --------------------------------------------------------- Boton de salidas de prodcutos
+                    OutlinedButton.icon(
+                      onPressed: () => Get.toNamed(
+                        '/salidain',
+                        arguments: {
+                          'pk_productoin': productoSeleccionado['pk_productoin']
+                        },
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: color_font,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      icon: Icon(
+                        Icons.remove,
+                        color: Colors.orange,
+                        size: 18,
+                      ),
+                      label: Text(
+                        'Restar',
+                        style: TextStyle(
+                          color: color_white,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+
+                    // --------------------------------------------------------- Boton de editar prodcutos
+                    OutlinedButton.icon(
+                      onPressed: () => Get.toNamed(
+                        '/editarproductoin',
+                        arguments: {
+                          'pk_productoin': productoSeleccionado['pk_productoin']
+                        },
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: color_font,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      icon: Icon(
+                        Icons.edit,
+                        color: color_bg,
+                        size: 18,
+                      ),
+                      label: Text(
+                        'Editar',
+                        style: TextStyle(
+                          color: color_white,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+
+                    // --------------------------------------------------------- Boton de eliminar productos
+                    OutlinedButton.icon(
+                      onPressed: () {
+                        // Lógica para eliminar el producto
+                      },
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: color_font,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      icon: Icon(
+                        Icons.delete,
+                        color: color_cancelar,
+                        size: 18,
+                      ),
+                      label: Text(
+                        'Eliminar',
+                        style: TextStyle(
+                          color: color_white,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: 20),
+
+                // ---------------------------------- Botón para cerrar
+                IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  style: ElevatedButton.styleFrom(
+                    side: BorderSide(color: color_cancelar),
+                    iconColor: color_cancelar,
+                  ),
+                  icon: Icon(
+                    Icons.close,
+                    color: color_cancelar,
+                    size: 24,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    },
+  );
 }

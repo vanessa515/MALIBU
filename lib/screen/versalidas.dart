@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:malibu/constants/custom_appbar.dart';
-import 'package:malibu/constants/custom_drawer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+//Variables de colores
+final Color color_bg = Color.fromARGB(255, 230, 190, 152);
+final Color color_bg2 = Color.fromARGB(255, 254, 235, 216);
+final Color color_font = Color.fromARGB(255, 69, 65, 129);
+final Color color_white = Color.fromARGB(255, 255, 255, 255);
+final Color color_white2 = Color.fromARGB(255, 250, 250, 250);
+final Color color_cancelar = Color.fromARGB(255, 244, 63, 63);
+final Color color_black = Color.fromARGB(255, 0, 0, 0);
+final Color color_effects = Colors.black.withOpacity(0.3);
+final Color color_green = Colors.green;
 
 class VerSalidas extends StatefulWidget {
   VerSalidas({super.key});
@@ -13,7 +22,8 @@ class VerSalidas extends StatefulWidget {
 }
 
 class _VerSalidasState extends State<VerSalidas> {
-  final supabase = SupabaseClient('https://xctdoftrftgaiwvfrdqj.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhjdGRvZnRyZnRnYWl3dmZyZHFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjY3ODY5OTcsImV4cCI6MjA0MjM2Mjk5N30.kyKvMcuXnLOMGWz2Mbyscok0l8DrB0-x0ug9jDIqDYU');
+  final supabase = SupabaseClient('https://xctdoftrftgaiwvfrdqj.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhjdGRvZnRyZnRnYWl3dmZyZHFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjY3ODY5OTcsImV4cCI6MjA0MjM2Mjk5N30.kyKvMcuXnLOMGWz2Mbyscok0l8DrB0-x0ug9jDIqDYU');
   Color color_1 = Color.fromARGB(255, 255, 192, 152);
   bool cargando = false;
 
@@ -64,7 +74,8 @@ class _VerSalidasState extends State<VerSalidas> {
 
         Map<String, dynamic> salidaData = {
           'cantidad': salida['cantidad'] ?? 0,
-          'nom_productoin': productResponse['nom_productoin'] ?? 'Producto desconocido',
+          'nom_productoin':
+              productResponse['nom_productoin'] ?? 'Producto desconocido',
           'estatus': salida['estatus'] == 1 ? 'Activo' : 'Inactivo',
           'comentario': salida['comentario'] ?? '',
           'hora': salida['hora'] ?? 'Hora desconocida',
@@ -186,153 +197,181 @@ class _VerSalidasState extends State<VerSalidas> {
         });
       },
       child: Scaffold(
-        appBar: CustomAppbar(
-          titulo: 'Salidas registradas',
-          colorsito: color_1,
-        ),
-        drawer: CustomDrawer(),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: ElevatedButton(
-                  onPressed: mostrarCalendario,
-                  child: Text('Seleccionar fecha'),
-                ),
-              ),
-              Text(fechaSeleccionada != null ? 'Fecha seleccionada: $fechaSeleccionada' : 'Seleccione una fecha'),
-              cargando
-                  ? CircularProgressIndicator()
-                  : salidasConComentario.isEmpty && salidasSinComentario.isEmpty
-                      ? Center(child: Text('No hay salidas hoy'))
-                      : Column(
-                          children: [
-                            Text("Salidas comentadas"),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: DataTable(
-  columnSpacing: 20,
-  columns: <DataColumn>[
-    DataColumn(label: Text('Producto')),
-    DataColumn(label: Text('Cantidad')),
-    DataColumn(label: Text('Hora')),
-    DataColumn(label: Text('Comentario')),
-  ],
-  rows: salidasConComentario.map((salida) {
-    return DataRow(
-      cells: [
-        DataCell(
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              salida['nom_productoin'],
-              softWrap: true,
-              overflow: TextOverflow.visible,
-            ),
-          ),
-        ),
-        DataCell(
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              '${salida['cantidad']}',
-              softWrap: true,
-              overflow: TextOverflow.visible,
-            ),
-          ),
-        ),
-        DataCell(
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              salida['hora'],
-              softWrap: true,
-              overflow: TextOverflow.visible,
-            ),
-          ),
-        ),
-        DataCell(
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 170, maxHeight: 170),
-            child: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                salida['comentario'],
-                softWrap: true,
-                overflow: TextOverflow.visible,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }).toList(),
-),
+        backgroundColor: color_bg2,
 
+/* ----------------------------------------------- AppBar ----------------------------------------------- */
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(80),
+          child: CustomAppbar(
+            titulo: 'Salidas Registradas',
+            colorsito: color_bg,
+          ),
+        ),
+
+/* ----------------------------------------------- Cuerpo principal ----------------------------------------------- */
+        body: SingleChildScrollView(
+          child: Center(
+            // Centra el contenido en la pantalla
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Botón para seleccionar fecha
+                Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: ElevatedButton(
+                    onPressed: mostrarCalendario,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: color_font,
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                      minimumSize: Size(200, 50),
+                    ),
+                    child: Text(
+                      'Seleccionar fecha',
+                      style: TextStyle(
+                        color: color_white,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Mostrar la fecha seleccionada
+                Text(
+                  fechaSeleccionada != null
+                      ? 'Fecha seleccionada: $fechaSeleccionada'
+                      : '',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+
+                // Indicador de carga o contenido de las salidas
+                cargando
+                    ? Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20.0),
+                        child: CircularProgressIndicator(),
+                      )
+                    : salidasConComentario.isEmpty &&
+                            salidasSinComentario.isEmpty
+                        ? Center(
+                            child: Text(
+                              'No hay salidas hoy',
+                              style: TextStyle(fontSize: 18),
                             ),
-                            SizedBox(height: 20),
-                            Text("Salidas registradas"),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: DataTable(
-                                columnSpacing: 20,
-                                columns: <DataColumn>[
-                                  DataColumn(label: Text('Producto')),
-                                  DataColumn(label: Text('Cantidad')),
-                                  DataColumn(label: Text('Hora')),
-                                ],
-                                rows: salidasSinComentario.map((salida) {
-                                  return DataRow(
-                                    cells: [
-                                      DataCell(
-                                        Container(
-                                          width: 100,
-                                          child: Text(
-                                            salida['nom_productoin'],
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 60,
-                                          child: Text(
-                                            '${salida['cantidad']}',
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 80,
-                                          child: Text(
-                                            salida['hora'],
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
+                          )
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              // Tabla de salidas con comentarios
+                              Padding(
+                                padding: EdgeInsets.symmetric(vertical: 16.0),
+                                child: Text(
+                                  "Salidas comentadas",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Container(
+                                  margin: EdgeInsets.all(16.0),
+                                  padding: EdgeInsets.all(16.0),
+                                  decoration: BoxDecoration(
+                                    color: color_white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: color_effects,
+                                        blurRadius: 10,
+                                        spreadRadius: 2,
                                       ),
                                     ],
-                                  );
-                                }).toList(),
+                                  ),
+                                  child: DataTable(
+                                    columnSpacing: 20,
+                                    headingTextStyle: TextStyle(
+                                      color: color_font,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    columns: <DataColumn>[
+                                      DataColumn(label: Text('Producto')),
+                                      DataColumn(label: Text('Cantidad')),
+                                      DataColumn(label: Text('Hora')),
+                                      DataColumn(label: Text('Comentario')),
+                                    ],
+                                    rows: salidasConComentario.map((salida) {
+                                      return DataRow(
+                                        cells: [
+                                          DataCell(
+                                              Text(salida['nom_productoin'])),
+                                          DataCell(
+                                              Text('${salida['cantidad']}')),
+                                          DataCell(Text(salida['hora'])),
+                                          DataCell(Text(
+                                            salida['comentario'],
+                                            overflow: TextOverflow.ellipsis,
+                                          )),
+                                        ],
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-              // Padding(
-              //   padding: const EdgeInsets.all(16.0),
-              //   child: Column(
-              //     children: [
-              //       ElevatedButton(
-              //         // onPressed: () async {
-              //         // await crearReportePDF();
-              //         // },
-              //         child: Text('Imprimir reporte'),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-            ],
+
+                              // Tabla de salidas registradas
+                              Padding(
+                                padding: EdgeInsets.symmetric(vertical: 16.0),
+                                child: Text(
+                                  "Salidas registradas",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Container(
+                                  margin: EdgeInsets.all(16.0),
+                                  padding: EdgeInsets.all(16.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black26,
+                                        blurRadius: 10,
+                                        spreadRadius: 2,
+                                      ),
+                                    ],
+                                  ),
+                                  child: DataTable(
+                                    columnSpacing: 20,
+                                    headingTextStyle: TextStyle(
+                                      color: color_font,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    columns: <DataColumn>[
+                                      DataColumn(label: Text('Producto')),
+                                      DataColumn(label: Text('Cantidad')),
+                                      DataColumn(label: Text('Hora')),
+                                    ],
+                                    rows: salidasSinComentario.map((salida) {
+                                      return DataRow(
+                                        cells: [
+                                          DataCell(
+                                              Text(salida['nom_productoin'])),
+                                          DataCell(
+                                              Text('${salida['cantidad']}')),
+                                          DataCell(Text(salida['hora'])),
+                                        ],
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+              ],
+            ),
           ),
         ),
       ),

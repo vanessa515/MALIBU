@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:malibu/constants/custom_appbar.dart';
-import 'package:malibu/constants/custom_drawer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+//Variables de colores
+final Color color_bg = Color.fromARGB(255, 230, 190, 152);
+final Color color_bg2 = Color.fromARGB(255, 254, 235, 216);
+final Color color_font = Color.fromARGB(255, 69, 65, 129);
+final Color color_white = Color.fromARGB(255, 255, 255, 255);
+final Color color_white2 = Color.fromARGB(255, 250, 250, 250);
+final Color color_cancelar = Color.fromARGB(255, 244, 63, 63);
+final Color color_black = Color.fromARGB(255, 0, 0, 0);
+final Color color_effects = Colors.black.withOpacity(0.3);
+final Color color_green = Colors.green;
 
 class Unidades extends StatefulWidget {
   Unidades({super.key});
@@ -60,7 +70,8 @@ class _UnidadesState extends State<Unidades> {
         .eq('pk_unidad', pk_unidad)
         .then((_) {
           traerUnidades(); // Actualiza la lista después de dar de baja
-        }).catchError((error) {
+        })
+        .catchError((error) {
           print('Error al dar de baja: $error');
         });
   }
@@ -68,78 +79,115 @@ class _UnidadesState extends State<Unidades> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppbar(
-        titulo: 'Unidades registradas',
-        colorsito: color_1,
+      backgroundColor: color_bg2,
+
+/* ----------------------------------------------- AppBar ----------------------------------------------- */
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(80),
+        child: CustomAppbar(
+          titulo: 'Unidades Registradas',
+          colorsito: color_bg,
+        ),
       ),
-      drawer: CustomDrawer(),
+
+/* ----------------------------------------------- Cuerpo principal ----------------------------------------------- */
       body: Column(
         children: [
           // Mostrar un indicador de carga
           if (cargando)
             CircularProgressIndicator()
           else
-            Expanded(
-              child: SingleChildScrollView(
-                child: Center(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: DataTable(
-                      columns: <DataColumn>[
-                        DataColumn(
-                          label: Text(
-                            'Unidad',
-                            style: TextStyle(color: Colors.black),
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Center(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Container(
+                          padding: EdgeInsets.all(
+                              16.0), // Espaciado alrededor de la tabla
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black26,
+                                blurRadius: 10,
+                                spreadRadius: 2,
+                              ),
+                            ],
                           ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Acciones',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      ],
-                      rows: unidadesActivas.map((unidad) {
-                        return DataRow(
-                          cells: [
-                            DataCell(Text(unidad['nom_unidad'])),
-                            DataCell(
-                              Row(
-                                children: [
-                                  // Botón Editar
-                                  OutlinedButton(
-                                    onPressed: () {
-                                      Get.toNamed(
-                                        '/editarunidad',
-                                        arguments: {'pk_unidad': unidad['pk_unidad']},
-                                      );
-                                    },
-                                    style: OutlinedButton.styleFrom(
-                                      side: BorderSide(color: Colors.green),
+                          child: DataTable(
+                            headingTextStyle: TextStyle(
+                              color: color_font,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            columns: <DataColumn>[
+                              DataColumn(
+                                label: Text(
+                                  'Unidad',
+                                  style: TextStyle(color: color_font),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Acciones',
+                                  style: TextStyle(color: color_font),
+                                ),
+                              ),
+                            ],
+                            rows: unidadesActivas.map((unidad) {
+                              return DataRow(
+                                cells: [
+                                  DataCell(Text(unidad['nom_unidad'])),
+                                  DataCell(
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        // Botón Editar
+                                        OutlinedButton(
+                                          onPressed: () {
+                                            Get.toNamed(
+                                              '/editarunidad',
+                                              arguments: {
+                                                'pk_unidad': unidad['pk_unidad']
+                                              },
+                                            );
+                                          },
+                                          style: OutlinedButton.styleFrom(
+                                            side:
+                                                BorderSide(color: Colors.green),
+                                          ),
+                                          child: Text('Editar'),
+                                        ),
+                                        SizedBox(width: 8),
+                                        // Botón Dar baja
+                                        OutlinedButton(
+                                          onPressed: () {
+                                            _mostrarConfirmacionDarBaja(
+                                                context, unidad['pk_unidad']);
+                                          },
+                                          style: OutlinedButton.styleFrom(
+                                            side: BorderSide(color: Colors.red),
+                                          ),
+                                          child: Text('Dar baja'),
+                                        ),
+                                      ],
                                     ),
-                                    child: Text('Editar'),
-                                  ),
-                                  SizedBox(width: 8),
-                                  // Botón Dar baja
-                                  OutlinedButton(
-                                    onPressed: () {
-                                      _mostrarConfirmacionDarBaja(
-                                          context, unidad['pk_unidad']);
-                                    },
-                                    style: OutlinedButton.styleFrom(
-                                      side: BorderSide(color: Colors.red),
-                                    ),
-                                    child: Text('Dar baja'),
                                   ),
                                 ],
-                              ),
-                            ),
-                          ],
-                        );
-                      }).toList(),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
             ),
 
@@ -151,6 +199,12 @@ class _UnidadesState extends State<Unidades> {
                 onPressed: () {
                   Get.toNamed('/registrarunidad');
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: color_font,
+                  foregroundColor: color_white,
+                  padding: EdgeInsets.symmetric(vertical: 15),
+                  minimumSize: Size(200, 50), // Botón adaptativo
+                ),
                 child: Text('Agregar unidad'),
               ),
             ),
