@@ -30,6 +30,8 @@ class _HISTORIALVXDState extends State<HISTORIALVXD> {
   final TextEditingController _motivosController = TextEditingController();
   bool _isSubmitting = false;
 
+List<dynamic> _cajaData = [];
+
   List<dynamic> _detallesVentaOptions = []; // Opciones de detalles_venta
   dynamic _selectedDetalleVenta; // Opción seleccionada
 
@@ -38,16 +40,109 @@ class _HISTORIALVXDState extends State<HISTORIALVXD> {
     super.initState();
     _fetchTicketData();
     _fetchDetallesVentaOptions(); // Cargar opciones de detalles_venta
+    _fetchCajaData();
   }
 
-  String _formatearFecha(String fechaCompleta) {
-    try {
-      DateTime fecha = DateTime.parse(fechaCompleta);
-      return DateFormat('yyyy-MM-dd').format(fecha); // Formato: Año-Mes-Día
-    } catch (e) {
+String _formatearFecha(String fechaCompleta) {
+  try {
+    // Imprimir la fecha para verificar si está en el formato esperado
+    print('Fecha original: $fechaCompleta');
+    DateTime fecha = DateTime.parse(fechaCompleta);  // Convertir el String en DateTime
+    return DateFormat('yyyy-MM-dd').format(fecha); // Formato: Año-Mes-Día
+  } catch (e) {
+    print('Error al formatear la fecha: $e');
+    return 'Fecha no disponible';
+  }
+}
+
+
+
+  // Función para obtener y sumar los datos
+
+Future<void> _fetchCajaData() async {
+  try {
+    final response = await Supabase.instance.client.from('caja').select();
+    double totalcaja = 0.0;
+    List<Map<String, dynamic>> cajaConFechas = [];
+
+    for (var item in response) {
+      double otros = item['otros'] ?? 0.0;
+      double sueldo = item['sueldo'] ?? 0.0;
+      totalcaja += otros + sueldo;
+
+      // Consulta para obtener la fecha del detalle de venta
+      final detalleResponse = await Supabase.instance.client
+          .from('detalle_venta')
+          .select('fecha')
+          .eq('pk_detalle_venta', item['fk_detalle_venta'])
+          .single();
+
+      String fecha = 'Fecha no disponible';
+      if (detalleResponse != null && detalleResponse['fecha'] != null) {
+        fecha = detalleResponse['fecha'];  // Usamos la fecha directamente
+      }
+
+      cajaConFechas.add({
+        'sueldo': sueldo,
+        'otros': otros,
+        'motivos': item['motivos'],
+        'fecha': fecha,
+        'total': otros + sueldo,
+      });
+    }
+
+    setState(() {
+      _cajaData = cajaConFechas;  // Actualizamos el estado con los datos obtenidos
+    });
+
+    print('Total Caja: $totalcaja');
+  } catch (e) {
+    print('Error: $e');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error al obtener datos de la caja: $e')),
+    );
+  }
+}
+
+
+Future<String> _obtenerFechaDetalleVenta(String fkDetalleVenta) async {
+  try {
+    final response = await Supabase.instance.client
+        .from('detalle_venta')  // Tabla donde se encuentra la fecha
+        .select('fecha')  // Campo 'fecha'
+        .eq('pk_detalle_venta', fkDetalleVenta)  // Buscar por el id del detalle de venta
+        .single();  // Obtener un solo resultado
+
+    if (response != null && response['fecha'] != null) {
+      var fecha = response['fecha'];
+
+      // Verificar si la fecha es un String
+      if (fecha is String) {
+        // Verificar si la fecha tiene el formato esperado
+        if (fecha.contains('-') && fecha.contains(':')) {
+          return _formatearFecha(fecha);  // Si tiene formato adecuado, la formateamos
+        } else {
+          return 'Formato de fecha inválido';
+        }
+      } else {
+        return 'Fecha no disponible';
+      }
+    } else {
       return 'Fecha no disponible';
     }
+  } catch (e) {
+    print('Error al obtener la fecha: $e');
+    return 'Fecha no disponible';
   }
+}
+
+
+
+
+
+
+
+
 
   Future<void> _fetchTicketData() async {
     try {
@@ -144,22 +239,23 @@ class _HISTORIALVXDState extends State<HISTORIALVXD> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: color_bg2,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80),
-        child: CustomAppbar(
-          titulo: 'Historial de Ventas por Día',
-          colorsito: color_bg,
-        ),
+ @override
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: color_bg2,
+    appBar: PreferredSize(
+      preferredSize: Size.fromHeight(80),
+      child: CustomAppbar(
+        titulo: 'Historial de Ventas por Día',
+        colorsito: color_bg,
       ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final isMobile = constraints.maxWidth < 600;
+    ),
+    body: LayoutBuilder(
+      builder: (context, constraints) {
+        final isMobile = constraints.maxWidth < 600;
 
-          return Column(
+        return SingleChildScrollView( // Permite el desplazamiento de todo el contenido
+          child: Column(
             children: [
               Form(
                 key: _formKey,
@@ -271,108 +367,135 @@ class _HISTORIALVXDState extends State<HISTORIALVXD> {
                   ),
                 ),
               ),
-              Expanded(
-                child: _ventasPorFecha.isEmpty
-                    ? Center(child: Text('No hay datos de ventas.'))
-                    : ListView.builder(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        itemCount: _ventasPorFecha.keys.length,
-                        itemBuilder: (context, index) {
-                          String fecha = _ventasPorFecha.keys.elementAt(index);
-                          List<dynamic> ventasDelDia = _ventasPorFecha[fecha]!;
-                          double totalVentasDelDia =
-                              _calcularTotalPorDia(ventasDelDia);
+              // Ventas por Fecha
+              _ventasPorFecha.isEmpty
+                  ? Center(child: Text('No hay datos de ventas.'))
+                  : ListView.builder(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      itemCount: _ventasPorFecha.keys.length,
+                      shrinkWrap: true, // Permite que el ListView no ocupe toda la altura
+                      physics: NeverScrollableScrollPhysics(), // Deshabilita el desplazamiento aquí
+                      itemBuilder: (context, index) {
+                        String fecha = _ventasPorFecha.keys.elementAt(index);
+                        List<dynamic> ventasDelDia = _ventasPorFecha[fecha]!;
+                        double totalVentasDelDia =
+                            _calcularTotalPorDia(ventasDelDia);
 
-                          return Card(
-                            margin: EdgeInsets.symmetric(vertical: 8.0),
-                            child: ExpansionTile(
-                              title: Text(
-                                'Ventas del $fecha',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: isMobile ? 16 : 18,
-                                ),
+                        return Card(
+                          margin: EdgeInsets.symmetric(vertical: 8.0),
+                          child: ExpansionTile(
+                            title: Text(
+                              'Ventas del $fecha',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: isMobile ? 16 : 18,
                               ),
-                              subtitle: Text(
-                                'Total del día: \$${totalVentasDelDia.toStringAsFixed(2)}',
-                                style: TextStyle(
-                                  color: color_green,
-                                  fontSize: isMobile ? 14 : 16,
-                                ),
+                            ),
+                            subtitle: Text(
+                              'Total del día: \$${totalVentasDelDia.toStringAsFixed(2)}',
+                              style: TextStyle(
+                                color: color_green,
+                                fontSize: isMobile ? 14 : 16,
                               ),
-                              children: ventasDelDia.map((venta) {
-                                final nombreProducto =
-                                    venta['producto_nombre'] ??
-                                        'Nombre no disponible';
-                                final precioProducto =
-                                    venta['producto_precio'] ?? 0;
-                                final cantidad =
-                                    venta['cantidad_producto'] ?? 0;
-                                final totalVenta = venta['total_venta'] ?? 0;
-                                final toppingNombre =
-                                    venta['topping_nombre'] ?? 'Sin topping';
-                                final toppingPrecio =
-                                    venta['topping_precio'] ?? 0;
-                                final topping2Nombre =
-                                    venta['topping2_nombre'] ?? 'Sin topping';
-                                final topping2Precio =
-                                    venta['topping2_precio'] ?? 0;
+                            ),
+                            children: ventasDelDia.map((venta) {
+                              final nombreProducto =
+                                  venta['producto_nombre'] ?? 'Nombre no disponible';
+                              final precioProducto =
+                                  venta['producto_precio'] ?? 0;
+                              final cantidad =
+                                  venta['cantidad_producto'] ?? 0;
+                              final totalVenta = venta['total_venta'] ?? 0;
+                              final toppingNombre =
+                                  venta['topping_nombre'] ?? 'Sin topping';
+                              final toppingPrecio =
+                                  venta['topping_precio'] ?? 0;
+                              final topping2Nombre =
+                                  venta['topping2_nombre'] ?? 'Sin topping';
+                              final topping2Precio =
+                                  venta['topping2_precio'] ?? 0;
 
-                                return Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 12.0, vertical: 6.0),
-                                  child: ListTile(
-                                    tileColor: color_grey,
-                                    title: Text(
-                                      nombreProducto,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: isMobile ? 14 : 16,
-                                      ),
-                                    ),
-                                    subtitle: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Precio Producto: \$${precioProducto.toStringAsFixed(2)}',
-                                          style: TextStyle(
-                                              fontSize: isMobile ? 12 : 14),
-                                        ),
-                                        Text(
-                                          'Topping 1: $toppingNombre (\$${toppingPrecio.toStringAsFixed(2)})',
-                                          style: TextStyle(
-                                              fontSize: isMobile ? 12 : 14),
-                                        ),
-                                        Text(
-                                          'Topping 2: $topping2Nombre (\$${topping2Precio.toStringAsFixed(2)})',
-                                          style: TextStyle(
-                                              fontSize: isMobile ? 12 : 14),
-                                        ),
-                                        Text(
-                                          'Cantidad: $cantidad',
-                                          style: TextStyle(
-                                              fontSize: isMobile ? 12 : 14),
-                                        ),
-                                        Text(
-                                          'Total Venta: \$${totalVenta.toStringAsFixed(2)}',
-                                          style: TextStyle(
-                                              fontSize: isMobile ? 12 : 14),
-                                        ),
-                                      ],
+                              return Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 12.0, vertical: 6.0),
+                                child: ListTile(
+                                  tileColor: color_grey,
+                                  title: Text(
+                                    nombreProducto,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: isMobile ? 14 : 16,
                                     ),
                                   ),
-                                );
-                              }).toList(),
-                            ),
-                          );
-                        },
-                      ),
-              ),
+                                  subtitle: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Precio Producto: \$${precioProducto.toStringAsFixed(2)}',
+                                        style: TextStyle(
+                                            fontSize: isMobile ? 12 : 14),
+                                      ),
+                                      Text(
+                                        'Topping 1: $toppingNombre (\$${toppingPrecio.toStringAsFixed(2)})',
+                                        style: TextStyle(
+                                            fontSize: isMobile ? 12 : 14),
+                                      ),
+                                      Text(
+                                        'Topping 2: $topping2Nombre (\$${topping2Precio.toStringAsFixed(2)})',
+                                        style: TextStyle(
+                                            fontSize: isMobile ? 12 : 14),
+                                      ),
+                                      Text(
+                                        'Cantidad: $cantidad',
+                                        style: TextStyle(
+                                            fontSize: isMobile ? 12 : 14),
+                                      ),
+                                      Text(
+                                        'Total Venta: \$${totalVenta.toStringAsFixed(2)}',
+                                        style: TextStyle(
+                                            fontSize: isMobile ? 12 : 14),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        );
+                      },
+                    ),
+              // Registros de Caja (Colocado al final)
+            SizedBox(height: 20),
+Text(
+  'Registros de Caja:',
+  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+),
+_cajaData.isEmpty
+  ? Center(child: Text('No hay datos disponibles.'))
+  : ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: _cajaData.length,
+      itemBuilder: (context, index) {
+        final caja = _cajaData[index];
+        return ListTile(
+          title: Text('Sueldo: ${caja['sueldo']}'),
+          subtitle: Text(
+            'Otros: ${caja['otros']}\nMotivos: ${caja['motivos']}\nFecha: ${caja['fecha']}',
+          ),
+          trailing: Text('Total: ${caja['total']}'),
+        );
+      },
+    )
+
+
+
             ],
-          );
-        },
-      ),
-    );
-  }
+          ),
+        );
+      },
+    ),
+  );
+}
 }
