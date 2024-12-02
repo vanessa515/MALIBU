@@ -3,6 +3,17 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:get/get.dart';
 import '../constants/custom_appbar.dart';
 
+//Variables de colores
+final Color color_bg = Color.fromARGB(255, 230, 190, 152);
+final Color color_bg2 = Color.fromARGB(255, 254, 235, 216);
+final Color color_font = Color.fromARGB(255, 69, 65, 129);
+final Color color_white = Color.fromARGB(255, 255, 255, 255);
+final Color color_white2 = Color.fromARGB(255, 250, 250, 250);
+final Color color_cancelar = Color.fromARGB(255, 244, 63, 63);
+final Color color_black = Color.fromARGB(255, 0, 0, 0);
+final Color color_effects = Colors.black.withOpacity(0.3);
+final Color color_green = Colors.green;
+
 class EditarProductoIn extends StatefulWidget {
   const EditarProductoIn({Key? key}) : super(key: key);
 
@@ -27,7 +38,8 @@ class _EditarProductoInState extends State<EditarProductoIn> {
   @override
   void initState() {
     super.initState();
-    pkProductoin = Get.arguments['pk_productoin']; // Obtener la pk_productoin desde argumentos
+    pkProductoin = Get.arguments[
+        'pk_productoin']; // Obtener la pk_productoin desde argumentos
     traerUnidades();
     traerMedidas();
     _cargarProducto(); // Cargar los datos actuales del producto
@@ -91,7 +103,8 @@ class _EditarProductoInState extends State<EditarProductoIn> {
     try {
       final response = await Supabase.instance.client
           .from('productoin')
-          .select('nom_productoin, descripcion, cantidad, minimo, fk_unidad, fk_medida')
+          .select(
+              'nom_productoin, descripcion, cantidad, minimo, fk_unidad, fk_medida')
           .eq('pk_productoin', pkProductoin)
           .single();
 
@@ -103,7 +116,7 @@ class _EditarProductoInState extends State<EditarProductoIn> {
         _selectedUnidad = response['fk_unidad'];
         _selectedMedida = response['fk_medida'];
       });
-        } catch (e) {
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error al cargar el producto: $e')),
       );
@@ -117,18 +130,15 @@ class _EditarProductoInState extends State<EditarProductoIn> {
       });
 
       try {
-        await Supabase.instance.client
-            .from('productoin')
-            .update({
-              'nom_productoin': _nombreController.text,
-              'descripcion': _descripcionController.text,
-              'fk_unidad': _selectedUnidad,
-              'cantidad': int.parse(_cantidadController.text),
-              'fk_medida': _selectedMedida,
-              'minimo': int.parse(_minimoController.text),
-              'estatus': 1,
-            })
-            .eq('pk_productoin', pkProductoin);
+        await Supabase.instance.client.from('productoin').update({
+          'nom_productoin': _nombreController.text,
+          'descripcion': _descripcionController.text,
+          'fk_unidad': _selectedUnidad,
+          'cantidad': int.parse(_cantidadController.text),
+          'fk_medida': _selectedMedida,
+          'minimo': int.parse(_minimoController.text),
+          'estatus': 1,
+        }).eq('pk_productoin', pkProductoin);
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Producto actualizado exitosamente')),
@@ -159,133 +169,252 @@ class _EditarProductoInState extends State<EditarProductoIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppbar(
-        titulo: 'EDITAR PRODUCTO',
-        colorsito: Colors.teal,
+      backgroundColor: color_bg2,
+
+/* ----------------------------------------------- AppBar ----------------------------------------------- */
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(80),
+        child: CustomAppbar(
+          titulo: 'Editar Producto en Inventario',
+          colorsito: color_bg,
+        ),
       ),
+
+/* ----------------------------------------------- Cuerpo principal ----------------------------------------------- */
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: _nombreController,
-                  decoration: InputDecoration(
-                    labelText: 'Nombre del Producto',
-                    border: OutlineInputBorder(),
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Container(
+              constraints: BoxConstraints(
+                  maxWidth: 600), // Ancho máximo para responsividad
+              padding: EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: color_white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 10,
+                    spreadRadius: 2,
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, ingrese un nombre de producto';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: _descripcionController,
-                  maxLines: 5,
-                  decoration: InputDecoration(
-                    labelText: 'Descripción',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, ingrese una descripción';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                DropdownButtonFormField<int>(
-                  value: _selectedUnidad,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedUnidad = value;
-                    });
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'Unidad',
-                    border: OutlineInputBorder(),
-                  ),
-                  items: unidadesActivas.map((unidad) {
-                    return DropdownMenuItem<int>(
-                      value: unidad['pk_unidad'],
-                      child: Text(unidad['nom_unidad']),
-                    );
-                  }).toList(),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Por favor, seleccione una unidad';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: _cantidadController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: 'Cantidad',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, ingrese la cantidad';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                DropdownButtonFormField<int>(
-                  value: _selectedMedida,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedMedida = value;
-                    });
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'Medida',
-                    border: OutlineInputBorder(),
-                  ),
-                  items: medidasActivas.map((medida) {
-                    return DropdownMenuItem<int>(
-                      value: medida['pk_medida'],
-                      child: Text(medida['nom_medida']),
-                    );
-                  }).toList(),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Por favor, seleccione una medida';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: _minimoController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: 'Mínimo',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, ingrese el valor mínimo';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                _isSubmitting
-                    ? CircularProgressIndicator()
-                    : ElevatedButton(
-                        onPressed: _editarProducto,
-                        child: Text('Actualizar Producto'),
+                ],
+              ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Nombre del Producto
+                    TextFormField(
+                      controller: _nombreController,
+                      decoration: InputDecoration(
+                        labelText: 'Nombre del Producto',
+                        labelStyle: TextStyle(color: color_font, fontSize: 16),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: color_font, width: 2.0),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 12.0,
+                          horizontal: 16.0,
+                        ),
                       ),
-              ],
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, ingrese un nombre de producto';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Descripción
+                    TextFormField(
+                      controller: _descripcionController,
+                      maxLines: 5,
+                      decoration: InputDecoration(
+                        labelText: 'Descripción',
+                        labelStyle: TextStyle(color: color_font, fontSize: 16),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: color_font, width: 2.0),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 12.0,
+                          horizontal: 16.0,
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, ingrese una descripción';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Unidad
+                    DropdownButtonFormField<int>(
+                      value: _selectedUnidad,
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedUnidad = value;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Unidad',
+                        labelStyle: TextStyle(color: color_font, fontSize: 16),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: color_font, width: 2.0),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 12.0,
+                          horizontal: 16.0,
+                        ),
+                      ),
+                      items: unidadesActivas.map((unidad) {
+                        return DropdownMenuItem<int>(
+                          value: unidad['pk_unidad'],
+                          child: Text(unidad['nom_unidad']),
+                        );
+                      }).toList(),
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Por favor, seleccione una unidad';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Cantidad
+                    TextFormField(
+                      controller: _cantidadController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: 'Cantidad',
+                        labelStyle: TextStyle(color: color_font, fontSize: 16),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: color_font, width: 2.0),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 12.0,
+                          horizontal: 16.0,
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, ingrese la cantidad';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Medida
+                    DropdownButtonFormField<int>(
+                      value: _selectedMedida,
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedMedida = value;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Medida',
+                        labelStyle: TextStyle(color: color_font, fontSize: 16),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: color_font, width: 2.0),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 12.0,
+                          horizontal: 16.0,
+                        ),
+                      ),
+                      items: medidasActivas.map((medida) {
+                        return DropdownMenuItem<int>(
+                          value: medida['pk_medida'],
+                          child: Text(medida['nom_medida']),
+                        );
+                      }).toList(),
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Por favor, seleccione una medida';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Mínimo
+                    TextFormField(
+                      controller: _minimoController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: 'Mínimo',
+                        labelStyle: TextStyle(color: color_font, fontSize: 16),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: color_font, width: 2.0),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 12.0,
+                          horizontal: 16.0,
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, ingrese el valor mínimo';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 20),
+
+                    // Botón de Actualizar
+                    Center(
+                      child: _isSubmitting
+                          ? CircularProgressIndicator()
+                          : ElevatedButton(
+                              onPressed: _editarProducto,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: color_font,
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 14.0,
+                                  horizontal: 32.0,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                              ),
+                              child: Text(
+                                'Actualizar Producto',
+                                style: TextStyle(
+                                  color: color_white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
