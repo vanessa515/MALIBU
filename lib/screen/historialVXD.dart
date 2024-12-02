@@ -78,7 +78,7 @@ Future<void> _fetchCajaData() async {
           .single();
 
       String fecha = 'Fecha no disponible';
-      if (detalleResponse != null && detalleResponse['fecha'] != null) {
+      if (detalleResponse['fecha'] != null) {
         fecha = detalleResponse['fecha'];  // Usamos la fecha directamente
       }
 
@@ -113,7 +113,7 @@ Future<String> _obtenerFechaDetalleVenta(String fkDetalleVenta) async {
         .eq('pk_detalle_venta', fkDetalleVenta)  // Buscar por el id del detalle de venta
         .single();  // Obtener un solo resultado
 
-    if (response != null && response['fecha'] != null) {
+    if (response['fecha'] != null) {
       var fecha = response['fecha'];
 
       // Verificar si la fecha es un String
