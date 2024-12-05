@@ -152,8 +152,8 @@ android.os.storage.StorageVolume
 top
 io.flutter.embedding.android.EnableVu...
 com.google.android.gms.provider.actio...
-ExifIFDPointer
 java.lang.String
+ExifIFDPointer
 resizeDown
 TextInput.setClient
 framework
@@ -805,6 +805,7 @@ int
 LensMake
 Xmp
 com.google.android.inputmethod.latin
+java.util.Arrays$ArrayList
 AccessibilityBridge
 exception
 STRING_LIST
@@ -1363,6 +1364,7 @@ Map
 classLoader
 telephoneNumber
 cancelBackGesture
+java.util.ArrayList
 delegate
 IS_EXPANDED
 RIGHT
@@ -2074,7 +2076,8 @@ Marking id:line3:2131165246 used because it matches string pool constant line
     @style/TextAppearance_Compat_Notification_Time
 @layout/notification_template_part_time : reachable=true
     @style/TextAppearance_Compat_Notification_Time
-@mipmap/ic_launcher : reachable=true
+@mipmap/ic_launcher : reachable=false
+@mipmap/launcher_icon : reachable=true
 @string/androidx_startup : reachable=true
 @string/call_notification_answer_action : reachable=false
 @string/call_notification_answer_video_action : reachable=false
@@ -2219,7 +2222,7 @@ The root reachable resources are:
  layout:notification_template_icon_group:2131296264
  layout:notification_template_part_chronometer:2131296265
  layout:notification_template_part_time:2131296266
- mipmap:ic_launcher:2131361792
+ mipmap:launcher_icon:2131361793
  string:androidx_startup:2131427328
  string:copy_toast_msg:2131427336
  style:LaunchTheme:2131492864
@@ -2284,6 +2287,7 @@ Unused resources are:
  layout:browser_actions_context_menu_row:2131296257
  layout:ime_base_split_test_activity:2131296259
  layout:ime_secondary_split_test_activity:2131296260
+ mipmap:ic_launcher:2131361792
  string:call_notification_answer_action:2131427329
  string:call_notification_answer_video_action:2131427330
  string:call_notification_decline_action:2131427331
@@ -2351,3 +2355,8 @@ Skipped unused resource res/layout/browser_actions_context_menu_page.xml: 3165 b
 Skipped unused resource res/layout/browser_actions_context_menu_row.xml: 2211 bytes (replaced with small dummy file of size 9 bytes)
 Skipped unused resource res/layout/ime_base_split_test_activity.xml: 365 bytes (replaced with small dummy file of size 9 bytes)
 Skipped unused resource res/layout/ime_secondary_split_test_activity.xml: 1465 bytes (replaced with small dummy file of size 9 bytes)
+Skipped unused resource res/mipmap-mdpi-v4/ic_launcher.png: 405 bytes (replaced with small dummy file of size 67 bytes)
+Skipped unused resource res/mipmap-hdpi-v4/ic_launcher.png: 507 bytes (replaced with small dummy file of size 67 bytes)
+Skipped unused resource res/mipmap-xhdpi-v4/ic_launcher.png: 684 bytes (replaced with small dummy file of size 67 bytes)
+Skipped unused resource res/mipmap-xxhdpi-v4/ic_launcher.png: 994 bytes (replaced with small dummy file of size 67 bytes)
+Skipped unused resource res/mipmap-xxxhdpi-v4/ic_launcher.png: 1406 bytes (replaced with small dummy file of size 67 bytes)

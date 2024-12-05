@@ -3,8 +3,8 @@
 # min_api: 21
 # common_typos_disable
 # {"id":"com.android.tools.r8.mapping","version":"2.2"}
-# pg_map_id: efa37be
-# pg_map_hash: SHA-256 efa37be810d82d7332c72f3d318211380ab9a7fe12c5406f718ea71b64698fe0
+# pg_map_id: 95a75de
+# pg_map_hash: SHA-256 95a75de8088e69c1c76b41f3154d8a729222cab8b12e4f91553f3564f964cf53
 _COROUTINE.ArtificialStackFrames -> a.a:
     void <init>() -> <init>
     1:1:java.lang.StackTraceElement coroutineBoundary():0:0 -> a
@@ -9839,6 +9839,8 @@ io.flutter.plugins.imagepicker.FileUtils -> v0.b:
     1:1:java.lang.String getImageName(android.content.Context,android.net.Uri):0:0 -> d
     1:1:java.lang.String getPathFromUri(android.content.Context,android.net.Uri):0:0 -> e
     1:1:android.database.Cursor queryImageName(android.content.Context,android.net.Uri):0:0 -> f
+    1:1:java.io.File saferOpenFile(java.lang.String,java.lang.String):0:0 -> g
+    1:1:java.lang.String sanitizeFilename(java.lang.String):0:0 -> h
 io.flutter.plugins.imagepicker.ImagePickerCache -> v0.c:
     android.content.Context context -> a
     1:1:void <init>(android.content.Context):0:0 -> <init>
@@ -11533,6 +11535,9 @@ io.flutter.plugins.sharedpreferences.SharedPreferencesPluginKt -> x0.e0:
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Landroid/content/Context;)Ln/g;"}
     1:1:androidx.datastore.core.DataStore getSharedPreferencesDataStore(android.content.Context):0:0 -> b
       # {"id":"com.android.tools.r8.residualsignature","signature":"(Landroid/content/Context;)Ln/g;"}
+io.flutter.plugins.sharedpreferences.StringListObjectInputStream -> x0.f0:
+    1:1:void <init>(java.io.InputStream):0:0 -> <init>
+    1:1:java.lang.Class resolveClass(java.io.ObjectStreamClass):0:0 -> resolveClass
 io.flutter.plugins.urllauncher.Messages -> y0.a:
     1:1:java.util.ArrayList wrapError(java.lang.Throwable):0:0 -> a
 io.flutter.plugins.urllauncher.Messages$BrowserOptions -> y0.a$a:
@@ -12690,8 +12695,10 @@ kotlin.collections.ArraysKt___ArraysKt -> b1.j:
     1:1:char single(char[]):0:0 -> k
     1:1:java.lang.Object singleOrNull(java.lang.Object[]):0:0 -> l
     1:1:java.util.List takeLast(java.lang.Object[],int):0:0 -> m
-    1:1:java.util.List toList(java.lang.Object[]):0:0 -> n
-    1:1:java.util.List toMutableList(java.lang.Object[]):0:0 -> o
+    1:1:java.util.Collection toCollection(java.lang.Object[],java.util.Collection):0:0 -> n
+    1:1:java.util.List toList(java.lang.Object[]):0:0 -> o
+    1:1:java.util.List toMutableList(java.lang.Object[]):0:0 -> p
+    1:1:java.util.Set toSet(java.lang.Object[]):0:0 -> q
 kotlin.collections.ArraysUtilJVM -> b1.k:
     1:1:java.util.List asList(java.lang.Object[]):0:0 -> a
 kotlin.collections.CollectionsKt -> b1.l:
@@ -12888,11 +12895,16 @@ kotlin.collections.MapsKt__MapsKt -> b1.e0:
     1:1:java.util.Map toMutableMap(java.util.Map):0:0 -> i
 kotlin.collections.MapsKt___MapsJvmKt -> b1.f0:
 kotlin.collections.MapsKt___MapsKt -> b1.g0:
-kotlin.collections.SetsKt__SetsJVMKt -> b1.h0:
+kotlin.collections.SetsKt -> b1.h0:
+    1:1:java.util.Set setOf(java.lang.Object[]):0:0 -> d
+      # {"id":"com.android.tools.r8.synthesized"}
+kotlin.collections.SetsKt__SetsJVMKt -> b1.i0:
     1:1:java.util.Set setOf(java.lang.Object):0:0 -> a
-kotlin.collections.SetsKt__SetsKt -> b1.i0:
+kotlin.collections.SetsKt__SetsKt -> b1.j0:
     1:1:java.util.Set emptySet():0:0 -> b
     1:1:java.util.Set optimizeReadOnlySet(java.util.Set):0:0 -> c
+    1:1:java.util.Set setOf(java.lang.Object[]):0:0 -> d
+kotlin.collections.SetsKt___SetsKt -> b1.k0:
 kotlin.coroutines.AbstractCoroutineContextElement -> c1.a:
     kotlin.coroutines.CoroutineContext$Key key -> e
     1:1:void <init>(kotlin.coroutines.CoroutineContext$Key):0:0 -> <init>

@@ -44,9 +44,9 @@
       proguardRules="proguard.txt"/>
   <library
       name="C:\project_malibu\MALIBU\android@@:image_picker_android::release"
-      jars="C:\Users\jbac9\.gradle\caches\8.9\transforms\f5292d19c84429c8311d345391aa87a1\transformed\out\jars\classes.jar;C:\Users\jbac9\.gradle\caches\8.9\transforms\f5292d19c84429c8311d345391aa87a1\transformed\out\jars\libs\R.jar"
+      jars="C:\Users\jbac9\.gradle\caches\8.9\transforms\b348df2fc87ae29f1eb6c7e86ce8ae86\transformed\out\jars\classes.jar;C:\Users\jbac9\.gradle\caches\8.9\transforms\b348df2fc87ae29f1eb6c7e86ce8ae86\transformed\out\jars\libs\R.jar"
       resolved="io.flutter.plugins.imagepicker:image_picker_android:unspecified"
-      folder="C:\Users\jbac9\.gradle\caches\8.9\transforms\f5292d19c84429c8311d345391aa87a1\transformed\out"
+      folder="C:\Users\jbac9\.gradle\caches\8.9\transforms\b348df2fc87ae29f1eb6c7e86ce8ae86\transformed\out"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -70,9 +70,9 @@
       proguardRules="proguard.txt"/>
   <library
       name="C:\project_malibu\MALIBU\android@@:shared_preferences_android::release"
-      jars="C:\Users\jbac9\.gradle\caches\8.9\transforms\ef9d7806e618b01baade7e03e9ff4b6b\transformed\out\jars\classes.jar;C:\Users\jbac9\.gradle\caches\8.9\transforms\ef9d7806e618b01baade7e03e9ff4b6b\transformed\out\jars\libs\R.jar"
+      jars="C:\Users\jbac9\.gradle\caches\8.9\transforms\0f5296de4f6ac681bf6a9c0a7b78f583\transformed\out\jars\classes.jar;C:\Users\jbac9\.gradle\caches\8.9\transforms\0f5296de4f6ac681bf6a9c0a7b78f583\transformed\out\jars\libs\R.jar"
       resolved="io.flutter.plugins.sharedpreferences:shared_preferences_android:unspecified"
-      folder="C:\Users\jbac9\.gradle\caches\8.9\transforms\ef9d7806e618b01baade7e03e9ff4b6b\transformed\out"
+      folder="C:\Users\jbac9\.gradle\caches\8.9\transforms\0f5296de4f6ac681bf6a9c0a7b78f583\transformed\out"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"

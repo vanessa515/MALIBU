@@ -65,8 +65,8 @@
 43        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 43-->[androidx.core:core:1.13.1] C:\Users\jbac9\.gradle\caches\8.9\transforms\f94475d0ee9d4fd73fbdbfc57d660a71\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
 44        android:extractNativeLibs="true"
-45        android:icon="@mipmap/ic_launcher"
-45-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:5:9-43
+45        android:icon="@mipmap/launcher_icon"
+45-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:5:9-45
 46        android:label="Malibu" >
 46-->C:\project_malibu\MALIBU\android\app\src\main\AndroidManifest.xml:3:9-31
 47        <activity
