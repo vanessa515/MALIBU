@@ -19,8 +19,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
   final Color color_7 = Color.fromARGB(255, 244, 63, 63);
 
   //Variables de imagenes
-  final String logo_img = '../assets/logos/logo.png';
-  final String logo_rmvbg = '../assets/logos/logo_bgremove.png';
+  final String logo_img = '../assets/icon/logo.png';
+  final String logo_rmvbg = '../assets/icon/logo_bgremove.png';
 
   // Opcion para la seleccion en el dropdown
   final List<Map<String, dynamic>> registerOptions = [

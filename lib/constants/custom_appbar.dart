@@ -16,7 +16,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   final Color color_white = const Color.fromARGB(255, 255, 255, 255);
 
   // Variables de imágenes
-  final String logo_malibu = "../assets/logos/logo_malibu.png";
+  final String logo_malibu = "../assets/icon/logo_malibu.png";
 
   @override
   Widget build(BuildContext context) {
